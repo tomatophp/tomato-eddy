@@ -3,6 +3,8 @@
 namespace TomatoPHP\TomatoEddy;
 
 use Illuminate\Support\ServiceProvider;
+use TomatoPHP\TomatoAdmin\Facade\TomatoMenu;
+use TomatoPHP\TomatoAdmin\Services\Contracts\Menu;
 
 
 class TomatoEddyServiceProvider extends ServiceProvider
@@ -52,6 +54,22 @@ class TomatoEddyServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        //you boot methods here
+        TomatoMenu::register([
+            Menu::make()
+                ->group(__('Eddy'))
+                ->label(__('Credentials'))
+                ->icon('bx bxs-lock')
+                ->route('admin.credentials.index'),
+            Menu::make()
+                ->group(__('Eddy'))
+                ->label(__('SSH Keys'))
+                ->icon('bx bxs-key')
+                ->route('admin.ssh-keys.index'),
+           Menu::make()
+            ->group(__('Eddy'))
+            ->label(__('Servers'))
+            ->icon('bx bxs-group')
+            ->route('admin.servers.index')
+        ]);
     }
 }
