@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Policies;
+namespace TomatoPHP\TomatoEddy\Policies;
 
-use App\Models\Cron;
+use TomatoPHP\TomatoEddy\Models\Cron;
 use App\Models\User;
 
 class CronPolicy

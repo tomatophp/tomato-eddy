@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tasks;
+namespace TomatoPHP\TomatoEddy\Tasks;
 
 use Illuminate\Support\Str;
 

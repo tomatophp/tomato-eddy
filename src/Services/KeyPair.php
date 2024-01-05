@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace TomatoPHP\TomatoEddy\Services;
 
 class KeyPair
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http;
+namespace TomatoPHP\TomatoEddy\Http;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Vite;

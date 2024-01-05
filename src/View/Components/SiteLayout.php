@@ -1,8 +1,8 @@
 <?php
 
-namespace App\View\Components;
+namespace TomatoPHP\TomatoEddy\View\Components;
 
-use App\Models\Site;
+use TomatoPHP\TomatoEddy\Models\Site;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
@@ -32,7 +32,7 @@ class SiteLayout extends Component
     {
         $parameters = [$this->site->server, $this->site];
 
-        return view('components.site-layout', [
+        return view('tomato-eddy::components.site-layout', [
             'server' => $this->site->server,
             'site' => $this->site,
             'navigationItems' => [

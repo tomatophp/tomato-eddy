@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components;
+namespace TomatoPHP\TomatoEddy\View\Components;
 
 use Closure;
 use Illuminate\Contracts\View\View;
@@ -16,6 +16,6 @@ class PrismEditor extends Textarea
      */
     public function render(): View|Closure|string
     {
-        return view('components.prism-editor');
+        return view('tomato-eddy::components.prism-editor');
     }
 }

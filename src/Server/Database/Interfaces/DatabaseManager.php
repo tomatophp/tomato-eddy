@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Server\Database;
+namespace TomatoPHP\TomatoEddy\Server\Database\Interfaces;
 
 interface DatabaseManager
 {

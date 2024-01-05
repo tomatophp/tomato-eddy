@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Events;
+namespace TomatoPHP\TomatoEddy\Events;
 
-use App\Models\Site;
+use TomatoPHP\TomatoEddy\Models\Site;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;

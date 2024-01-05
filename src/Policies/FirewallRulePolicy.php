@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Policies;
+namespace TomatoPHP\TomatoEddy\Policies;
 
-use App\Models\FirewallRule;
+use TomatoPHP\TomatoEddy\Models\FirewallRule;
 use App\Models\User;
 
 class FirewallRulePolicy

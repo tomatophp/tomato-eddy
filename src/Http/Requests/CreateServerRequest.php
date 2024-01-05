@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests;
+namespace TomatoPHP\TomatoEddy\Http\Requests;
 
-use App\Infrastructure\Entities\Image;
-use App\Infrastructure\Entities\Region;
-use App\Infrastructure\Entities\ServerType;
-use App\Infrastructure\ProviderFactory;
-use App\Infrastructure\ServerProvider;
-use App\Models\Credentials;
+use TomatoPHP\TomatoEddy\Infrastructure\Entities\Image;
+use TomatoPHP\TomatoEddy\Infrastructure\Entities\Region;
+use TomatoPHP\TomatoEddy\Infrastructure\Entities\ServerType;
+use TomatoPHP\TomatoEddy\Infrastructure\ProviderFactory;
+use TomatoPHP\TomatoEddy\Infrastructure\ServerProvider;
+use TomatoPHP\TomatoEddy\Models\Credentials;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;

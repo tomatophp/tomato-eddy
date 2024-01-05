@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components;
+namespace TomatoPHP\TomatoEddy\View\Components;
 
 use Illuminate\Support\Str;
 

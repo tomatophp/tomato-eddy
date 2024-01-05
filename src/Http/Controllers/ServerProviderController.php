@@ -2,7 +2,6 @@
 
 namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use TomatoPHP\TomatoEddy\Infrastructure\Entities\Image;
 use TomatoPHP\TomatoEddy\Enums\Infrastructure\OperatingSystem;
 use TomatoPHP\TomatoEddy\Infrastructure\Entities\Region;

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
-use App\Jobs\InstallCron;
-use App\Jobs\UninstallCron;
-use App\Models\Cron;
-use App\Models\Server;
+use TomatoPHP\TomatoEddy\Jobs\InstallCron;
+use TomatoPHP\TomatoEddy\Jobs\UninstallCron;
+use TomatoPHP\TomatoEddy\Models\Cron;
+use TomatoPHP\TomatoEddy\Models\Server;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
@@ -17,14 +17,6 @@ use ProtoneMedia\Splade\SpladeTable;
  */
 class CronController extends Controller
 {
-    /**
-     * Create the controller instance.
-     */
-    public function __construct()
-    {
-        $this->authorizeResource(Cron::class, 'cron');
-    }
-
     /**
      * An array of default frequencies.
      */

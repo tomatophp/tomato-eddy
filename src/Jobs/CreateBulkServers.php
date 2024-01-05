@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Jobs;
+namespace TomatoPHP\TomatoEddy\Jobs;
 
-use App\KeyPairGenerator;
-use App\Models\Credentials;
-use App\Models\SshKey;
+use TomatoPHP\TomatoEddy\Services\KeyPairGenerator;
+use TomatoPHP\TomatoEddy\Models\Credentials;
+use TomatoPHP\TomatoEddy\Models\SshKey;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

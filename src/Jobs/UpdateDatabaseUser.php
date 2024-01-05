@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Jobs;
+namespace TomatoPHP\TomatoEddy\Jobs;
 
-use App\Models\Database;
-use App\Models\DatabaseUser;
+use TomatoPHP\TomatoEddy\Models\Database;
+use TomatoPHP\TomatoEddy\Models\DatabaseUser;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;

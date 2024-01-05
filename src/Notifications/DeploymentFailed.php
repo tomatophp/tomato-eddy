@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Notifications;
+namespace TomatoPHP\TomatoEddy\Notifications;
 
-use App\Models\Deployment;
+use TomatoPHP\TomatoEddy\Models\Deployment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Markdown;

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Events;
+namespace TomatoPHP\TomatoEddy\Events;
 
-use App\Models\Cron;
+use TomatoPHP\TomatoEddy\Models\Cron;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;

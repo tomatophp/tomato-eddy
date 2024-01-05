@@ -1,8 +1,8 @@
 <?php
 
-namespace App\View\Components;
+namespace TomatoPHP\TomatoEddy\View\Components;
 
-use App\Tasks\Formatter;
+use TomatoPHP\TomatoEddy\Tasks\Formatter;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\View\Component as BaseComponent;
 

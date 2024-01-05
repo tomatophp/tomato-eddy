@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components;
+namespace TomatoPHP\TomatoEddy\View\Components;
 
 use Closure;
 use Illuminate\Contracts\View\View;
@@ -24,10 +24,10 @@ class TaskShellDefaults extends Component
         $setOptions = array_filter([
             $this->exitImmediately ? 'e' : null,
             'u',
-            config('eddy.print_shell_commands') ? 'x' : null,
+            config('tomato-eddy.print_shell_commands') ? 'x' : null,
         ]);
 
-        return view('components.task-shell-defaults', [
+        return view('tomato-eddy::components.task-shell-defaults', [
             'setOptions' => implode($setOptions),
         ]);
     }

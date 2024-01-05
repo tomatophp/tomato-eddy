@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Exceptions;
+namespace TomatoPHP\TomatoEddy\Exceptions;
 
-use App\Models\CouldNotConnectToServerException;
-use App\Models\Server;
-use App\Notifications\JobOnServerFailed;
-use App\Notifications\ServerConnectionLost;
+use TomatoPHP\TomatoEddy\Models\CouldNotConnectToServerException;
+use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\Notifications\JobOnServerFailed;
+use TomatoPHP\TomatoEddy\Notifications\ServerConnectionLost;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notification;
 use Throwable;

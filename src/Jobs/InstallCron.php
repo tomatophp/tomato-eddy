@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Jobs;
+namespace TomatoPHP\TomatoEddy\Jobs;
 
-use App\Models\Cron as CronModel;
+use TomatoPHP\TomatoEddy\Models\Cron as CronModel;
 use App\Models\User;
-use App\View\Components\Cron as CronView;
+use TomatoPHP\TomatoEddy\View\Components\Cron as CronView;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Jobs;
+namespace TomatoPHP\TomatoEddy\Jobs;
 
-use App\Models\Daemon;
+use TomatoPHP\TomatoEddy\Models\Daemon;
 use App\Models\User;
-use App\Tasks\ReloadSupervisor;
-use App\View\Components\SupervisorProgram;
+use TomatoPHP\TomatoEddy\Tasks\ReloadSupervisor;
+use TomatoPHP\TomatoEddy\View\Components\SupervisorProgram;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

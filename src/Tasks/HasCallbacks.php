@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Tasks;
+namespace TomatoPHP\TomatoEddy\Tasks;
 
-use App\Models\Task;
+use TomatoPHP\TomatoEddy\Models\Task;
 use Illuminate\Http\Request;
 
 interface HasCallbacks

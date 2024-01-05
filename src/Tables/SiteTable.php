@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tables;
+namespace TomatoPHP\TomatoEddy\Tables;
 
 use Illuminate\Http\Request;
 use ProtoneMedia\Splade\AbstractTable;

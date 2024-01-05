@@ -2,7 +2,6 @@
 
 namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use TomatoPHP\TomatoEddy\Jobs\RemoveSshKeyFromServer;
 use TomatoPHP\TomatoEddy\Models\Server;
 use TomatoPHP\TomatoEddy\Models\SshKey;

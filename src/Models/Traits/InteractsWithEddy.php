@@ -9,7 +9,6 @@ use TomatoPHP\TomatoEddy\Models\SshKey;
 
 trait InteractsWithEddy
 {
-    use HasUlids;
 
     public function getInitialsAttribute()
     {
@@ -23,16 +22,6 @@ trait InteractsWithEddy
         }
 
         return strtoupper($initials);
-    }
-
-    /**
-     * Route notifications for the mail channel.
-     *
-     * @return  array<string, string>|string
-     */
-    public function routeNotificationForMail(Notification $notification): array|string
-    {
-        return [$this->email => $this->name];
     }
 
     public function sshKeys()

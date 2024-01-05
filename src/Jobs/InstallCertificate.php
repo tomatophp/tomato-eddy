@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Jobs;
+namespace TomatoPHP\TomatoEddy\Jobs;
 
-use App\Models\Certificate;
-use App\Models\TlsSetting;
+use TomatoPHP\TomatoEddy\Models\Certificate;
+use TomatoPHP\TomatoEddy\Models\TlsSetting;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

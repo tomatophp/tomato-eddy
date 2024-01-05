@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
-use App\Models\Server;
-use App\Models\Site;
+use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\Models\Site;
 use Illuminate\Support\Str;
 use ProtoneMedia\Splade\Facades\Toast;
 

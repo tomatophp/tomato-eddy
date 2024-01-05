@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
-use App\Enum;
-use App\Jobs\InstallCertificate;
-use App\Jobs\UpdateSiteTlsSetting;
-use App\Models\Server;
-use App\Models\Site;
-use App\Models\TlsSetting;
+use TomatoPHP\TomatoEddy\Enums\Enum;
+use TomatoPHP\TomatoEddy\Jobs\InstallCertificate;
+use TomatoPHP\TomatoEddy\Jobs\UpdateSiteTlsSetting;
+use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\Models\Site;
+use TomatoPHP\TomatoEddy\Models\TlsSetting;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use ProtoneMedia\Splade\Facades\Toast;

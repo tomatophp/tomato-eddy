@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tasks;
+namespace TomatoPHP\TomatoEddy\Tasks;
 
 class GenerateEd25519KeyPair extends Task
 {
@@ -10,6 +10,6 @@ class GenerateEd25519KeyPair extends Task
 
     public function comment()
     {
-        return config('eddy.server_defaults.ssh_comment');
+        return config('tomato-eddy.server_defaults.ssh_comment');
     }
 }

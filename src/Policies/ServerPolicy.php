@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Policies;
+namespace TomatoPHP\TomatoEddy\Policies;
 
-use App\Models\Server;
+use TomatoPHP\TomatoEddy\Models\Server;
 use App\Models\User;
 
 class ServerPolicy

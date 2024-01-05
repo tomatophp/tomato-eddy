@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
-use App\FileOnServer;
-use App\Models\Server;
+use TomatoPHP\TomatoEddy\Services\FileOnServer;
+use TomatoPHP\TomatoEddy\Models\Server;
 use ProtoneMedia\Splade\SpladeTable;
 
 /**

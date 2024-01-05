@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Jobs;
+namespace TomatoPHP\TomatoEddy\Jobs;
 
-use App\Models\Daemon;
-use App\Models\Server;
+use TomatoPHP\TomatoEddy\Models\Daemon;
+use TomatoPHP\TomatoEddy\Models\Server;
 use App\Models\User;
-use App\Tasks\DeleteFile;
-use App\Tasks\ReloadSupervisor;
+use TomatoPHP\TomatoEddy\Tasks\DeleteFile;
+use TomatoPHP\TomatoEddy\Tasks\ReloadSupervisor;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

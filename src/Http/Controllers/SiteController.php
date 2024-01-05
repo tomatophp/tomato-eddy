@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
-use App\Enum;
-use App\Http\Requests\UpdateSiteRequest;
-use App\Jobs\FireEventAPI;
-use App\Jobs\InstallDatabase;
-use App\Jobs\InstallDatabaseUser;
-use App\Jobs\UninstallSite;
-use App\KeyPair;
-use App\KeyPairGenerator;
-use App\Models\DatabaseUser;
-use App\Models\Server;
-use App\Models\Site;
-use App\Models\SiteType;
-use App\Models\TlsSetting;
-use App\Server\PhpVersion;
-use App\Services\Cloudflare;
+use TomatoPHP\TomatoEddy\Enums\Enum;
+use TomatoPHP\TomatoEddy\Http\Requests\UpdateSiteRequest;
+use TomatoPHP\TomatoEddy\Jobs\FireEventAPI;
+use TomatoPHP\TomatoEddy\Jobs\InstallDatabase;
+use TomatoPHP\TomatoEddy\Jobs\InstallDatabaseUser;
+use TomatoPHP\TomatoEddy\Jobs\UninstallSite;
+use TomatoPHP\TomatoEddy\Services\KeyPair;
+use TomatoPHP\TomatoEddy\Services\KeyPairGenerator;
+use TomatoPHP\TomatoEddy\Models\DatabaseUser;
+use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\Models\Site;
+use TomatoPHP\TomatoEddy\Models\SiteType;
+use TomatoPHP\TomatoEddy\Models\TlsSetting;
+use TomatoPHP\TomatoEddy\Server\PhpVersion;
+use TomatoPHP\TomatoEddy\Services\Cloudflare;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Bus;
@@ -31,14 +31,6 @@ use ProtoneMedia\Splade\SpladeTable;
  */
 class SiteController extends Controller
 {
-    /**
-     * Create the controller instance.
-     */
-    public function __construct()
-    {
-        $this->authorizeResource(Site::class, 'site');
-    }
-
     /**
      * Display a listing of the resource.
      */

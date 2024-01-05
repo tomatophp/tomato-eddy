@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Tasks;
+namespace TomatoPHP\TomatoEddy\Tasks;
 
-use App\Models\Task as TaskModel;
+use TomatoPHP\TomatoEddy\Models\Task as TaskModel;
 use Illuminate\Http\Request;
 
 /**

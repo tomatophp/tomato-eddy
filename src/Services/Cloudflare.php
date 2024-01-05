@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services;
+namespace TomatoPHP\TomatoEddy\Services;
 
-use App\Models\Credentials;
+use TomatoPHP\TomatoEddy\Models\Credentials;
 use Cloudflare\Api;
 use Cloudflare\Zone\Dns;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Tasks;
+namespace TomatoPHP\TomatoEddy\Tasks;
 
-use App\Models\Site;
+use TomatoPHP\TomatoEddy\Models\Site;
 
 class RunNodeBot extends Task
 {
@@ -14,7 +14,7 @@ class RunNodeBot extends Task
 
     public function render(): string
     {
-        return view('tasks.node', [
+        return view('tomato-eddy::tasks.node', [
             'path' => $this->path
         ]);
     }

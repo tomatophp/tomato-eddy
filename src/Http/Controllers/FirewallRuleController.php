@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
-use App\Enum;
-use App\Jobs\InstallFirewallRule;
-use App\Jobs\UninstallFirewallRule;
-use App\Models\FirewallRule;
-use App\Models\Server;
-use App\Rules\FirewallPort;
-use App\Server\Firewall\RuleAction;
+use TomatoPHP\TomatoEddy\Enums\Enum;
+use TomatoPHP\TomatoEddy\Jobs\InstallFirewallRule;
+use TomatoPHP\TomatoEddy\Jobs\UninstallFirewallRule;
+use TomatoPHP\TomatoEddy\Models\FirewallRule;
+use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\Rules\FirewallPort;
+use TomatoPHP\TomatoEddy\Enums\Firewall\RuleAction;
 use Illuminate\Http\Request;
 use ProtoneMedia\Splade\Facades\Toast;
 use ProtoneMedia\Splade\SpladeTable;
@@ -18,14 +18,6 @@ use ProtoneMedia\Splade\SpladeTable;
  */
 class FirewallRuleController extends Controller
 {
-    /**
-     * Create the controller instance.
-     */
-    public function __construct()
-    {
-        $this->authorizeResource(FirewallRule::class, 'firewall_rule');
-    }
-
     /**
      * Display a listing of the resource.
      */

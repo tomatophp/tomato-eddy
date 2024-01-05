@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Jobs;
+namespace TomatoPHP\TomatoEddy\Jobs;
 
-use App\Models\FirewallRule;
+use TomatoPHP\TomatoEddy\Models\FirewallRule;
 use App\Models\User;
-use App\Tasks\AddFirewallRule;
+use TomatoPHP\TomatoEddy\Tasks\AddFirewallRule;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

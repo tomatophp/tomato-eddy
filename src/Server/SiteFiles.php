@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Server;
+namespace TomatoPHP\TomatoEddy\Server;
 
-use App\FileOnServer;
-use App\Models\Site;
-use App\Models\SiteType;
-use App\PrismLanguage;
-use App\Rules\CaddyfileOnServer;
-use App\Tasks\ReloadCaddy;
+use TomatoPHP\TomatoEddy\FileOnServer;
+use TomatoPHP\TomatoEddy\Models\Site;
+use TomatoPHP\TomatoEddy\Enums\Models\SiteType;
+use TomatoPHP\TomatoEddy\Enums\Services\PrismLanguage;
+use TomatoPHP\TomatoEddy\Rules\CaddyfileOnServer;
+use TomatoPHP\TomatoEddy\Tasks\ReloadCaddy;
 use Illuminate\Support\Collection;
 
 class SiteFiles

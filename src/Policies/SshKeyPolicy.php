@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Policies;
+namespace TomatoPHP\TomatoEddy\Policies;
 
-use App\Models\SshKey;
+use TomatoPHP\TomatoEddy\Models\SshKey;
 use App\Models\User;
 
 class SshKeyPolicy

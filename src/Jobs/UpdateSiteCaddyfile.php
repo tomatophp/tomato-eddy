@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Jobs;
+namespace TomatoPHP\TomatoEddy\Jobs;
 
-use App\CaddyfilePatcher;
-use App\Models\Site;
+use TomatoPHP\TomatoEddy\Services\CaddyfilePatcher;
+use TomatoPHP\TomatoEddy\Models\Site;
 use App\Models\User;
-use App\Server\PhpVersion;
-use App\Tasks\GetFile;
-use App\Tasks\PrettifyCaddyfile;
-use App\Tasks\UpdateCaddyfile;
+use TomatoPHP\TomatoEddy\Enums\Server\PhpVersion;
+use TomatoPHP\TomatoEddy\Tasks\GetFile;
+use TomatoPHP\TomatoEddy\Tasks\PrettifyCaddyfile;
+use TomatoPHP\TomatoEddy\Tasks\UpdateCaddyfile;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

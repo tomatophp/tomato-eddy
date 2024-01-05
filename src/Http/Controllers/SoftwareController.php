@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
-use App\Jobs\MakeSoftwareDefaultOnServer;
-use App\Jobs\RestartSoftwareOnServer;
-use App\Models\Server;
-use App\Server\Software;
+use TomatoPHP\TomatoEddy\Jobs\MakeSoftwareDefaultOnServer;
+use TomatoPHP\TomatoEddy\Jobs\RestartSoftwareOnServer;
+use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\Server\Software;
 use ProtoneMedia\Splade\Facades\Toast;
 use ProtoneMedia\Splade\SpladeTable;
 

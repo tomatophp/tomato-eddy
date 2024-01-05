@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Jobs;
+namespace TomatoPHP\TomatoEddy\Jobs;
 
-use App\Models\Cron;
+use TomatoPHP\TomatoEddy\Models\Cron;
 use App\Models\User;
-use App\Tasks\DeleteFile;
+use TomatoPHP\TomatoEddy\Tasks\DeleteFile;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

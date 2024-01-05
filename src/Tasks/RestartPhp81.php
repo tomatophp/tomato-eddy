@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tasks;
+namespace TomatoPHP\TomatoEddy\Tasks;
 
 class RestartPhp81 extends RestartService
 {

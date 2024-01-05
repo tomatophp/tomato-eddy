@@ -1,8 +1,8 @@
 <?php
 
-namespace App\View\Components;
+namespace TomatoPHP\TomatoEddy\View\Components;
 
-use App\Models\Site;
+use TomatoPHP\TomatoEddy\Models\Site;
 
 class SiteCaddyfile extends Component implements Caddyfile
 {
@@ -22,6 +22,6 @@ class SiteCaddyfile extends Component implements Caddyfile
      */
     public function render()
     {
-        return view('components.server.site-caddyfile');
+        return view('tomato-eddy::components.server.site-caddyfile');
     }
 }

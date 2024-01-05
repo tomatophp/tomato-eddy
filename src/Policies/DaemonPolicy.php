@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Policies;
+namespace TomatoPHP\TomatoEddy\Policies;
 
-use App\Models\Daemon;
+use TomatoPHP\TomatoEddy\Models\Daemon;
 use App\Models\User;
 
 class DaemonPolicy

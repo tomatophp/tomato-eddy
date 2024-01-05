@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Jobs;
+namespace TomatoPHP\TomatoEddy\Jobs;
 
-use App\Models\Server;
+use TomatoPHP\TomatoEddy\Models\Server;
 use App\Models\User;
-use App\Notifications\ServerStopFailed;
+use TomatoPHP\TomatoEddy\Notifications\ServerStopFailed;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

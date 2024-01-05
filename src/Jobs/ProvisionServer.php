@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Jobs;
+namespace TomatoPHP\TomatoEddy\Jobs;
 
-use App\Infrastructure\Entities\ServerStatus;
-use App\Models\Server;
-use App\Models\ServerTaskDispatcher;
-use App\Models\Task;
-use App\Tasks\ProvisionFreshServer;
+use TomatoPHP\TomatoEddy\Enums\Infrastructure\ServerStatus;
+use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\Models\ServerTaskDispatcher;
+use TomatoPHP\TomatoEddy\Models\Task;
+use TomatoPHP\TomatoEddy\Tasks\ProvisionFreshServer;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Collection;

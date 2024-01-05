@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components;
+namespace TomatoPHP\TomatoEddy\View\Components;
 
 use Closure;
 use Illuminate\Contracts\View\View;
@@ -37,6 +37,6 @@ class TaskCallback extends Component
      */
     public function render(): View|Closure|string
     {
-        return $this->url ? view('components.task-callback') : PHP_EOL;
+        return $this->url ? view('tomato-eddy::components.task-callback') : PHP_EOL;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\SourceControl\Entities;
+namespace TomatoPHP\TomatoEddy\SourceControl\Entities;
 
 class GitRepository
 {

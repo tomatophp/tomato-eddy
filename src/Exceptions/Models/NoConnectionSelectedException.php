@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace TomatoPHP\TomatoEddy\Exceptions\Models;
 
 use Exception;
 

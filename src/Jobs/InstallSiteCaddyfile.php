@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Jobs;
+namespace TomatoPHP\TomatoEddy\Jobs;
 
-use App\Models\Site;
+use TomatoPHP\TomatoEddy\Models\Site;
 use App\Models\User;
-use App\Tasks\UpdateCaddyfile;
-use App\Tasks\UpdateCaddySiteImports;
-use App\View\Components\SiteCaddyfile;
+use TomatoPHP\TomatoEddy\Tasks\UpdateCaddyfile;
+use TomatoPHP\TomatoEddy\Tasks\UpdateCaddySiteImports;
+use TomatoPHP\TomatoEddy\View\Components\SiteCaddyfile;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

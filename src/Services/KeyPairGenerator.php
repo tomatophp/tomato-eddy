@@ -1,8 +1,8 @@
 <?php
 
-namespace App;
+namespace TomatoPHP\TomatoEddy\Services;
 
-use App\Tasks\GenerateEd25519KeyPair;
+use TomatoPHP\TomatoEddy\Tasks\GenerateEd25519KeyPair;
 use Exception;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;

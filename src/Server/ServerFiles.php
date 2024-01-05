@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Server;
+namespace TomatoPHP\TomatoEddy\Server;
 
-use App\FileOnServer;
-use App\Models\Server;
-use App\Models\Site;
-use App\PrismLanguage;
-use App\Rules\CaddyfileOnServer;
-use App\Rules\JsonString;
-use App\Rules\MySqlConfigOnServer;
-use App\Tasks\ReloadCaddy;
-use App\Tasks\RestartMySql;
-use App\Tasks\RestartPhp81;
-use App\Tasks\RestartPhp82;
+use TomatoPHP\TomatoEddy\Services\FileOnServer;
+use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\Models\Site;
+use TomatoPHP\TomatoEddy\Enums\Services\PrismLanguage;
+use TomatoPHP\TomatoEddy\Rules\CaddyfileOnServer;
+use TomatoPHP\TomatoEddy\Rules\JsonString;
+use TomatoPHP\TomatoEddy\Rules\MySqlConfigOnServer;
+use TomatoPHP\TomatoEddy\Tasks\ReloadCaddy;
+use TomatoPHP\TomatoEddy\Tasks\RestartMySql;
+use TomatoPHP\TomatoEddy\Tasks\RestartPhp81;
+use TomatoPHP\TomatoEddy\Tasks\RestartPhp82;
 use Illuminate\Support\Collection;
 
 class ServerFiles

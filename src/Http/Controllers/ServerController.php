@@ -2,7 +2,6 @@
 
 namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\View\View;
 use TomatoPHP\TomatoAdmin\Facade\Tomato;
 use TomatoPHP\TomatoEddy\Http\Requests\CreateServerRequest;
@@ -16,7 +15,7 @@ use TomatoPHP\TomatoEddy\Jobs\RestartServerFromInfrastructure;
 use TomatoPHP\TomatoEddy\Jobs\ScanAccounts;
 use TomatoPHP\TomatoEddy\Jobs\StartServerFromInfrastructure;
 use TomatoPHP\TomatoEddy\Jobs\StopServerFromInfrastructure;
-use TomatoPHP\TomatoEddy\KeyPairGenerator;
+use TomatoPHP\TomatoEddy\Services\KeyPairGenerator;
 use TomatoPHP\TomatoEddy\Models\Credentials;
 use TomatoPHP\TomatoEddy\Models\Server;
 use TomatoPHP\TomatoEddy\Models\SshKey;
@@ -38,11 +37,6 @@ class ServerController extends Controller
     public function __construct()
     {
         $this->model = Server::class;
-    }
-
-    public function user()
-    {
-        return auth('web')->user();
     }
     /**
      * Display a listing of the resource.
@@ -120,7 +114,7 @@ class ServerController extends Controller
 
             Toast::success(__('Bulk Servers Has Been Created'));
 
-            return to_route('servers.index');
+            return to_route('admin.servers.index');
         } else {
             /** @var Server */
             $server = $this->team()->servers()->make([
@@ -135,9 +129,9 @@ class ServerController extends Controller
             $server->public_key = $keyPair->publicKey;
             $server->private_key = $keyPair->privateKey;
 
-            $server->working_directory = config('eddy.server_defaults.working_directory');
-            $server->ssh_port = config('eddy.server_defaults.ssh_port');
-            $server->username = config('eddy.server_defaults.username');
+            $server->working_directory = config('tomato-eddy.server_defaults.working_directory');
+            $server->ssh_port = config('tomato-eddy.server_defaults.ssh_port');
+            $server->username = config('tomato-eddy.server_defaults.username');
 
             $server->password = Str::password(symbols: false);
             $server->database_password = Str::password(symbols: false);
@@ -156,7 +150,7 @@ class ServerController extends Controller
 
             Toast::success(__('Your server is being created and provisioned.'));
 
-            return to_route('servers.show', $server);
+            return to_route('admin.servers.show', $server);
         }
 
     }
@@ -169,16 +163,16 @@ class ServerController extends Controller
         if ($server->status === ServerStatus::Deleting) {
             Toast::warning(__('Your server is being deleted.'));
 
-            return to_route('servers.index');
+            return to_route('admin.servers.index');
         }
 
         if (! $server->provisioned_at) {
-            return view('servers.provisioning', [
+            return view('tomato-eddy::servers.provisioning', [
                 'server' => $server,
             ]);
         }
 
-        return view('servers.show', [
+        return view('tomato-eddy::servers.show', [
             'server' => $server,
         ]);
     }
@@ -199,7 +193,7 @@ class ServerController extends Controller
 
         Toast::message(__('Your server is being deleted.'));
 
-        return to_route('servers.index');
+        return to_route('admin.servers.index');
     }
 
     /**
@@ -252,7 +246,7 @@ class ServerController extends Controller
 
     public function resetView(Server $server)
     {
-        return view('servers.password', [
+        return view('tomato-eddy::servers.password', [
             'server' => $server,
         ]);
     }
@@ -264,7 +258,7 @@ class ServerController extends Controller
             'password' => 'required|min:8',
         ]);
 
-        dispatch(new ResetServerFromInfrastructure($server, config('eddy.server_defaults.username'), $request->get('password')));
+        dispatch(new ResetServerFromInfrastructure($server, config('tomato-eddy.server_defaults.username'), $request->get('password')));
 
         $this->logActivity(__("Resting server ':server'", ['server' => $server->name]), $server);
 
@@ -275,7 +269,7 @@ class ServerController extends Controller
 
     public function storageView(Server $server)
     {
-        return view('servers.storage', [
+        return view('tomato-eddy::servers.storage', [
             'server' => $server,
         ]);
     }

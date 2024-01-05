@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Tasks;
+namespace TomatoPHP\TomatoEddy\Tasks;
 
-use App\Models\Site;
+use TomatoPHP\TomatoEddy\Models\Site;
 
 class UpdateCaddyfile extends Task
 {

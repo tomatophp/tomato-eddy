@@ -1,11 +1,11 @@
 <?php
 
-namespace App;
+namespace TomatoPHP\TomatoEddy\Services;
 
-use App\Models\Certificate;
-use App\Models\Site;
-use App\Models\TlsSetting;
-use App\Server\PhpVersion;
+use TomatoPHP\TomatoEddy\Models\Certificate;
+use TomatoPHP\TomatoEddy\Models\Site;
+use TomatoPHP\TomatoEddy\Enums\Models\TlsSetting;
+use TomatoPHP\TomatoEddy\Enums\Server\PhpVersion;
 use Exception;
 
 class CaddyfilePatcher

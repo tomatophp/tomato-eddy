@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace TomatoPHP\TomatoEddy\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;

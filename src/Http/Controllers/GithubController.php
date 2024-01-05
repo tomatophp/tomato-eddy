@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
-use App\Provider;
-use App\SourceControl\Entities\GitRepository;
-use App\SourceControl\Github;
-use App\SourceControl\ProviderFactory;
+use Illuminate\Http\Request;
+use TomatoPHP\TomatoEddy\Enums\Services\Provider;
+use TomatoPHP\TomatoEddy\SourceControl\Entities\GitRepository;
+use TomatoPHP\TomatoEddy\SourceControl\Github;
+use TomatoPHP\TomatoEddy\SourceControl\ProviderFactory;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
@@ -19,13 +20,20 @@ class GithubController extends Controller
     /**
      * Redirects the user to the Github OAuth page.
      */
-    public function redirect(GithubProvider $githubProvider): RedirectResponse
+    public function redirect(Request $request): RedirectResponse
     {
         if ($this->user()->credentials()->where('provider', Provider::Github)->exists()) {
             Toast::warning(__('You already have a Github account connected.'));
 
-            return to_route('credentials.index');
+            return to_route('admin.credentials.index');
         }
+
+        $githubProvider = new GithubProvider(
+            request: $request,
+            clientId: config('services.github.client_id'),
+            clientSecret: config('services.github.client_secret'),
+            redirectUrl: config('services.github.redirect')
+        );
 
         return $githubProvider->setScopes([
             'repo',
@@ -37,12 +45,19 @@ class GithubController extends Controller
     /**
      * Handles the callback from Github.
      */
-    public function callback(GithubProvider $githubProvider)
+    public function callback(Request $request)
     {
+        $githubProvider = new GithubProvider(
+            request: $request,
+            clientId: config('services.github.client_id'),
+            clientSecret: config('services.github.client_secret'),
+            redirectUrl: config('services.github.redirect')
+        );
+
         if ($this->user()->credentials()->where('provider', Provider::Github)->exists()) {
             Toast::warning(__('You already have a Github account connected.'));
 
-            return to_route('credentials.index');
+            return to_route('admin.credentials.index');
         }
 
         try {
@@ -51,13 +66,13 @@ class GithubController extends Controller
         } catch (ClientException $e) {
             Toast::warning(__('Failed to connect to Github.'));
 
-            return to_route('credentials.index');
+            return to_route('admin.credentials.index');
         }
 
         if (! app()->makeWith(Github::class, ['token' => $user->token])->canConnect()) {
             Toast::warning(__('Failed to connect to Github.'));
 
-            return to_route('credentials.index');
+            return to_route('admin.credentials.index');
         }
 
         $this->user()->credentials()->create([
@@ -71,7 +86,7 @@ class GithubController extends Controller
 
         Toast::info(__('Successfully connected to Github.'));
 
-        return to_route('credentials.index');
+        return to_route('admin.credentials.index');
     }
 
     /**

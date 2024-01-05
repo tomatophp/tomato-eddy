@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Server\Database;
+namespace TomatoPHP\TomatoEddy\Exceptions\Database;
 
-use App\Models\Server;
+use TomatoPHP\TomatoEddy\Models\Server;
 use Exception;
 use ProtoneMedia\Splade\Facades\Toast;
 

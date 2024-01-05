@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Jobs;
+namespace TomatoPHP\TomatoEddy\Jobs;
 
-use App\Models\Task;
-use App\Models\TaskStatus;
+use TomatoPHP\TomatoEddy\Models\Task;
+use TomatoPHP\TomatoEddy\Enums\Models\TaskStatus;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

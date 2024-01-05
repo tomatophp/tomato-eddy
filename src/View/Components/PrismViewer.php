@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components;
+namespace TomatoPHP\TomatoEddy\View\Components;
 
 use Closure;
 use Illuminate\Contracts\View\View;
@@ -29,6 +29,6 @@ class PrismViewer extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.prism-viewer');
+        return view('tomato-eddy::components.prism-viewer');
     }
 }

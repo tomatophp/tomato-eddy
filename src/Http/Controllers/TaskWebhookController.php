@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
-use App\Models\Task;
-use App\Models\TaskStatus;
-use App\Tasks\CallbackType;
+use TomatoPHP\TomatoEddy\Models\Task;
+use TomatoPHP\TomatoEddy\Models\TaskStatus;
+use TomatoPHP\TomatoEddy\Tasks\CallbackType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 

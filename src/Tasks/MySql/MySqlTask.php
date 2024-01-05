@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Tasks\MySql;
+namespace TomatoPHP\TomatoEddy\Tasks\MySql;
 
-use App\Models\Server;
-use App\Tasks\Task;
+use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\Tasks\Task;
 use Exception;
 use Illuminate\Support\Collection;
 

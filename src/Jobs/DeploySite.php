@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Jobs;
+namespace TomatoPHP\TomatoEddy\Jobs;
 
-use App\Models\Deployment;
-use App\Models\Task;
-use App\Tasks;
+use TomatoPHP\TomatoEddy\Models\Deployment;
+use TomatoPHP\TomatoEddy\Models\Task;
+use TomatoPHP\TomatoEddy\Tasks;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;

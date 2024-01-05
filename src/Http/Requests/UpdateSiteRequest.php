@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace TomatoPHP\TomatoEddy\Http\Requests;
 
-use App\Enum;
-use App\Models\Server;
-use App\Models\Site;
-use App\Models\SiteType;
-use App\Server\PhpVersion;
+use TomatoPHP\TomatoEddy\Enums\Enum;
+use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\Models\Site;
+use TomatoPHP\TomatoEddy\Enums\Models\SiteType;
+use TomatoPHP\TomatoEddy\Enums\Server\PhpVersion;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 

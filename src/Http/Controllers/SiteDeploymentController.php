@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
-use App\Models\Deployment;
-use App\Models\Server;
-use App\Models\Site;
+use TomatoPHP\TomatoEddy\Models\Deployment;
+use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\Models\Site;
 use ProtoneMedia\Splade\Facades\Toast;
 use ProtoneMedia\Splade\SpladeTable;
 
@@ -13,14 +13,6 @@ use ProtoneMedia\Splade\SpladeTable;
  */
 class SiteDeploymentController extends Controller
 {
-    /**
-     * Create the controller instance.
-     */
-    public function __construct()
-    {
-        $this->authorizeResource(Deployment::class, 'deployment');
-    }
-
     /**
      * Display a listing of the resource.
      */

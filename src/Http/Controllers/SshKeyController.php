@@ -2,7 +2,6 @@
 
 namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
-use Illuminate\Routing\Controller;
 use TomatoPHP\TomatoAdmin\Facade\Tomato;
 use TomatoPHP\TomatoEddy\Jobs\RemoveSshKeyFromServer;
 use TomatoPHP\TomatoEddy\Models\Server;
@@ -22,12 +21,6 @@ class SshKeyController extends Controller
     {
         $this->model = SshKey::class;
     }
-
-    public function user()
-    {
-        return auth('web')->user();
-    }
-
     /**
      * Display a listing of the resource.
      */

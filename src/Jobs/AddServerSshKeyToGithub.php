@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Jobs;
+namespace TomatoPHP\TomatoEddy\Jobs;
 
-use App\Models\Credentials;
-use App\Models\Server;
-use App\SourceControl\Github;
-use App\SourceControl\ProviderFactory;
+use TomatoPHP\TomatoEddy\Models\Credentials;
+use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\SourceControl\Github;
+use TomatoPHP\TomatoEddy\SourceControl\ProviderFactory;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

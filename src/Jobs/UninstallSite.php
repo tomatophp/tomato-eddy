@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Jobs;
+namespace TomatoPHP\TomatoEddy\Jobs;
 
-use App\Models\Server;
-use App\Tasks\DeleteFile;
-use App\Tasks\UpdateCaddySiteImports;
+use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\Tasks\DeleteFile;
+use TomatoPHP\TomatoEddy\Tasks\UpdateCaddySiteImports;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

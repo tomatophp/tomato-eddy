@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Tasks;
+namespace TomatoPHP\TomatoEddy\Tasks;
 
-use App\Models\Server;
+use TomatoPHP\TomatoEddy\Models\Server;
 
 class AuthorizePublicKey extends Task
 {

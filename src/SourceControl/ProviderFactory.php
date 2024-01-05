@@ -1,9 +1,9 @@
 <?php
 
-namespace App\SourceControl;
+namespace TomatoPHP\TomatoEddy\SourceControl;
 
-use App\Models\Credentials;
-use App\Provider;
+use TomatoPHP\TomatoEddy\Models\Credentials;
+use TomatoPHP\TomatoEddy\Enums\Services\Provider;
 use Exception;
 
 class ProviderFactory

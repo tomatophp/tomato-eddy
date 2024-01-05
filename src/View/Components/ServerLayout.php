@@ -1,8 +1,8 @@
 <?php
 
-namespace App\View\Components;
+namespace TomatoPHP\TomatoEddy\View\Components;
 
-use App\Models\Server;
+use TomatoPHP\TomatoEddy\Models\Server;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
@@ -29,7 +29,7 @@ class ServerLayout extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.server-layout', [
+        return view('tomato-eddy::components.server-layout', [
             'server' => $this->server,
             'navigationItems' => [
                 new NavigationItem(__('Overview'), route('servers.show', $this->server), 'heroicon-o-server'),

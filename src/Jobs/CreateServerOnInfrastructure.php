@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Jobs;
+namespace TomatoPHP\TomatoEddy\Jobs;
 
-use App\Infrastructure\Entities\ServerStatus;
-use App\Infrastructure\ServerProvider;
-use App\Models\Server;
-use App\Provider;
+use TomatoPHP\TomatoEddy\Infrastructure\Entities\ServerStatus;
+use TomatoPHP\TomatoEddy\Infrastructure\ServerProvider;
+use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\Enums\Services\Provider;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

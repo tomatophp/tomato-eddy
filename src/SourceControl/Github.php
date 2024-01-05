@@ -1,8 +1,8 @@
 <?php
 
-namespace App\SourceControl;
+namespace TomatoPHP\TomatoEddy\SourceControl;
 
-use App\SourceControl\Entities\GitRepository;
+use TomatoPHP\TomatoEddy\SourceControl\Entities\GitRepository;
 use Github\Client;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Collection;

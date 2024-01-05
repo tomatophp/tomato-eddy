@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Policies;
+namespace TomatoPHP\TomatoEddy\Policies;
 
-use App\Models\Credentials;
+use TomatoPHP\TomatoEddy\Models\Credentials;
 use App\Models\User;
 
 class CredentialsPolicy

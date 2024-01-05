@@ -2,7 +2,6 @@
 
 namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use TomatoPHP\TomatoEddy\Jobs\AddSshKeyToServer;
 use TomatoPHP\TomatoEddy\Models\Server;
 use TomatoPHP\TomatoEddy\Models\SshKey;
@@ -15,11 +14,6 @@ use ProtoneMedia\Splade\Facades\Toast;
  */
 class AddSshKeyToServerController extends Controller
 {
-    public function user()
-    {
-        return auth('web')->user();
-    }
-
     /**
      * Show a form to add an SSH key to a server.
      */

@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Server\Database;
+namespace TomatoPHP\TomatoEddy\Server\Database;
 
-use App\Models\Server;
-use App\Tasks\MySql\CreateDatabase;
-use App\Tasks\MySql\CreateUser;
-use App\Tasks\MySql\DropDatabase;
-use App\Tasks\MySql\DropUser;
-use App\Tasks\MySql\GetDatabases;
-use App\Tasks\MySql\GetTables;
-use App\Tasks\MySql\GetUsers;
-use App\Tasks\MySql\GrantAllPrivileges;
-use App\Tasks\MySql\MySqlTask;
-use App\Tasks\MySql\RevokeAllPrivileges;
-use App\Tasks\MySql\UpdateUserPassword;
+use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\Tasks\MySql\CreateDatabase;
+use TomatoPHP\TomatoEddy\Tasks\MySql\CreateUser;
+use TomatoPHP\TomatoEddy\Tasks\MySql\DropDatabase;
+use TomatoPHP\TomatoEddy\Tasks\MySql\DropUser;
+use TomatoPHP\TomatoEddy\Tasks\MySql\GetDatabases;
+use TomatoPHP\TomatoEddy\Tasks\MySql\GetTables;
+use TomatoPHP\TomatoEddy\Tasks\MySql\GetUsers;
+use TomatoPHP\TomatoEddy\Tasks\MySql\GrantAllPrivileges;
+use TomatoPHP\TomatoEddy\Tasks\MySql\MySqlTask;
+use TomatoPHP\TomatoEddy\Tasks\MySql\RevokeAllPrivileges;
+use TomatoPHP\TomatoEddy\Tasks\MySql\UpdateUserPassword;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 

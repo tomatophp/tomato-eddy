@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
-use App\Models\Server;
-use App\Provider;
-use App\Tasks\AuthorizePublicKey;
+use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\Enums\Services\Provider;
+use TomatoPHP\TomatoEddy\Tasks\AuthorizePublicKey;
 
 /**
  * @codeCoverageIgnore Handled by Dusk tests.

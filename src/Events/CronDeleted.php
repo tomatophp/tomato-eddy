@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace TomatoPHP\TomatoEddy\Events;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;

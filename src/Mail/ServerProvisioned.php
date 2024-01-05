@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Mail;
+namespace TomatoPHP\TomatoEddy\Mail;
 
-use App\Models\Server;
+use TomatoPHP\TomatoEddy\Models\Server;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;

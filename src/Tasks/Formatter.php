@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tasks;
+namespace TomatoPHP\TomatoEddy\Tasks;
 
 use Illuminate\Support\Facades\Process;
 use ProtoneMedia\LaravelTaskRunner\ProcessRunner;
@@ -28,7 +28,7 @@ class Formatter
      */
     private function handle(string $content, callable $commandCallback): string
     {
-        if (! config('eddy.format_server_content')) {
+        if (! config('tomato-eddy.format_server_content')) {
             return $content;
         }
 

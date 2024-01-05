@@ -1,8 +1,8 @@
 <?php
 
-namespace App;
+namespace TomatoPHP\TomatoEddy\Services;
 
-use App\Models\Server;
+use TomatoPHP\TomatoEddy\Models\Server;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 

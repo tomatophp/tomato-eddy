@@ -1,70 +1,58 @@
-@seoTitle(__('Edit Credentials'))
+<x-tomato-admin-container :label="__('Edit Credentials')">
+    <x-splade-form method="PATCH" :action="route('admin.credentials.update', $credentials)" :default="$credentials" class="space-y-4">
+        <x-splade-select disabled name="provider" :label="__('Provider')" :options="$providers" />
+        <x-splade-input v-show="form.provider != 'github'" name="name" :label="__('Name')" />
 
-<x-app-layout>
-    <x-action-section>
-        <x-slot:title>
-            {{ __('Edit Credentials') }}
-        </x-slot>
+        <x-splade-textarea
+            autosize
+            v-show="form.provider == 'digital_ocean'"
+            name="credentials.digital_ocean_token"
+            :label="__('API Token')"
+            :help="__('Only fill this field if you want to change the token.')"
+        />
 
-        <x-slot:description>
-            {{ __('Edit your credentials.') }}
-        </x-slot>
+        <x-splade-textarea
+            autosize
+            v-show="form.provider == 'hetzner_cloud'"
+            name="credentials.hetzner_cloud_token"
+            :label="__('API Token')"
+            :help="__('Only fill this field if you want to change the token.')"
+        />
 
-        <x-slot:content>
-            <x-splade-form method="PATCH" :action="route('credentials.update', $credentials)" :default="$credentials" class="space-y-4">
-                <x-splade-select disabled name="provider" :label="__('Provider')" :options="$providers" />
-                <x-splade-input v-show="form.provider != 'github'" name="name" :label="__('Name')" />
+        <x-splade-input
+            v-show="form.provider == 'hetzner_cloud'"
+            name="credentials.hetzner_cloud_project_id"
+            :label="__('Project ID')"
+        />
 
-                <x-splade-textarea
-                    autosize
-                    v-show="form.provider == 'digital_ocean'"
-                    name="credentials.digital_ocean_token"
-                    :label="__('API Token')"
-                    :help="__('Only fill this field if you want to change the token.')"
-                />
-
-                <x-splade-textarea
-                    autosize
-                    v-show="form.provider == 'hetzner_cloud'"
-                    name="credentials.hetzner_cloud_token"
-                    :label="__('API Token')"
-                    :help="__('Only fill this field if you want to change the token.')"
-                />
-
-                <x-splade-input
-                    v-show="form.provider == 'hetzner_cloud'"
-                    name="credentials.hetzner_cloud_project_id"
-                    :label="__('Project ID')"
-                />
-
-                <x-splade-input
-                    v-show="form.provider == 'cloudflare'"
-                    name="credentials.cloudflare_domain"
-                    :label="__('Domain')"
-                />
+        <x-splade-input
+            v-show="form.provider == 'cloudflare'"
+            name="credentials.cloudflare_domain"
+            :label="__('Domain')"
+        />
 
 
-                <x-splade-input
-                    v-show="form.provider == 'cloudflare'"
-                    name="credentials.cloudflare_email"
-                    :label="__('Email')"
-                />
+        <x-splade-input
+            v-show="form.provider == 'cloudflare'"
+            name="credentials.cloudflare_email"
+            :label="__('Email')"
+        />
 
-                <x-splade-textarea
-                    autosize
-                    v-show="form.provider == 'cloudflare'"
-                    name="credentials.cloudflare_key"
-                    :label="__('API Key')"
-                />
+        <x-splade-textarea
+            autosize
+            v-show="form.provider == 'cloudflare'"
+            name="credentials.cloudflare_key"
+            :label="__('API Key')"
+        />
 
-                <div class="flex flex-row justify-between items-center">
-                    <x-splade-submit v-show="form.provider != 'github'" :label="__('Save')" />
+        <div class="flex flex-row justify-between items-center">
+            <x-splade-submit v-show="form.provider != 'github'" :label="__('Save')" />
 
-                    <x-splade-link confirm-danger method="DELETE" :href="route('credentials.destroy', $credentials)">
-                        <x-splade-button danger :label="__('Delete Credentials')" />
-                    </x-splade-link>
-                </div>
-            </x-splade-form>
-        </x-slot>
-    </x-action-section>
-</x-app-layout>
+            <x-splade-link confirm-danger method="DELETE" :href="route('admin.credentials.destroy', $credentials)">
+                <x-splade-button danger :label="__('Delete Credentials')" />
+            </x-splade-link>
+        </div>
+    </x-splade-form>
+
+</x-tomato-admin-container>
+

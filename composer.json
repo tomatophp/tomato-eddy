@@ -40,9 +40,8 @@
         "kirschbaum-development/eloquent-power-joins": "^3.2",
         "jamesryanbell/cloudflare": "^1.11",
         "bepsvpt/secure-headers": "^7.4",
-        "laravel/fortify": "^1.15",
-        "jenssegers/agent": "^2.6",
         "moneyphp/money": "^4.3",
-        "phpseclib/phpseclib": "~3.0"
+        "phpseclib/phpseclib": "~3.0",
+        "laravel/socialite": "^5.11"
     }
 }

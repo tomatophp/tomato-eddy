@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
-use App\Enum;
-use App\Jobs\InstallDaemon;
-use App\Jobs\UninstallDaemon;
-use App\Models\Daemon;
-use App\Models\Server;
+use TomatoPHP\TomatoEddy\Enums\Enum;
+use TomatoPHP\TomatoEddy\Jobs\InstallDaemon;
+use TomatoPHP\TomatoEddy\Jobs\UninstallDaemon;
+use TomatoPHP\TomatoEddy\Models\Daemon;
+use TomatoPHP\TomatoEddy\Models\Server;
 use App\Signal;
 use Illuminate\Http\Request;
 use ProtoneMedia\Splade\Facades\Toast;
@@ -17,14 +17,6 @@ use ProtoneMedia\Splade\SpladeTable;
  */
 class DaemonController extends Controller
 {
-    /**
-     * Create the controller instance.
-     */
-    public function __construct()
-    {
-        $this->authorizeResource(Daemon::class, 'daemon');
-    }
-
     /**
      * An array of default signals.
      */

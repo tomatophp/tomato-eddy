@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Tasks;
+namespace TomatoPHP\TomatoEddy\Tasks;
 
-use App\Enum;
-use App\Infrastructure\Entities\ServerStatus;
-use App\Jobs\CleanupFailedServerProvisioning;
-use App\Jobs\UpdateUserPublicKey;
-use App\Mail\ServerProvisioned;
-use App\Models\FirewallRule;
-use App\Models\Server;
-use App\Models\Task as TaskModel;
-use App\Rules\PublicKey;
-use App\Server\Firewall\RuleAction;
-use App\Server\ProvisionStep;
-use App\Server\Software;
+use TomatoPHP\TomatoEddy\Enums\Enum;
+use TomatoPHP\TomatoEddy\Enums\Infrastructure\ServerStatus;
+use TomatoPHP\TomatoEddy\Jobs\CleanupFailedServerProvisioning;
+use TomatoPHP\TomatoEddy\Jobs\UpdateUserPublicKey;
+use TomatoPHP\TomatoEddy\Mail\ServerProvisioned;
+use TomatoPHP\TomatoEddy\Models\FirewallRule;
+use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\Models\Task as TaskModel;
+use TomatoPHP\TomatoEddy\Rules\PublicKey;
+use TomatoPHP\TomatoEddy\Enums\Firewall\RuleAction;
+use TomatoPHP\TomatoEddy\Enums\Server\ProvisionStep;
+use TomatoPHP\TomatoEddy\Enums\Server\Software;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;

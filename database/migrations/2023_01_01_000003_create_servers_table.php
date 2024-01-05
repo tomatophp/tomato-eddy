@@ -1,7 +1,7 @@
 <?php
 
 use TomatoPHP\TomatoEddy\Models\Credentials;
-use TomatoPHP\TomatoEddy\Models\Team;
+use TomatoPHP\TomatoAdmin\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
-use App\FileOnServer;
-use App\Models\Server;
-use App\Tasks\GetFile;
+use TomatoPHP\TomatoEddy\Services\FileOnServer;
+use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\Tasks\GetFile;
 use App\Tasks\UploadFile;
 use Illuminate\Http\Request;
 use ProtoneMedia\Splade\Facades\Splade;

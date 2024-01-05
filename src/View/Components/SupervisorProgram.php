@@ -1,8 +1,8 @@
 <?php
 
-namespace App\View\Components;
+namespace TomatoPHP\TomatoEddy\View\Components;
 
-use App\Models\Daemon;
+use TomatoPHP\TomatoEddy\Models\Daemon;
 
 class SupervisorProgram extends Component implements BashScript
 {
@@ -22,6 +22,6 @@ class SupervisorProgram extends Component implements BashScript
      */
     public function render()
     {
-        return view('components.server.supervisor-program');
+        return view('tomato-eddy::components.server.supervisor-program');
     }
 }

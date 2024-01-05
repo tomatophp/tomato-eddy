@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tasks\MySql;
+namespace TomatoPHP\TomatoEddy\Tasks\MySql;
 
 class GetDatabases extends MySqlTask
 {

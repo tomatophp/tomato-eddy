@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
-use App\Jobs\InstallDatabase;
-use App\Jobs\InstallDatabaseUser;
-use App\Jobs\UninstallDatabase;
-use App\Models\Database;
-use App\Models\DatabaseUser;
-use App\Models\Server;
+use TomatoPHP\TomatoEddy\Jobs\InstallDatabase;
+use TomatoPHP\TomatoEddy\Jobs\InstallDatabaseUser;
+use TomatoPHP\TomatoEddy\Jobs\UninstallDatabase;
+use TomatoPHP\TomatoEddy\Models\Database;
+use TomatoPHP\TomatoEddy\Models\DatabaseUser;
+use TomatoPHP\TomatoEddy\Models\Server;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Validation\Rule;
@@ -19,13 +19,6 @@ use ProtoneMedia\Splade\SpladeTable;
  */
 class DatabaseController extends Controller
 {
-    /**
-     * Create the controller instance.
-     */
-    public function __construct()
-    {
-        $this->authorizeResource(Database::class, 'database');
-    }
 
     /**
      * Display a listing of the resource.

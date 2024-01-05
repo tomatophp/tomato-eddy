@@ -2,7 +2,6 @@
 
 namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use TomatoPHP\TomatoAdmin\Facade\Tomato;
 use TomatoPHP\TomatoEddy\Enums\Enum;
 use TomatoPHP\TomatoEddy\Http\Requests\UpdateCredentialsRequest;
@@ -26,12 +25,7 @@ class CredentialsController extends Controller
     {
         $this->model = Credentials::class;
     }
-
-    public function user()
-    {
-        return auth('web')->user();
-    }
-
+    
     /**
      * Display a listing of the resource.
      */
@@ -94,7 +88,7 @@ class CredentialsController extends Controller
      */
     public function edit(Credentials $credentials)
     {
-        return view('credentials.edit', [
+        return view('tomato-eddy::credentials.edit', [
             'credentials' => $credentials,
             'providers' => Enum::options(Provider::class),
         ]);
@@ -111,7 +105,7 @@ class CredentialsController extends Controller
 
         Toast::message(__('Credentials updated.'));
 
-        return to_route('credentials.index');
+        return to_route('admin.credentials.index');
     }
 
     /**
@@ -123,6 +117,6 @@ class CredentialsController extends Controller
 
         Toast::message(__('Credentials deleted.'));
 
-        return to_route('credentials.index');
+        return to_route('admin.credentials.index');
     }
 }

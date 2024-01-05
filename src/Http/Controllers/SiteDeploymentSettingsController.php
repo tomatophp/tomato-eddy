@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
-use App\Models\Server;
-use App\Models\Site;
+use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\Models\Site;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\RequiredIf;
 use ProtoneMedia\Splade\Facades\Toast;

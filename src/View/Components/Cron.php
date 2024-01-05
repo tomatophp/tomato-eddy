@@ -1,8 +1,8 @@
 <?php
 
-namespace App\View\Components;
+namespace TomatoPHP\TomatoEddy\View\Components;
 
-use App\Models\Cron as CronModel;
+use TomatoPHP\TomatoEddy\Models\Cron as CronModel;
 
 class Cron extends Component implements BashScript
 {
@@ -22,6 +22,6 @@ class Cron extends Component implements BashScript
      */
     public function render()
     {
-        return view('components.server.cron');
+        return view('tomato-eddy::components.server.cron');
     }
 }

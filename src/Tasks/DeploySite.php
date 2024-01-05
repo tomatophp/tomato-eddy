@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Tasks;
+namespace TomatoPHP\TomatoEddy\Tasks;
 
-use App\Events\DeploymentUpdated;
-use App\Jobs\InstallSiteCaddyfile;
-use App\Jobs\InstallWordpressCron;
-use App\Models\Deployment;
-use App\Models\DeploymentStatus;
-use App\Models\Site;
-use App\Models\SiteType;
-use App\Models\Task as TaskModel;
-use App\Rules\Sha1;
+use TomatoPHP\TomatoEddy\Events\DeploymentUpdated;
+use TomatoPHP\TomatoEddy\Jobs\InstallSiteCaddyfile;
+use TomatoPHP\TomatoEddy\Jobs\InstallWordpressCron;
+use TomatoPHP\TomatoEddy\Models\Deployment;
+use TomatoPHP\TomatoEddy\Models\DeploymentStatus;
+use TomatoPHP\TomatoEddy\Models\Site;
+use TomatoPHP\TomatoEddy\Models\SiteType;
+use TomatoPHP\TomatoEddy\Models\Task as TaskModel;
+use TomatoPHP\TomatoEddy\Rules\Sha1;
 use Illuminate\Http\Request;
 
 class DeploySite extends Task implements HasCallbacks
