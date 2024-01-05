@@ -1,4 +1,4 @@
-<x-task-shell-defaults />
+<x-eddy-task-shell-defaults />
 
 @if($rule->action === \App\Server\Firewall\RuleAction::Allow)
     ufw {!! $rule->formatAsUfwRule() !!}

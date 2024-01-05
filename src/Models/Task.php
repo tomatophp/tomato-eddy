@@ -2,6 +2,7 @@
 
 namespace TomatoPHP\TomatoEddy\Models;
 
+use TomatoPHP\TomatoEddy\Enums\Models\TaskStatus;
 use TomatoPHP\TomatoEddy\Jobs\UpdateTaskOutput;
 use TomatoPHP\TomatoEddy\Tasks\CallbackType;
 use TomatoPHP\TomatoEddy\Tasks\GetFile;
@@ -78,7 +79,7 @@ class Task extends Model
         ]);
 
         if ($handleCallbacks && $instance = unserialize($this->instance)) {
-            /** @var \App\Tasks\Task $instance */
+            /** @var Task $instance */
             $instance->setTaskModel($this)->onOutputUpdated($output);
         }
 
@@ -124,7 +125,7 @@ class Task extends Model
      */
     private function webhookUrl(string $name): string
     {
-        $host = rtrim(config('eddy.webhook_url') ?: config('app.url'), '/');
+        $host = rtrim(config('tomato-eddy.webhook_url') ?: config('app.url'), '/');
 
         return $host.URL::signedRoute(
             name: 'webhook.task.'.$name,

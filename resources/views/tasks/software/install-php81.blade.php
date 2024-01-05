@@ -1,4 +1,4 @@
-@include('tasks.apt-functions')
+@include('tomato-eddy::tasks.apt-functions')
 
 echo "Install PHP 8.1"
 
@@ -52,7 +52,7 @@ waitForAptUnlock
 echo "extension=redis.so" > /etc/php/8.1/mods-available/redis.ini
 yes '' | apt install php8.1-redis
 
-@include('tasks.software.update-php-config', ['version' => '8.1'])
+@include('tomato-eddy::tasks.software.update-php-config', ['version' => '8.1'])
 
 service php8.1-fpm restart > /dev/null 2>&1
 

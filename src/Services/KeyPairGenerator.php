@@ -2,6 +2,7 @@
 
 namespace TomatoPHP\TomatoEddy\Services;
 
+use TomatoPHP\TomatoEddy\Enums\Services\KeyPairType;
 use TomatoPHP\TomatoEddy\Tasks\GenerateEd25519KeyPair;
 use Exception;
 use Illuminate\Filesystem\Filesystem;

@@ -2,13 +2,15 @@
 
 namespace TomatoPHP\TomatoEddy\Models;
 
+use App\Models\User;
+use TomatoPHP\TomatoAdmin\Models\Team;
 use TomatoPHP\TomatoEddy\Events\ServerDeleted;
 use TomatoPHP\TomatoEddy\Events\ServerUpdated;
 use TomatoPHP\TomatoEddy\Exceptions\ServerHandler;
-use TomatoPHP\TomatoEddy\Infrastructure\Entities\ServerStatus;
+use TomatoPHP\TomatoEddy\Enums\Infrastructure\ServerStatus;
 use TomatoPHP\TomatoEddy\Infrastructure\Entities\ServerType;
+use TomatoPHP\TomatoEddy\Infrastructure\Interfaces\ServerProvider;
 use TomatoPHP\TomatoEddy\Infrastructure\ProviderFactory;
-use TomatoPHP\TomatoEddy\Infrastructure\ServerProvider;
 use TomatoPHP\TomatoEddy\Jobs\AddServerSshKeyToGithub;
 use TomatoPHP\TomatoEddy\Jobs\CreateServerOnInfrastructure;
 use TomatoPHP\TomatoEddy\Jobs\ProvisionServer;
@@ -17,9 +19,9 @@ use TomatoPHP\TomatoEddy\Models\Task as TaskModel;
 use TomatoPHP\TomatoEddy\Enums\Services\Provider;
 use TomatoPHP\TomatoEddy\Server\Database\DatabaseManager;
 use TomatoPHP\TomatoEddy\Server\Database\MySqlDatabase;
-use TomatoPHP\TomatoEddy\Server\PhpVersion;
-use TomatoPHP\TomatoEddy\Server\ServerFiles;
-use TomatoPHP\TomatoEddy\Server\Software;
+use TomatoPHP\TomatoEddy\Enums\Server\PhpVersion;
+use TomatoPHP\TomatoEddy\Enums\Server\ServerFiles;
+use TomatoPHP\TomatoEddy\Enums\Server\Software;
 use TomatoPHP\TomatoEddy\Tasks\Task;
 use TomatoPHP\TomatoEddy\Tasks\UploadFile;
 use TomatoPHP\TomatoEddy\Tasks\Whoami;
@@ -62,6 +64,8 @@ class Server extends Model
         'description',
         'is_ready',
         'ssk_key_id',
+        'provider_id',
+        'storage_id'
     ];
 
     protected $casts = [
@@ -80,6 +84,7 @@ class Server extends Model
         'storage_in_gb' => 'integer',
         'uninstallation_requested_at' => 'datetime',
         'user_public_key' => 'encrypted',
+        'provider_id' => 'encrypted',
     ];
 
     protected $dispatchesEvents = [
@@ -181,7 +186,7 @@ class Server extends Model
      */
     public function provisionScriptUrl(): string
     {
-        $host = rtrim(config('eddy.webhook_url') ?: config('app.url'), '/');
+        $host = rtrim(config('tomato-eddy.webhook_url') ?: config('app.url'), '/');
 
         return $host.URL::signedRoute(
             name: 'servers.provisionScript',
@@ -230,7 +235,7 @@ class Server extends Model
      */
     private static function randomSshProxy(): ?string
     {
-        $proxies = array_filter(config('eddy.ssh_proxies', []));
+        $proxies = array_filter(config('tomato-eddy.ssh_proxies', []));
 
         return count($proxies) > 0 ? Arr::random($proxies) : null;
     }
@@ -383,9 +388,5 @@ class Server extends Model
     public function firewallRules(): HasMany
     {
         return $this->hasMany(FirewallRule::class);
-    }
-
-    public function tags(){
-        return $this->belongsToMany(Tag::class, 'server_has_tags', 'server_id', 'tag_id');
     }
 }

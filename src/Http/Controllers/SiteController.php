@@ -36,7 +36,7 @@ class SiteController extends Controller
      */
     public function index(Server $server)
     {
-        return view('sites.index', [
+        return view('tomato-eddy::sites.index', [
             'server' => $server,
             'sites' => SpladeTable::for($server->sites()->with('latestDeployment'))
                 ->withGlobalSearch(columns: ['address'])

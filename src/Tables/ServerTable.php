@@ -2,7 +2,7 @@
 
 namespace TomatoPHP\TomatoEddy\Tables;
 
-use TomatoPHP\TomatoEddy\Infrastructure\Entities\ServerStatus;
+use TomatoPHP\TomatoEddy\Enums\Infrastructure\ServerStatus;
 use TomatoPHP\TomatoEddy\Jobs\DeleteServerFromInfrastructure;
 use TomatoPHP\TomatoEddy\Models\Account;
 use TomatoPHP\TomatoEddy\Models\Log;
@@ -65,12 +65,6 @@ class ServerTable extends AbstractTable
             ->bulkAction(
                 label: 'Delete Selected',
                 each: function (Server $server) {
-                    $sites = $server->sites();
-                    foreach ($sites as $site){
-                        Account::where('site_id', $site->id)->delete();
-                        Log::where('site_id', $site->id)->delete();
-                        $site->delete();
-                    }
                     try {
                         $server->forceFill([
                             'status' => ServerStatus::Deleting,
@@ -82,7 +76,6 @@ class ServerTable extends AbstractTable
                         }catch (\Exception $e){}
                     }
                     catch (\Exception $e) {}
-                    $server->delete();
                 },
                 after: fn () => Toast::message(__('Your server is being deleted.'))->autoDismiss(2),
                 confirm: true

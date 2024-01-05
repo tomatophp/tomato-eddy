@@ -16,11 +16,11 @@ class ServerProvisionScriptController extends Controller
      */
     public function __invoke(Server $server)
     {
-        $teamSubscriptionOptions = $server->team->subscriptionOptions();
-
-        if ($teamSubscriptionOptions->mustVerifySubscription() && ! $teamSubscriptionOptions->onTrialOrIsSubscribed()) {
-            abort(402, 'Your team must have an active subscription to perform this action.');
-        }
+//        $teamSubscriptionOptions = $server->team->subscriptionOptions();
+//
+//        if ($teamSubscriptionOptions->mustVerifySubscription() && ! $teamSubscriptionOptions->onTrialOrIsSubscribed()) {
+//            abort(402, 'Your team must have an active subscription to perform this action.');
+//        }
 
         if ($server->provider !== Provider::CustomServer) {
             return '';

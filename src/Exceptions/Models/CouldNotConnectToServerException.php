@@ -4,6 +4,7 @@ namespace TomatoPHP\TomatoEddy\Exceptions\Models;
 
 use Exception;
 use ProtoneMedia\Splade\Facades\Toast;
+use TomatoPHP\TomatoEddy\Models\Server;
 
 class CouldNotConnectToServerException extends Exception
 {
@@ -25,6 +26,6 @@ class CouldNotConnectToServerException extends Exception
             'server' => $this->server->name,
         ]));
 
-        return back(fallback: route('servers.show', $this->server));
+        return back(fallback: route('admin.servers.show', $this->server));
     }
 }

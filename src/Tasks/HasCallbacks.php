@@ -2,6 +2,7 @@
 
 namespace TomatoPHP\TomatoEddy\Tasks;
 
+use TomatoPHP\TomatoEddy\Enums\Tasks\CallbackType;
 use TomatoPHP\TomatoEddy\Models\Task;
 use Illuminate\Http\Request;
 

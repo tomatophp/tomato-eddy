@@ -1,19 +1,19 @@
-<x-task-shell-defaults />
+<x-eddy-task-shell-defaults />
 
-@include('tasks.common-functions')
+@include('tomato-eddy::tasks.common-functions')
 
-@include('tasks.apt-functions')
+@include('tomato-eddy::tasks.apt-functions')
 
 @foreach($provisionSteps() as $step)
     @include($step->getViewName())
 
-    <x-task-callback :url="$callbackUrl()" :data="['provision_step_completed' => $step]" />
+    <x-eddy-task-callback :url="$callbackUrl()" :data="['provision_step_completed' => $step]" />
 @endforeach
 
 @foreach($softwareStack() as $software)
-    @include($software->getInstallationViewName())
+    @include('tomato-eddy::'.$software->getInstallationViewName())
 
-    <x-task-callback :url="$callbackUrl()" :data="['software_installed' => $software]" />
+    <x-eddy-task-callback :url="$callbackUrl()" :data="['software_installed' => $software]" />
 @endforeach
 
 # See 'apt-update-upgrade'

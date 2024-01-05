@@ -36,10 +36,6 @@ cd {!! $repositoryDirectory !!}
 @else
     git reset --hard HEAD
     git pull origin {!! $site->repository_branch !!}
-    cd {!! $repositoryDirectory !!}/playwright
-    npm install -D @playwright/test@latest
-    npx playwright install
-    npm i
 @endif
 
 @if($site->zero_downtime_deployment)

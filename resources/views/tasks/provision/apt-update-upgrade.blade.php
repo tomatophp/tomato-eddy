@@ -1,4 +1,4 @@
-@include('tasks.apt-functions')
+@include('tomato-eddy::tasks.apt-functions')
 
 echo "Update package repositories and upgrade packages"
 

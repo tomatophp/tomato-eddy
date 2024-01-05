@@ -66,4 +66,11 @@ return [
      */
     'fake_credentials_validation' => env('FAKE_CREDENTIALS_VALIDATION', false),
 
+
+    'test_public_key' => env('TEST_PUBLIC_KEY'),
+
+    'vagrant' => [
+        'path' => storage_path('app/vagrant'),
+    ],
+
 ];

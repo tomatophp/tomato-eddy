@@ -1,3 +1,3 @@
-<x-task-shell-defaults />
+<x-eddy-task-shell-defaults />
 
 ufw delete {!! $rule->formatAsUfwRule() !!}

@@ -2,11 +2,13 @@
 
 namespace TomatoPHP\TomatoEddy\Infrastructure;
 
-use TomatoPHP\TomatoEddy\Models\Credentials;
-use TomatoPHP\TomatoEddy\Models\Server;
-use TomatoPHP\TomatoEddy\Enums\Services\Provider;
+
 use Exception;
 use ProtoneMedia\LaravelTaskRunner\ProcessRunner;
+use TomatoPHP\TomatoEddy\Enums\Services\Provider;
+use TomatoPHP\TomatoEddy\Infrastructure\Interfaces\ServerProvider;
+use TomatoPHP\TomatoEddy\Models\Credentials;
+use TomatoPHP\TomatoEddy\Models\Server;
 
 class ProviderFactory
 {
@@ -21,7 +23,7 @@ class ProviderFactory
         }
 
         return match ($server->provider) {
-            Provider::Vagrant => new Vagrant($this->processRunner, config('services.vagrant.path')),
+            Provider::Vagrant => new Vagrant($this->processRunner, config('tomato-eddy.vagrant.path')),
 
             default => throw new Exception('Invalid provider')
         };
@@ -32,7 +34,7 @@ class ProviderFactory
         return match ($credentials->provider) {
             Provider::DigitalOcean => new DigitalOcean($credentials->credentials['digital_ocean_token']),
             Provider::HetznerCloud => new HetznerCloud($credentials->credentials['hetzner_cloud_token']),
-            Provider::Vagrant => new Vagrant($this->processRunner, config('services.vagrant.path')),
+            Provider::Vagrant => new Vagrant($this->processRunner, config('tomato-eddy.vagrant.path')),
 
             default => throw new Exception('Invalid provider')
         };

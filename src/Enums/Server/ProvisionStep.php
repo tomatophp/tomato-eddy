@@ -54,6 +54,6 @@ enum ProvisionStep: string
      */
     public function getViewName(): string
     {
-        return 'tasks.provision.'.Str::replace('_', '-', $this->value);
+        return 'tomato-eddy::tasks.provision.'.Str::replace('_', '-', $this->value);
     }
 }

@@ -27,7 +27,7 @@ class CreateServerRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->currentTeam->subscriptionOptions()->canCreateServer();
+        return true;
     }
 
     /**

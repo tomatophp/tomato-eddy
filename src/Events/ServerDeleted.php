@@ -41,7 +41,7 @@ class ServerDeleted implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            Splade::redirectOnEvent()->route('servers.index'),
+            Splade::redirectOnEvent()->route('admin.servers.index'),
             Splade::toastOnEvent()->warning(__('The server has been deleted.')),
         ];
     }

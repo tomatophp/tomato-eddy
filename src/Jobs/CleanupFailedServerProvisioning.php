@@ -2,14 +2,15 @@
 
 namespace TomatoPHP\TomatoEddy\Jobs;
 
-use TomatoPHP\TomatoEddy\Models\Server;
-use TomatoPHP\TomatoEddy\Models\Task;
-use TomatoPHP\TomatoEddy\Notifications\ServerProvisioningFailed;
+
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\Notifications\ServerProvisioningFailed;
+use TomatoPHP\TomatoEddy\Tasks\Task;
 
 class CleanupFailedServerProvisioning implements ShouldQueue
 {
@@ -31,6 +32,10 @@ class CleanupFailedServerProvisioning implements ShouldQueue
      */
     public function handle(): void
     {
+        if ($this->server->provider_id) {
+            $this->server->getProvider()->deleteServer($this->server->provider_id);
+        }
+
         rescue(fn () => $this->task?->updateOutputWithoutCallbacks(), report: false);
 
         $this->server->createdByUser?->notify(

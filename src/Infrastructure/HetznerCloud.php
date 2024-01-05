@@ -68,6 +68,16 @@ class HetznerCloud implements ServerProvider, HasCredentials
         return $data;
     }
 
+    public function getAllServers()
+    {
+        return $this->getAll('servers');
+    }
+    
+    public function mapServers()
+    {
+        
+    }
+
     /**
      * Check if the Hetzner Cloud client can connect to the API.
      */

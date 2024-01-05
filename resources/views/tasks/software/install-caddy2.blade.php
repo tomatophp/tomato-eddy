@@ -1,4 +1,4 @@
-@include('tasks.apt-functions')
+@include('tomato-eddy::tasks.apt-functions')
 
 echo "Install Caddy webserver"
 

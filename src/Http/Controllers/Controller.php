@@ -2,9 +2,11 @@
 
 namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use TomatoPHP\TomatoAdmin\Models\Team;
 use TomatoPHP\TomatoEddy\Models\ActivityLog;
 
 class Controller extends BaseController

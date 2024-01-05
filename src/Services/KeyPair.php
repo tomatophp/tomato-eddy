@@ -2,6 +2,8 @@
 
 namespace TomatoPHP\TomatoEddy\Services;
 
+use TomatoPHP\TomatoEddy\Enums\Services\KeyPairType;
+
 class KeyPair
 {
     public function __construct(

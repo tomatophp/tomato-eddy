@@ -1,4 +1,4 @@
-<x-task-shell-defaults />
+<x-eddy-task-shell-defaults />
 
 cat > {!! $path !!} << 'EOF'
 {!! $mysqlConfig !!}

@@ -29,7 +29,7 @@ class WaitForServerToConnect implements ShouldQueue
      *
      * @var int
      */
-    public $tries = 40;
+    public $tries = 60;
 
     /**
      * Execute the job.
@@ -42,7 +42,7 @@ class WaitForServerToConnect implements ShouldQueue
             $ip = $this->server->getProvider()->getPublicIpv4OfServer($this->server->provider_id);
 
             if (! $ip) {
-                $this->release(15);
+                $this->release(30);
 
                 return false;
             }
@@ -51,7 +51,7 @@ class WaitForServerToConnect implements ShouldQueue
         }
 
         if (! $this->server->canConnectOverSsh()) {
-            $this->release(15);
+            $this->release(30);
 
             return false;
         }

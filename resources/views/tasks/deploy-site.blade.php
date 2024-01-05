@@ -1,6 +1,6 @@
-<x-task-shell-defaults />
+<x-eddy-task-shell-defaults />
 
-@include('tasks.deployment.shell-variables')
+@include('tomato-eddy::tasks.deployment.shell-variables')
 
 # Create the necessary directories
 mkdir -p {!! $repositoryDirectory !!}
@@ -13,10 +13,10 @@ mkdir -p {!! $logsDirectory !!}
 @endif
 
 @if($site->repository_url)
-    @include('tasks.deployment.update-repository')
+    @include('tomato-eddy::tasks.deployment.update-repository')
 
     @unless($site->installed_at)
-        @include('tasks.deployment.prepare-fresh-installation')
+        @include('tomato-eddy::tasks.deployment.prepare-fresh-installation')
     @endunless
 
     @if($site->hook_after_updating_repository)
@@ -25,10 +25,10 @@ mkdir -p {!! $logsDirectory !!}
         {!! $site->hook_after_updating_repository !!}
     @endif
 
-    @include('tasks.deployment.send-repository-data')
+    @include('tomato-eddy::tasks.deployment.send-repository-data')
 @endif
 
-@if($site->installed_at && $site->type === \App\Models\SiteType::Wordpress)
+@if($site->installed_at && $site->type === \TomatoPHP\TomatoEddy\Enums\Models\SiteType::Wordpress)
     echo "Wordpress already installed!"
 @endif
 

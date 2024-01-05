@@ -1,4 +1,4 @@
-@include('tasks.apt-functions')
+@include('tomato-eddy::tasks.apt-functions')
 
 echo "Install PHP 8.2"
 
@@ -51,7 +51,7 @@ echo "Install Redis for PHP 8.2"
 waitForAptUnlock
 yes '' | apt-get install php8.2-redis
 
-@include('tasks.software.update-php-config', ['version' => '8.2'])
+@include('tomato-eddy::tasks.software.update-php-config', ['version' => '8.2'])
 
 service php8.2-fpm restart > /dev/null 2>&1
 

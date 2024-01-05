@@ -2,6 +2,10 @@
 
 namespace TomatoPHP\TomatoEddy\Models;
 
+use TomatoPHP\TomatoEddy\Enums\Models\TaskStatus;
+use TomatoPHP\TomatoEddy\Exceptions\Models\CouldNotConnectToServerException;
+use TomatoPHP\TomatoEddy\Exceptions\Models\NoConnectionSelectedException;
+use TomatoPHP\TomatoEddy\Exceptions\Models\TaskFailedException;
 use TomatoPHP\TomatoEddy\Jobs\UpdateTaskOutput;
 use TomatoPHP\TomatoEddy\Models\Task as TaskModel;
 use TomatoPHP\TomatoEddy\Tasks\HasCallbacks;
@@ -207,7 +211,7 @@ class ServerTaskDispatcher
     public function dispatch(): ProcessOutput|TaskModel|null
     {
         if ($this->pendingTask->getConnection() == null) {
-            throw new NoConnectionSelectedException;
+            throw new NoConnectionSelectedException();
         }
 
         if ($this->keepTrack) {

@@ -2,9 +2,9 @@
 
 namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
+use TomatoPHP\TomatoEddy\Enums\Models\TaskStatus;
+use TomatoPHP\TomatoEddy\Enums\Tasks\CallbackType;
 use TomatoPHP\TomatoEddy\Models\Task;
-use TomatoPHP\TomatoEddy\Models\TaskStatus;
-use TomatoPHP\TomatoEddy\Tasks\CallbackType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -35,7 +35,7 @@ class TaskWebhookController
      */
     public function markAsTimedOut(Request $request, Task $task): Response
     {
-        $this->verifyTeamSubscription($task);
+//        $this->verifyTeamSubscription($task);
         $this->verifyTaskIsPending($task);
 
         $task->update([
@@ -57,7 +57,7 @@ class TaskWebhookController
             'exit_code' => 'required|integer|min:1|max:255',
         ]);
 
-        $this->verifyTeamSubscription($task);
+//        $this->verifyTeamSubscription($task);
         $this->verifyTaskIsPending($task);
 
         $task->update([
@@ -75,7 +75,7 @@ class TaskWebhookController
      */
     public function markAsFinished(Request $request, Task $task): Response
     {
-        $this->verifyTeamSubscription($task);
+//        $this->verifyTeamSubscription($task);
         $this->verifyTaskIsPending($task);
 
         $task->update([
@@ -92,7 +92,7 @@ class TaskWebhookController
      */
     public function callback(Request $request, Task $task): Response
     {
-        $this->verifyTeamSubscription($task);
+//        $this->verifyTeamSubscription($task);
         $this->verifyTaskIsPending($task);
 
         $task->handleCallback($request, CallbackType::Custom);

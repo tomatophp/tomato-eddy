@@ -2,13 +2,61 @@
 
 use \Illuminate\Support\Facades\Route;
 
+
+Route::middleware('signed:relative')->group(function () {
+    Route::get('/servers/{server}/provision-script', \TomatoPHP\TomatoEddy\Http\Controllers\ServerProvisionScriptController::class)->name('servers.provisionScript');
+    Route::post('/webhook/task/{task}/timeout', [\TomatoPHP\TomatoEddy\Http\Controllers\TaskWebhookController::class, 'markAsTimedOut'])->name('webhook.task.markAsTimedOut');
+    Route::post('/webhook/task/{task}/failed', [\TomatoPHP\TomatoEddy\Http\Controllers\TaskWebhookController::class, 'markAsFailed'])->name('webhook.task.markAsFailed');
+    Route::post('/webhook/task/{task}/finished', [\TomatoPHP\TomatoEddy\Http\Controllers\TaskWebhookController::class, 'markAsFinished'])->name('webhook.task.markAsFinished');
+    Route::post('/webhook/task/{task}/callback', [\TomatoPHP\TomatoEddy\Http\Controllers\TaskWebhookController::class, 'callback'])->name('webhook.task.callback');
+});
+
+
 Route::middleware(['web', 'auth', 'verified', 'splade'])->prefix('admin')->name('admin.')->group(function(){
     //Servers
+    Route::get('servers/build', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'build'])->name('servers.build');
+    Route::get('servers/sync', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'sync'])->name('servers.sync');
+    Route::get('servers/scan', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'scan'])->name('servers.scan');
+    Route::get('servers/restart-all', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'restartAll'])->name('servers.restart.all');
+    Route::post('servers/{server}/restart', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'restart'])->name('servers.restart');
+    Route::post('servers/{server}/disconect', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'disconect'])->name('servers.disconect');
+    Route::post('servers/{server}/stop', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'stop'])->name('servers.stop');
+    Route::post('servers/{server}/start', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'start'])->name('servers.start');
+    Route::get('servers/{server}/reset', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'resetView'])->name('servers.reset.view');
+    Route::post('servers/{server}/reset', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'reset'])->name('servers.reset');
+    Route::get('servers/{server}/storage', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'storageView'])->name('servers.storage.view');
+    Route::post('servers/{server}/storage', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'storage'])->name('servers.storage');
+    Route::get('servers/connect', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'connect'])->name('servers.connect');
+    Route::post('servers/connect', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'link'])->name('servers.link');
     Route::resource('servers', \TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class);
+    Route::resource('servers.crons', \TomatoPHP\TomatoEddy\Http\Controllers\CronController::class);
+    Route::resource('servers.daemons', \TomatoPHP\TomatoEddy\Http\Controllers\DaemonController::class);
+    Route::resource('servers.databases', \TomatoPHP\TomatoEddy\Http\Controllers\DatabaseController::class)->except(['show', 'update']);
+    Route::resource('servers.database-users', \TomatoPHP\TomatoEddy\Http\Controllers\DatabaseUserController::class)->except(['index', 'show']);
+    Route::resource('servers.files', \TomatoPHP\TomatoEddy\Http\Controllers\FileController::class)->only(['index', 'show', 'edit', 'update']);
+    Route::resource('servers.firewall-rules', \TomatoPHP\TomatoEddy\Http\Controllers\FirewallRuleController::class);
+    Route::resource('servers.sites', \TomatoPHP\TomatoEddy\Http\Controllers\SiteController::class);
+    Route::get('servers/{server}/logs', \TomatoPHP\TomatoEddy\Http\Controllers\LogController::class)->name('servers.logs.index');
+    Route::get('servers/{server}/software', [\TomatoPHP\TomatoEddy\Http\Controllers\SoftwareController::class, 'index'])->name('servers.software.index');
+    Route::post('servers/{server}/software/{software}/default', [\TomatoPHP\TomatoEddy\Http\Controllers\SoftwareController::class, 'default'])->name('servers.software.default');
+    Route::post('servers/{server}/software/{software}/restart', [\TomatoPHP\TomatoEddy\Http\Controllers\SoftwareController::class, 'restart'])->name('servers.software.restart');
     Route::get('servers/provider/{credentials}/regions', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerProviderController::class, 'regions'])->name('servers.provider.regions');
     Route::get('servers/provider/{credentials}/types/{region}', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerProviderController::class, 'types'])->name('servers.provider.types');
     Route::get('servers/provider/{credentials}/images/{region}', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerProviderController::class, 'images'])->name('servers.provider.images');
 
+
+    Route::name('servers.sites.')
+        ->prefix('servers/{server}/sites/{site}')
+        ->group(function () {
+            Route::get('deployment-settings', [\TomatoPHP\TomatoEddy\Http\Controllers\SiteDeploymentSettingsController::class, 'edit'])->name('deployment-settings.edit');
+            Route::patch('deployment-settings', [\TomatoPHP\TomatoEddy\Http\Controllers\SiteDeploymentSettingsController::class, 'update'])->name('deployment-settings.update');
+            Route::post('deploy-token', \TomatoPHP\TomatoEddy\Http\Controllers\SiteDeployTokenController::class)->name('refresh-deploy-token');
+            Route::resource('deployments', \TomatoPHP\TomatoEddy\Http\Controllers\SiteDeploymentController::class)->only(['index', 'show', 'store']);
+            Route::get('files', [\TomatoPHP\TomatoEddy\Http\Controllers\SiteFileController::class, 'index'])->name('files.index');
+            Route::get('ssl', [\TomatoPHP\TomatoEddy\Http\Controllers\SiteSslController::class, 'edit'])->name('ssl.edit');
+            Route::patch('ssl', [\TomatoPHP\TomatoEddy\Http\Controllers\SiteSslController::class, 'update'])->name('ssl.update');
+            Route::get('logs', [\TomatoPHP\TomatoEddy\Http\Controllers\SiteLogController::class, 'index'])->name('logs.index');
+        });
     //Credentials
     Route::resource('credentials', \TomatoPHP\TomatoEddy\Http\Controllers\CredentialsController::class)->parameters(['credentials' => 'credentials'])->except('show');
 
@@ -30,14 +78,7 @@ Route::middleware('web', 'auth', 'verified', 'splade')->prefix('admin')->name('a
 //
 //Route::any('/deploy/{site}/{token}', [SiteDeploymentController::class, 'deployWithToken'])->name('site.deployWithToken');
 //
-//Route::middleware('signed:relative')->group(function () {
-//    Route::get('/servers/{server}/provision-script', ServerProvisionScriptController::class)->name('servers.provisionScript');
-//    Route::post('/webhook/task/{task}/timeout', [TaskWebhookController::class, 'markAsTimedOut'])->name('webhook.task.markAsTimedOut');
-//    Route::post('/webhook/task/{task}/failed', [TaskWebhookController::class, 'markAsFailed'])->name('webhook.task.markAsFailed');
-//    Route::post('/webhook/task/{task}/finished', [TaskWebhookController::class, 'markAsFinished'])->name('webhook.task.markAsFinished');
-//    Route::post('/webhook/task/{task}/callback', [TaskWebhookController::class, 'callback'])->name('webhook.task.callback');
-//});
-//
+
 $authMiddleware = [
     'auth:sanctum',
     config('jetstream.auth_session'),

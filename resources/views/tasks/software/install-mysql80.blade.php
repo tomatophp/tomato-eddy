@@ -1,4 +1,4 @@
-@include('tasks.apt-functions')
+@include('tomato-eddy::tasks.apt-functions')
 
 echo "Install MySQL 8.0"
 
@@ -42,13 +42,13 @@ mysql --user="root" --password="{{ $server->database_password }}" -e "GRANT ALL 
 mysql --user="root" --password="{{ $server->database_password }}" -e "GRANT ALL PRIVILEGES ON *.* TO root@'%' WITH GRANT OPTION;"
 service mysql restart
 
-mysql --user="root" --password="{{ $server->database_password }}" -e "CREATE USER '{{ config('eddy.server_defaults.database_name') }}'@'{{ $server->public_ipv4 }}' IDENTIFIED BY '{{ $server->database_password }}';"
-mysql --user="root" --password="{{ $server->database_password }}" -e "CREATE USER '{{ config('eddy.server_defaults.database_name') }}'@'%' IDENTIFIED BY '{{ $server->database_password }}';"
-mysql --user="root" --password="{{ $server->database_password }}" -e "GRANT ALL PRIVILEGES ON *.* TO '{{ config('eddy.server_defaults.database_name') }}'@'{{ $server->public_ipv4 }}' WITH GRANT OPTION;"
-mysql --user="root" --password="{{ $server->database_password }}" -e "GRANT ALL PRIVILEGES ON *.* TO '{{ config('eddy.server_defaults.database_name') }}'@'%' WITH GRANT OPTION;"
+mysql --user="root" --password="{{ $server->database_password }}" -e "CREATE USER '{{ config('tomato-eddy.server_defaults.database_name') }}'@'{{ $server->public_ipv4 }}' IDENTIFIED BY '{{ $server->database_password }}';"
+mysql --user="root" --password="{{ $server->database_password }}" -e "CREATE USER '{{ config('tomato-eddy.server_defaults.database_name') }}'@'%' IDENTIFIED BY '{{ $server->database_password }}';"
+mysql --user="root" --password="{{ $server->database_password }}" -e "GRANT ALL PRIVILEGES ON *.* TO '{{ config('tomato-eddy.server_defaults.database_name') }}'@'{{ $server->public_ipv4 }}' WITH GRANT OPTION;"
+mysql --user="root" --password="{{ $server->database_password }}" -e "GRANT ALL PRIVILEGES ON *.* TO '{{ config('tomato-eddy.server_defaults.database_name') }}'@'%' WITH GRANT OPTION;"
 mysql --user="root" --password="{{ $server->database_password }}" -e "FLUSH PRIVILEGES;"
 
-mysql --user="root" --password="{{ $server->database_password }}" -e "CREATE DATABASE {{ config('eddy.server_defaults.database_name') }} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+mysql --user="root" --password="{{ $server->database_password }}" -e "CREATE DATABASE {{ config('tomato-eddy.server_defaults.database_name') }} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
 service mysql restart
 

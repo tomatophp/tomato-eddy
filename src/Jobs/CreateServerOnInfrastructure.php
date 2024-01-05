@@ -2,10 +2,6 @@
 
 namespace TomatoPHP\TomatoEddy\Jobs;
 
-use TomatoPHP\TomatoEddy\Infrastructure\Entities\ServerStatus;
-use TomatoPHP\TomatoEddy\Infrastructure\ServerProvider;
-use TomatoPHP\TomatoEddy\Models\Server;
-use TomatoPHP\TomatoEddy\Enums\Services\Provider;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,6 +12,10 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Throwable;
+use TomatoPHP\TomatoEddy\Enums\Infrastructure\ServerStatus;
+use TomatoPHP\TomatoEddy\Enums\Services\Provider;
+use TomatoPHP\TomatoEddy\Infrastructure\Interfaces\ServerProvider;
+use TomatoPHP\TomatoEddy\Models\Server;
 
 class CreateServerOnInfrastructure implements ShouldQueue
 {
@@ -85,7 +85,7 @@ class CreateServerOnInfrastructure implements ShouldQueue
     {
         $keys = [];
 
-        $testPublicKey = config('services.test_public_key');
+        $testPublicKey = config('tomato-eddy.test_public_key');
 
         if ($testPublicKey) {
             $keys[] = ($client->findSshKeyByPublicKey($testPublicKey) ?: $client->createSshKey($testPublicKey))->id;

@@ -2,6 +2,7 @@
 
 namespace TomatoPHP\TomatoEddy;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use TomatoPHP\TomatoAdmin\Facade\TomatoMenu;
 use TomatoPHP\TomatoAdmin\Services\Contracts\Menu;
@@ -45,6 +46,15 @@ use ProtoneMedia\Splade\Components\Form\Select;
 use ProtoneMedia\Splade\Facades\Splade;
 use ProtoneMedia\Splade\SpladeTable;
 use ProtoneMedia\Splade\SpladeToast;
+use TomatoPHP\TomatoEddy\View\Components\NavigationItem;
+use TomatoPHP\TomatoEddy\View\Components\PrismEditor;
+use TomatoPHP\TomatoEddy\View\Components\PrismViewer;
+use TomatoPHP\TomatoEddy\View\Components\ServerLayout;
+use TomatoPHP\TomatoEddy\View\Components\SiteCaddyfile;
+use TomatoPHP\TomatoEddy\View\Components\SiteLayout;
+use TomatoPHP\TomatoEddy\View\Components\SupervisorProgram;
+use TomatoPHP\TomatoEddy\View\Components\TaskCallback;
+use TomatoPHP\TomatoEddy\View\Components\TaskShellDefaults;
 
 
 class TomatoEddyServiceProvider extends ServiceProvider
@@ -89,6 +99,21 @@ class TomatoEddyServiceProvider extends ServiceProvider
 
         //Register Routes
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+
+        Config::set('task-runner.task_views', 'tomato-eddy::tasks');
+
+        $this->loadViewComponentsAs('eddy', [
+            Cron::class,
+            NavigationItem::class,
+            PrismEditor::class,
+            PrismViewer::class,
+            ServerLayout::class,
+            SiteCaddyfile::class,
+            SiteLayout::class,
+            SupervisorProgram::class,
+            TaskCallback::class,
+            TaskShellDefaults::class
+        ]);
 
     }
 

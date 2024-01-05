@@ -1,6 +1,6 @@
-<x-task-shell-defaults :exit-immediately="false" />
+<x-eddy-task-shell-defaults :exit-immediately="false" />
 
-@include('tasks.common-functions')
+@include('tomato-eddy::tasks.common-functions')
 
 DIRECTORY=$(dirname "$0")
 FILENAME=$(basename "$0")
@@ -10,7 +10,7 @@ PATH_ACTUAL_SCRIPT="$DIRECTORY/${FILENAME%.*}-original.$EXT"
 # Writing actual script to $PATH_ACTUAL_SCRIPT
 
 cat > $PATH_ACTUAL_SCRIPT << '{{ $eof }}'
-@includeWhen($actualTask->callbackUrl(), 'tasks.common-functions')
+@includeWhen($actualTask->callbackUrl(), 'tomato-eddy::tasks.common-functions')
 
 {!! $actualTask->getScript() !!}
 

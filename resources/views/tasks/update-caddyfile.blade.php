@@ -1,4 +1,4 @@
-<x-task-shell-defaults />
+<x-eddy-task-shell-defaults />
 
 @php $caddyfilePath = $site->files()->caddyfile()->path; $tmpSuffix = '.'.Str::random(); @endphp
 

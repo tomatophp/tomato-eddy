@@ -1,31 +1,42 @@
-<x-server-layout :$server>
-    <x-slot:title>
-        {{ __('Sites') }}
-    </x-slot>
+@extends('tomato-eddy::servers.layout')
 
-    <x-slot:description>
-        {{ __("Manage the sites on server ':server'.", ['server' => $server->name]) }}
-    </x-slot>
+@section('title', __('Sites'))
 
-    <x-slot:actions>
-        <x-splade-button type="link" modal href="{{ route('servers.sites.create', $server) }}">
-            {{ __('New Site') }}
-        </x-splade-button>
-    </x-slot>
+@section('description', __("Manage the sites on server ':server'.", ['server' => $server->name]))
 
-    @if($sites->isNotEmpty())
-        <x-slot:actions>
-            <x-splade-button type="link" modal href="{{ route('servers.sites.create', $server) }}">
-                {{ __('New Site') }}
-            </x-splade-button>
-        </x-slot>
-    @endif
+@section('buttons')
+    <x-tomato-admin-button type="link" modal href="{{ route('admin.servers.sites.create', $server) }}">
+        {{ __('New Site') }}
+    </x-tomato-admin-button>
+@endsection
 
+@section('content')
     <x-splade-table :for="$sites">
-        <x-slot:empty-state>
-            <x-empty-state modal :href="route('servers.sites.create', $server)" icon="heroicon-o-document-plus">
-                {{ __('New Site') }}
-            </x-empty-state>
-        </x-slot>
+
     </x-splade-table>
-</x-server-layout>
+@endsection
+{{--<x-server-layout :$server>--}}
+{{--    <x-slot:title>--}}
+{{--        {{ __('Sites') }}--}}
+{{--    </x-slot>--}}
+
+{{--    <x-slot:description>--}}
+{{--        {{ __("Manage the sites on server ':server'.", ['server' => $server->name]) }}--}}
+{{--    </x-slot>--}}
+
+{{--    <x-slot:actions>--}}
+{{--        <x-splade-button type="link" modal href="{{ route('servers.sites.create', $server) }}">--}}
+{{--            {{ __('New Site') }}--}}
+{{--        </x-splade-button>--}}
+{{--    </x-slot>--}}
+
+{{--    @if($sites->isNotEmpty())--}}
+{{--        <x-slot:actions>--}}
+{{--            <x-splade-button type="link" modal href="{{ route('servers.sites.create', $server) }}">--}}
+{{--                {{ __('New Site') }}--}}
+{{--            </x-splade-button>--}}
+{{--        </x-slot>--}}
+{{--    @endif--}}
+
+
+{{--</x-server-layout>--}}
