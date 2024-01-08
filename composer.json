@@ -43,6 +43,6 @@
         "moneyphp/money": "^4.3",
         "phpseclib/phpseclib": "~3.0",
         "laravel/socialite": "^5.11",
-        "pusher/pusher-php-server": "^7.2",
+        "pusher/pusher-php-server": "^7.2"
     }
 }
