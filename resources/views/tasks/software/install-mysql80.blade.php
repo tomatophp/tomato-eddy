@@ -1,4 +1,4 @@
-@include('tomato-eddy::tasks.apt-functions')
+@include('tasks.apt-functions')
 
 echo "Install MySQL 8.0"
 
@@ -31,9 +31,9 @@ echo "skip-log-bin" >> /etc/mysql/my.cnf
 sed -i "s/^max_connections.*=.*/max_connections={{ $mysqlMaxConnections() }}/" /etc/mysql/my.cnf
 
 if grep -q "bind-address" /etc/mysql/mysql.conf.d/mysqld.cnf; then
-  sed -i '/^bind-address/s/bind-address.*=.*/bind-address = */' /etc/mysql/mysql.conf.d/mysqld.cnf
+sed -i '/^bind-address/s/bind-address.*=.*/bind-address = */' /etc/mysql/mysql.conf.d/mysqld.cnf
 else
-  echo "bind-address = *" >> /etc/mysql/mysql.conf.d/mysqld.cnf
+echo "bind-address = *" >> /etc/mysql/mysql.conf.d/mysqld.cnf
 fi
 
 mysql --user="root" --password="{{ $server->database_password }}" -e "CREATE USER 'root'@'{{ $server->public_ipv4 }}' IDENTIFIED BY '{{ $server->database_password }}';"

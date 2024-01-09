@@ -35,7 +35,6 @@ class TaskWebhookController
      */
     public function markAsTimedOut(Request $request, Task $task): Response
     {
-//        $this->verifyTeamSubscription($task);
         $this->verifyTaskIsPending($task);
 
         $task->update([
@@ -57,7 +56,6 @@ class TaskWebhookController
             'exit_code' => 'required|integer|min:1|max:255',
         ]);
 
-//        $this->verifyTeamSubscription($task);
         $this->verifyTaskIsPending($task);
 
         $task->update([
@@ -75,7 +73,6 @@ class TaskWebhookController
      */
     public function markAsFinished(Request $request, Task $task): Response
     {
-//        $this->verifyTeamSubscription($task);
         $this->verifyTaskIsPending($task);
 
         $task->update([
@@ -92,7 +89,6 @@ class TaskWebhookController
      */
     public function callback(Request $request, Task $task): Response
     {
-//        $this->verifyTeamSubscription($task);
         $this->verifyTaskIsPending($task);
 
         $task->handleCallback($request, CallbackType::Custom);

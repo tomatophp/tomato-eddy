@@ -4,7 +4,7 @@ namespace TomatoPHP\TomatoEddy\Enums\Server;
 
 use TomatoPHP\TomatoEddy\Tasks;
 use TomatoPHP\TomatoEddy\Enums\Tasks\Task;
-use TomatoPHP\TomatoEddy\Enums\Tasks\UpdateAlternatives;
+use TomatoPHP\TomatoEddy\Tasks\UpdateAlternatives;
 use Illuminate\Support\Str;
 
 enum Software: string

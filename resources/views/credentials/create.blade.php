@@ -31,21 +31,21 @@
         <x-splade-input
             v-show="form.provider == 'cloudflare'"
             name="credentials.cloudflare_domain"
-            :label="__('Domain')"
+            :label="__('Cloudflare ZONE ID')"
         />
 
 
         <x-splade-input
             v-show="form.provider == 'cloudflare'"
             name="credentials.cloudflare_email"
-            :label="__('Email')"
+            :label="__('Cloudflare Email')"
         />
 
         <x-splade-textarea
             autosize
             v-show="form.provider == 'cloudflare'"
             name="credentials.cloudflare_key"
-            :label="__('API Key')"
+            :label="__('Cloudflare API Key')"
         />
 
         <p v-if="form.provider == 'github'">

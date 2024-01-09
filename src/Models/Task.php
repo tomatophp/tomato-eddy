@@ -3,8 +3,8 @@
 namespace TomatoPHP\TomatoEddy\Models;
 
 use TomatoPHP\TomatoEddy\Enums\Models\TaskStatus;
+use TomatoPHP\TomatoEddy\Enums\Tasks\CallbackType;
 use TomatoPHP\TomatoEddy\Jobs\UpdateTaskOutput;
-use TomatoPHP\TomatoEddy\Tasks\CallbackType;
 use TomatoPHP\TomatoEddy\Tasks\GetFile;
 use TomatoPHP\TomatoEddy\Tasks\HasCallbacks;
 use Exception;

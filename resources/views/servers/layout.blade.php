@@ -80,10 +80,15 @@
     </x-slot:buttons>
 
     <div class="grid grid-cols-12 gap-4">
-        <div class="col-span-2 flex flex-col gap-2">
-            @include('tomato-eddy::servers.sidebar')
+        <div class="col-span-12 md:col-span-4 xl:col-span-2 flex flex-col gap-2">
+            <div class="hidden md:block">
+                @include('tomato-eddy::servers.sidebar')
+            </div>
+            <div class="block md:hidden">
+                @include('tomato-eddy::servers.sidebar-mobile')
+            </div>
         </div>
-        <div class="col-span-10 flex flex-col gap-4">
+        <div class="col-span-12 md:col-span-8 xl:col-span-10 flex flex-col gap-4">
             <div class="dark:bg-gray-800 dark:text-white p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                 <section class="mb-4 @hasSection('buttons') flex justify-between @endif">
                     <div>

@@ -62,7 +62,7 @@
     </div>
 
     <div>
-        <ol role="list" class="space-y-6">
+        <ol role="list" class="flex flex-col gap-4 my-4">
             <x-dynamic-component
                 :component="$isNew ? 'tomato-eddy::step.current' : 'tomato-eddy::step.complete'">
                 {{ __('Create the server at the provider') }}

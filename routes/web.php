@@ -3,7 +3,7 @@
 use \Illuminate\Support\Facades\Route;
 
 
-Route::middleware('signed:relative')->group(function () {
+Route::middleware(['web', 'signed:relative'])->group(function () {
     Route::get('/servers/{server}/provision-script', \TomatoPHP\TomatoEddy\Http\Controllers\ServerProvisionScriptController::class)->name('servers.provisionScript');
     Route::post('/webhook/task/{task}/timeout', [\TomatoPHP\TomatoEddy\Http\Controllers\TaskWebhookController::class, 'markAsTimedOut'])->name('webhook.task.markAsTimedOut');
     Route::post('/webhook/task/{task}/failed', [\TomatoPHP\TomatoEddy\Http\Controllers\TaskWebhookController::class, 'markAsFailed'])->name('webhook.task.markAsFailed');
