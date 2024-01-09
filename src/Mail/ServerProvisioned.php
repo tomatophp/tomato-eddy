@@ -37,7 +37,7 @@ class ServerProvisioned extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.server-provisioned',
+            markdown: 'tomato-eddy::emails.server-provisioned',
         );
     }
 

@@ -1,12 +1,12 @@
-@include('tasks.apt-functions')
+@include('tomato-eddy::tasks.apt-functions')
 
 echo "Install MySQL 8.0"
 
 waitForAptUnlock
 
 # https://dev.mysql.com/doc/mysql-apt-repo-quick-guide/en/#apt-repo-fresh-install
-wget -c https://dev.mysql.com/get/mysql-apt-config_0.8.24-1_all.deb
-dpkg --install mysql-apt-config_0.8.24-1_all.deb
+wget -c https://dev.mysql.com/get/mysql-apt-config_0.8.29-1_all.deb
+dpkg --install mysql-apt-config_0.8.29-1_all.deb
 
 waitForAptUnlock
 apt-get update
@@ -52,4 +52,4 @@ mysql --user="root" --password="{{ $server->database_password }}" -e "CREATE DAT
 
 service mysql restart
 
-rm mysql-apt-config_0.8.24-1_all.deb
+rm mysql-apt-config_0.8.29-1_all.deb

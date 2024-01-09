@@ -14,6 +14,22 @@
                 </x-tomato-admin-button>
             </x-slot:button>
 
+            @php
+                $projectID = \TomatoPHP\TomatoEddy\Models\Credentials::where('provider', 'hetzner_cloud')->first()?->credentials['hetzner_cloud_project_id'];
+                if($projectID){
+                    $vncLink = "https://console.hetzner.cloud/console/".$projectID."/".$server->provider_id;
+                }
+                else {
+                    $vncLink = false;
+                }
+            @endphp
+            <x-tomato-admin-dropdown-item
+                type="a"
+                icon="bx bx-desktop"
+                :label="__('Server VNC')"
+                :link="$vncLink"
+            />
+
             <x-tomato-admin-dropdown-item
                 type="link"
                 icon="bx bx-arrow-back"
@@ -55,9 +71,18 @@
             <x-tomato-admin-dropdown-item
                 type="link"
                 icon="bx bx-play-circle"
-                :label="__('Attach Storage')"
+                :label="__('Attach Voulme')"
                 modal
                 :href="route('admin.servers.storage', $server)"
+            />
+            <x-tomato-admin-dropdown-item
+                danger
+                confirm-danger
+                type="link"
+                icon="bx bx-x-circle"
+                :label="__('Destory Attached Voulme')"
+                method="DELETE"
+                :href="route('admin.servers.storage.destory', $server)"
             />
             <x-tomato-admin-dropdown-item
                 danger

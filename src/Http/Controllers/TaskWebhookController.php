@@ -2,13 +2,14 @@
 
 namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use TomatoPHP\TomatoEddy\Enums\Models\TaskStatus;
 use TomatoPHP\TomatoEddy\Enums\Tasks\CallbackType;
 use TomatoPHP\TomatoEddy\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class TaskWebhookController
+class TaskWebhookController extends Controller
 {
     /**
      * Throws an exception if the task is not pending.
@@ -64,6 +65,11 @@ class TaskWebhookController
         ]);
 
         $task->updateOutputInBackground()->handleCallback($request, CallbackType::Failed);
+
+        Log::error('Task failed', [
+            'task' => $task->toArray(),
+            'request' => $request->all(),
+        ]);
 
         return response()->make();
     }

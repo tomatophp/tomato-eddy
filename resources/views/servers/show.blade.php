@@ -6,6 +6,8 @@
     <x-tomato-admin-row inline :label="__('Name')" :value="$server->name" />
     <x-tomato-admin-row inline type="copy" :label="__('IP Address')" :value="$server->public_ipv4" />
     <x-tomato-admin-row inline :label="__('Provider')" :value="$server->provider->getDisplayName()" />
+    <x-tomato-admin-row inline type="copy" :label="__('Connect SSH')" :value="$server->username.'@'.$server->public_ipv4" />
+    <x-tomato-admin-row inline type="copy" :label="__('SSH User & Database User')" :value="$server->username" />
     <x-tomato-admin-row inline type="password" :label="__('Sudo Password')" :value="$server->password" />
     <x-tomato-admin-row inline type="password" :label="__('Database Password')" :value="$server->database_password" />
     <x-tomato-admin-row inline type="password" :label="__('SSH Key')" :value="$server->user_public_key" />

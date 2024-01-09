@@ -100,6 +100,7 @@ class TomatoEddyServiceProvider extends ServiceProvider
         //Register Routes
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
 
+        Config::set('task-runner.task_views', 'tomato-eddy::tasks');
 
         $this->loadViewComponentsAs('eddy', [
             Cron::class,
@@ -118,8 +119,6 @@ class TomatoEddyServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        Config::set('task-runner.task_views', 'tomato-eddy::tasks');
-
         TomatoMenu::register([
             Menu::make()
                 ->group(__('Eddy'))

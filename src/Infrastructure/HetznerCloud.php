@@ -72,10 +72,10 @@ class HetznerCloud implements ServerProvider, HasCredentials
     {
         return $this->getAll('servers');
     }
-    
+
     public function mapServers()
     {
-        
+
     }
 
     /**
@@ -328,13 +328,25 @@ class HetznerCloud implements ServerProvider, HasCredentials
         return $this->http->post(self::API_URL.'volumes', [
             'automount' => true,
             'format' => 'ext4',
-            'labels' => [
+            'labels' => (object)[
                 'labelkey' => $name,
             ],
             'name' => $name,
-            'server' => $id,
-            'size' => $size,
+            'server' => (int)$id,
+            'size' => (int)$size,
         ])->json('volume');
+    }
+
+    public function detachVolume(int $id): ?array
+    {
+        return $this->http->post(self::API_URL."volumes/{$id}/actions/detach", [
+            'id' => (int) $id,
+        ])->json('action');
+    }
+
+    public function destroyVolume(int $id): void
+    {
+        $this->http->delete(self::API_URL."volumes/{$id}");
     }
 
     public function deleteServerVolume(string $id): void

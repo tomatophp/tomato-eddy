@@ -4,7 +4,7 @@
 
 {{ __('You can access your server by clicking the button below.') }}
 
-@component('mail::button', ['url' => route('servers.show', $server)])
+@component('mail::button', ['url' => route('admin.servers.show', $server)])
 {{ __('View Server') }}
 @endcomponent
 
@@ -23,7 +23,7 @@
 
 {{ __('IP Address') }}: `{{ $server->public_ipv4 }}`
 
-{{ __('Database Username') }}: `{{ config('eddy.server_defaults.database_name') }}`
+{{ __('Database Username') }}: `{{ config('tomato-eddy.server_defaults.database_name') }}`
 
 {{ __('Database Password') }}: `{{ $server->database_password }}`
 @endcomponent

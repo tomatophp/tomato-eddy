@@ -17,10 +17,6 @@ enum Software: string
     case Php82 = 'php82';
     case Redis6 = 'redis6';
 
-    case UbuntuDesktop = 'ubuntu-desktop';
-
-    case ChromeBrowser = 'chrome-browser';
-
     /**
      * Returns the default stack of software for a fresh server.
      */
@@ -35,9 +31,7 @@ enum Software: string
             self::Php81,
             self::Php82,
             self::Composer2,
-            self::Node18,
-            self::UbuntuDesktop,
-            self::ChromeBrowser,
+            self::Node18
         ];
     }
 
@@ -54,8 +48,6 @@ enum Software: string
             self::Php81 => 'PHP 8.1',
             self::Php82 => 'PHP 8.2',
             self::Redis6 => 'Redis 6',
-            self::UbuntuDesktop => 'Ubuntu Desktop',
-            self::ChromeBrowser => 'Chrome Browser',
         };
     }
 
@@ -103,6 +95,6 @@ enum Software: string
      */
     public function getInstallationViewName(): string
     {
-        return 'tasks.software.install-'.Str::replace('_', '-', $this->value);
+        return 'tomato-eddy::tasks.software.install-'.Str::replace('_', '-', $this->value);
     }
 }

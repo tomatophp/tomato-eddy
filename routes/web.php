@@ -13,21 +13,26 @@ Route::middleware(['web', 'signed:relative'])->group(function () {
 
 
 Route::middleware(['web', 'auth', 'verified', 'splade'])->prefix('admin')->name('admin.')->group(function(){
+
+    //Server Actions
+    Route::get('servers-actions/build', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerActionsController::class, 'build'])->name('servers.build');
+    Route::get('servers-actions/sync', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerActionsController::class, 'sync'])->name('servers.sync');
+    Route::get('servers-actions/scan', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerActionsController::class, 'scan'])->name('servers.scan');
+    Route::get('servers-actions/restart-all', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerActionsController::class, 'restartAll'])->name('servers.restart.all');
+    Route::post('servers-actions/{server}/restart', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerActionsController::class, 'restart'])->name('servers.restart');
+    Route::post('servers-actions/{server}/disconect', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerActionsController::class, 'disconect'])->name('servers.disconect');
+    Route::post('servers-actions/{server}/stop', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerActionsController::class, 'stop'])->name('servers.stop');
+    Route::post('servers-actions/{server}/start', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerActionsController::class, 'start'])->name('servers.start');
+    Route::get('servers-actions/{server}/reset', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerActionsController::class, 'resetView'])->name('servers.reset.view');
+    Route::post('servers-actions/{server}/reset', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerActionsController::class, 'reset'])->name('servers.reset');
+    Route::get('servers-actions/{server}/storage', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerActionsController::class, 'storageView'])->name('servers.storage.view');
+    Route::post('servers-actions/{server}/storage', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerActionsController::class, 'storage'])->name('servers.storage');
+    Route::delete('servers-actions/{server}/destroy-volumes', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerActionsController::class, 'destroyVolumes'])->name('servers.storage.destory');
+    Route::get('servers-actions/connect', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerActionsController::class, 'connect'])->name('servers.connect');
+    Route::post('servers-actions/connect', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerActionsController::class, 'link'])->name('servers.link');
+
+
     //Servers
-    Route::get('servers/build', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'build'])->name('servers.build');
-    Route::get('servers/sync', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'sync'])->name('servers.sync');
-    Route::get('servers/scan', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'scan'])->name('servers.scan');
-    Route::get('servers/restart-all', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'restartAll'])->name('servers.restart.all');
-    Route::post('servers/{server}/restart', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'restart'])->name('servers.restart');
-    Route::post('servers/{server}/disconect', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'disconect'])->name('servers.disconect');
-    Route::post('servers/{server}/stop', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'stop'])->name('servers.stop');
-    Route::post('servers/{server}/start', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'start'])->name('servers.start');
-    Route::get('servers/{server}/reset', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'resetView'])->name('servers.reset.view');
-    Route::post('servers/{server}/reset', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'reset'])->name('servers.reset');
-    Route::get('servers/{server}/storage', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'storageView'])->name('servers.storage.view');
-    Route::post('servers/{server}/storage', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'storage'])->name('servers.storage');
-    Route::get('servers/connect', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'connect'])->name('servers.connect');
-    Route::post('servers/connect', [\TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class, 'link'])->name('servers.link');
     Route::resource('servers', \TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class);
     Route::resource('servers.crons', \TomatoPHP\TomatoEddy\Http\Controllers\CronController::class);
     Route::resource('servers.daemons', \TomatoPHP\TomatoEddy\Http\Controllers\DaemonController::class);

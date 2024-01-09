@@ -11,7 +11,7 @@
 @endforeach
 
 @foreach($softwareStack() as $software)
-    @include('tomato-eddy::'.$software->getInstallationViewName())
+    @include($software->getInstallationViewName())
 
     <x-eddy-task-callback :url="$callbackUrl()" :data="['software_installed' => $software]" />
 @endforeach
