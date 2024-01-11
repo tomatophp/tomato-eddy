@@ -4,6 +4,7 @@ namespace TomatoPHP\TomatoEddy\Exceptions\Models;
 
 use Exception;
 use ProtoneMedia\Splade\Facades\Toast;
+use TomatoPHP\TomatoEddy\Models\Site;
 
 class PendingDeploymentException extends Exception
 {
@@ -23,6 +24,6 @@ class PendingDeploymentException extends Exception
     {
         Toast::warning(__('The site is already being deployed.'));
 
-        return back(fallback: route('servers.sites.show', [$this->site->server, $this->site]));
+        return back(fallback: route('admin.servers.sites.show', [$this->site->server, $this->site]));
     }
 }

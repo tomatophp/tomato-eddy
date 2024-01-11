@@ -2,7 +2,7 @@
 
 namespace TomatoPHP\TomatoEddy\Tasks;
 
-class RestartSupervisor extends RestartService
+class RestartSuperVisor extends RestartService
 {
     protected string $service = 'supervisor';
 }

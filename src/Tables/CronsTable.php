@@ -57,6 +57,7 @@ class CronsTable extends AbstractTable
             ->withGlobalSearch(label: __('Search By Command'), columns: [
                 'command',
             ])
+            ->column('site.address', __('Site'))
             ->column('command', __('Command'))
             ->column('user', __('User'))
             ->column('expression', __('Frequency'), as: fn ($expression) => $this->frequencies[$expression] ?? $expression)

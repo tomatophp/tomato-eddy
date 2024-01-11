@@ -7,7 +7,7 @@ use TomatoPHP\TomatoEddy\Jobs\InstallCertificate;
 use TomatoPHP\TomatoEddy\Jobs\UpdateSiteTlsSetting;
 use TomatoPHP\TomatoEddy\Models\Server;
 use TomatoPHP\TomatoEddy\Models\Site;
-use TomatoPHP\TomatoEddy\Models\TlsSetting;
+use TomatoPHP\TomatoEddy\Enums\Models\TlsSetting;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use ProtoneMedia\Splade\Facades\Toast;
@@ -27,7 +27,7 @@ class SiteSslController extends Controller
             $site->forceFill(['pending_tls_update_since' => null])->saveQuietly();
         }
 
-        return view('sites.ssl.edit', [
+        return view('tomato-eddy::sites.ssl.edit', [
             'server' => $server,
             'site' => $site,
         ]);
@@ -81,6 +81,6 @@ class SiteSslController extends Controller
             $this->logActivity(__("Updated SSL settings of site ':address' on server ':server'", ['address' => $site->address, 'server' => $server->name]), $site);
         }
 
-        return to_route('servers.sites.ssl.edit', [$server, $site]);
+        return to_route('admin.servers.sites.ssl.edit', [$server, $site]);
     }
 }

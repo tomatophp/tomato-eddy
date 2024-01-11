@@ -2,13 +2,14 @@
 
 namespace TomatoPHP\TomatoEddy\Tasks;
 
+use Illuminate\Support\Str;
 use TomatoPHP\TomatoEddy\Events\DeploymentUpdated;
 use TomatoPHP\TomatoEddy\Jobs\InstallSiteCaddyfile;
 use TomatoPHP\TomatoEddy\Jobs\InstallWordpressCron;
 use TomatoPHP\TomatoEddy\Models\Deployment;
-use TomatoPHP\TomatoEddy\Models\DeploymentStatus;
+use TomatoPHP\TomatoEddy\Enums\Models\DeploymentStatus;
 use TomatoPHP\TomatoEddy\Models\Site;
-use TomatoPHP\TomatoEddy\Models\SiteType;
+use TomatoPHP\TomatoEddy\Enums\Models\SiteType;
 use TomatoPHP\TomatoEddy\Models\Task as TaskModel;
 use TomatoPHP\TomatoEddy\Rules\Sha1;
 use Illuminate\Http\Request;

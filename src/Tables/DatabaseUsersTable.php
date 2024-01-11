@@ -57,6 +57,7 @@ class DatabaseUsersTable extends AbstractTable
             ->withGlobalSearch(label: __('Search By Name'), columns: [
                 'name',
             ])
+            ->column('site.address', __('Site'))
             ->column('name', __('Name'))
             ->column('status', __('Status'))
             ->rowModal(fn (DatabaseUser $databaseUser) => route('admin.servers.database-users.edit', [$this->server, $databaseUser]))

@@ -9,6 +9,10 @@ use TomatoPHP\TomatoEddy\Events\SiteUpdated;
 use TomatoPHP\TomatoEddy\Exceptions\Models\PendingDeploymentException;
 use TomatoPHP\TomatoEddy\Jobs\CreateDeployment;
 use TomatoPHP\TomatoEddy\Jobs\DeploySite;
+use TomatoPHP\TomatoEddy\Jobs\UninstallCron;
+use TomatoPHP\TomatoEddy\Jobs\UninstallDaemon;
+use TomatoPHP\TomatoEddy\Jobs\UninstallDatabase;
+use TomatoPHP\TomatoEddy\Jobs\UninstallDatabaseUser;
 use TomatoPHP\TomatoEddy\Jobs\UpdateSiteCaddyfile;
 use TomatoPHP\TomatoEddy\Enums\Server\PhpVersion;
 use TomatoPHP\TomatoEddy\Enums\Models\DeploymentStatus;
@@ -195,10 +199,6 @@ class Site extends Model
         if ($this->type === SiteType::Laravel) {
             $variables['APP_KEY'] = 'base64:'.base64_encode(Encrypter::generateKey('AES-256-CBC'));
             $variables['APP_URL'] = $this->tls_setting === TlsSetting::Off ? "http://{$this->address}" : "https://{$this->address}";
-            $variables['DB_DATABASE'] = Str::replace('.3x1.one', '', $this->address);
-            $variables['DB_USERNAME'] = Str::replace('.3x1.one', '', $this->address);
-            $variables['DB_PASSWORD'] = '3x1@2023';
-            $variables['COOKIES_PATH'] = '/mnt/'.$this->server->storage_name;
         }
 
         if ($this->type === SiteType::Wordpress) {
@@ -217,6 +217,7 @@ class Site extends Model
                 $variables[$var] = str_replace(['&', '!', '$'], ['\&', '\!', '\$'], Str::generateWordpressKey());
             }
         }
+
 
         return $variables;
     }
@@ -327,13 +328,56 @@ class Site extends Model
         );
     }
 
-    public function logs(): HasMany
+
+    public function daemons()
     {
-        return $this->hasMany(Log::class);
+        return $this->hasMany(Daemon::class);
     }
 
-    public function accounts(): HasMany
+    public function dropDamons()
     {
-        return $this->hasMany(Account::class);
+        $this->daemons()->get()->map(function ($daemon){
+            $daemon->markUninstallationRequest();
+            dispatch(new UninstallDaemon($daemon, $this->user));
+        });
+    }
+
+    public function databases()
+    {
+        return $this->hasMany(Database::class);
+    }
+
+    public function dropDatabases()
+    {
+        $this->databases()->get()->map(function ($database){
+            $database->markUninstallationRequest();
+            dispatch(new UninstallDatabase($database, $this->user));
+        });
+    }
+
+    public function databaseUsers()
+    {
+        return $this->hasMany(DatabaseUser::class);
+    }
+
+    public function dropDatabaseUsers()
+    {
+        $this->databaseUsers()->get()->map(function ($databaseUser){
+            $databaseUser->markUninstallationRequest();
+            dispatch(new UninstallDatabaseUser($databaseUser, $this->user));
+        });
+    }
+
+    public function crons()
+    {
+        return $this->hasMany(Cron::class);
+    }
+
+    public function dropCrons()
+    {
+        $this->crons()->get()->map(function ($cron){
+            $cron->markUninstallationRequest();
+            dispatch(new UninstallCron($cron, $this->user));
+        });
     }
 }

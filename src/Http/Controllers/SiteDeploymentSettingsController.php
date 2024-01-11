@@ -18,7 +18,7 @@ class SiteDeploymentSettingsController extends Controller
      */
     public function edit(Server $server, Site $site)
     {
-        return view('sites.deployments.settings', [
+        return view('tomato-eddy::sites.deployments.settings', [
             'server' => $server,
             'site' => $site,
         ]);
@@ -60,6 +60,6 @@ class SiteDeploymentSettingsController extends Controller
 
         Toast::message(__('The deployment settings have been saved.'));
 
-        return to_route('servers.sites.deployment-settings.edit', [$server, $site]);
+        return to_route('admin.servers.sites.deployment-settings.edit', [$server, $site]);
     }
 }

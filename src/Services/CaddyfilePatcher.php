@@ -98,7 +98,7 @@ class CaddyfilePatcher
 
         $oldSnippet = $lines->slice($startLine, $endLine - $startLine + 1)->implode("\n");
 
-        $newSnippet = view('components.server.site-tls-snippet', [
+        $newSnippet = view('tomato-eddy::components.server.site-tls-snippet', [
             'site' => $this->site,
             'tlsSetting' => $newTlsSetting,
             'certificate' => $certificate,

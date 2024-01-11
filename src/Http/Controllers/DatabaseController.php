@@ -90,7 +90,7 @@ class DatabaseController extends Controller
 
         Toast::message(__('The database and user will be created shortly.'));
 
-        return to_route('servers.databases.index', $server);
+        return to_route('admin.servers.databases.index', $server);
     }
 
     /**
@@ -117,7 +117,7 @@ class DatabaseController extends Controller
 
         Toast::message(__('The database will be uninstalled from the server.'));
 
-        return to_route('servers.databases.index', $server);
+        return to_route('admin.servers.databases.index', $server);
     }
 
     public function update(Request $request, Server $server, Database $database)

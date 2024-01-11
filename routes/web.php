@@ -2,6 +2,7 @@
 
 use \Illuminate\Support\Facades\Route;
 
+Route::any('/deploy/{site}/{token}', [\TomatoPHP\TomatoEddy\Http\Controllers\SiteDeploymentController::class, 'deployWithToken'])->name('site.deployWithToken');
 
 Route::middleware(['web', 'signed:relative'])->group(function () {
     Route::get('/servers/{server}/provision-script', \TomatoPHP\TomatoEddy\Http\Controllers\ServerProvisionScriptController::class)->name('servers.provisionScript');
@@ -93,7 +94,6 @@ Route::middleware('web', 'auth', 'verified', 'splade')->prefix('admin')->name('a
 });
 
 //
-//Route::any('/deploy/{site}/{token}', [SiteDeploymentController::class, 'deployWithToken'])->name('site.deployWithToken');
 //
 
 $authMiddleware = [

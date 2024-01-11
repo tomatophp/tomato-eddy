@@ -7,6 +7,7 @@ use TomatoPHP\TomatoEddy\Models\Server;
 use TomatoPHP\TomatoEddy\Models\Site;
 use ProtoneMedia\Splade\Facades\Toast;
 use ProtoneMedia\Splade\SpladeTable;
+use TomatoPHP\TomatoEddy\Tables\DeploymentsTable;
 
 /**
  * @codeCoverageIgnore Handled by Dusk tests.
@@ -20,26 +21,10 @@ class SiteDeploymentController extends Controller
     {
         $query = $site->deployments();
 
-        $maxDeployments = $server->team->subscriptionOptions()->maxDeploymentsPerSite();
-
-        if ($maxDeployments !== false) {
-            $lastVisibleDeployment = $site->deployments()->latest()->skip($maxDeployments - 1)->value('created_at');
-
-            $lastVisibleDeployment ? $query->where('created_at', '>=', $lastVisibleDeployment) : null;
-        }
-
-        return view('sites.deployments.index', [
+        return view('tomato-eddy::sites.deployments.index', [
             'server' => $server,
             'site' => $site,
-            'deployments' => SpladeTable::for($query)
-                ->column('updated_at', __('Deployed at'), sortable: true)
-                ->column('user.name', __('User'), as: fn ($name) => $name ?: __('Via Deploy URL'))
-                ->column('short_git_hash', __('Git Hash'))
-                ->column('status', __('Status'), alignment: 'right')
-                ->withGlobalSearch(__('Search Git Hash...'), ['git_hash'])
-                ->rowLink(fn (Deployment $deployment) => route('servers.sites.deployments.show', [$server, $site, $deployment]))
-                ->defaultSort('-updated_at')
-                ->paginate(),
+            'deployments' => (new DeploymentsTable($query, $server, $site)),
         ]);
     }
 
@@ -52,7 +37,7 @@ class SiteDeploymentController extends Controller
 
         Toast::success(__('Deployment queued.'));
 
-        return to_route('servers.sites.deployments.show', [$server, $site, $deployment]);
+        return to_route('admin.servers.sites.deployments.show', [$server, $site, $deployment]);
     }
 
     /**
@@ -80,7 +65,7 @@ class SiteDeploymentController extends Controller
      */
     public function show(Server $server, Site $site, Deployment $deployment)
     {
-        return view('sites.deployments.show', [
+        return view('tomato-eddy::sites.deployments.show', [
             'server' => $server,
             'site' => $site,
             'deployment' => $deployment,

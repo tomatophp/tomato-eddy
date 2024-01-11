@@ -22,8 +22,8 @@ class SiteDeployTokenController extends Controller
 
         $this->logActivity(__("Updated deploy token of site ':address' on server ':server'", ['address' => $site->address, 'server' => $server->name]), $site);
 
-        Toast::success(__('The deploy token has been regenerated.'));
+        Toast::success(__('The deploy token has been regenerated.'))->autoDismiss(2);
 
-        return to_route('servers.sites.show', [$server, $site]);
+        return to_route('admin.servers.sites.show', [$server, $site]);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace TomatoPHP\TomatoEddy\Models;
 
+use App\Models\User;
+use TomatoPHP\TomatoEddy\Enums\Models\DeploymentStatus;
 use TomatoPHP\TomatoEddy\Notifications\DeploymentFailed;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

@@ -56,6 +56,7 @@ class DatabaseTable extends AbstractTable
             ->withGlobalSearch(label: __('Search By Name'), columns: [
                 'name',
             ])
+            ->column('site.address', __('Site'))
             ->column('name', __('Database'))
             ->column('status', __('Status'))
             ->rowModal(fn (Database $database) => route('admin.servers.databases.edit', [$this->server, $database]))

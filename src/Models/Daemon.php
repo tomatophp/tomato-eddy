@@ -28,7 +28,7 @@ class Daemon extends Model
         'installed_at' => 'datetime',
         'installation_failed_at' => 'datetime',
         'uninstallation_requested_at' => 'datetime',
-        'uninstallation_failed_at' => 'datetime',
+        'uninstallation_failed_at' => 'datetime'
     ];
 
     protected $fillable = [
@@ -38,6 +38,7 @@ class Daemon extends Model
         'processes',
         'stop_wait_seconds',
         'stop_signal',
+        'site_id'
     ];
 
     protected $dispatchesEvents = [
@@ -82,5 +83,11 @@ class Daemon extends Model
         return $this->user === 'root'
             ? "/root/{$this->server->working_directory}/daemon-{$this->id}.log"
             : "/home/{$this->user}/{$this->server->working_directory}/daemon-{$this->id}.log";
+    }
+
+
+    public function site()
+    {
+        return $this->belongsTo(Site::class);
     }
 }

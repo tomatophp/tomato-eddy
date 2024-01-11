@@ -35,6 +35,7 @@ class Cron extends Model
         'command',
         'user',
         'expression',
+        'site_id'
     ];
 
     protected $dispatchesEvents = [
@@ -69,5 +70,10 @@ class Cron extends Model
         return $this->user === 'root'
             ? "/root/{$this->server->working_directory}/cron-{$this->id}.log"
             : "/home/{$this->user}/{$this->server->working_directory}/cron-{$this->id}.log";
+    }
+
+    public function site()
+    {
+        return $this->belongsTo(Site::class);
     }
 }

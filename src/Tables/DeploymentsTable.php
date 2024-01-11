@@ -7,10 +7,11 @@ use ProtoneMedia\Splade\AbstractTable;
 use ProtoneMedia\Splade\SpladeTable;
 use TomatoPHP\TomatoEddy\Models\Credentials;
 use TomatoPHP\TomatoEddy\Models\Cron;
-use TomatoPHP\TomatoEddy\Models\Daemon;
+use TomatoPHP\TomatoEddy\Models\Deployment;
 use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\Models\Site;
 
-class DaemonsTable extends AbstractTable
+class DeploymentsTable extends AbstractTable
 {
     /**
      * Create a new instance.
@@ -19,10 +20,11 @@ class DaemonsTable extends AbstractTable
      */
     public function __construct(
         private mixed $query = null,
-        public Server $server
+        public Server $server,
+        public Site $site,
     ) {
         if(!$this->query){
-            $this->query = Daemon::query();
+            $this->query = Deployment::query();
         }
     }
 
@@ -54,16 +56,13 @@ class DaemonsTable extends AbstractTable
     public function configure(SpladeTable $table)
     {
         $table
-            ->withGlobalSearch(label: __('Search By Command'), columns: [
-                'command',
-            ])
-            ->column('site.address', __('Site'))
-            ->column('command', __('Command'))
-            ->column('user', __('User'))
-            ->column('processes', __('Processes'))
+            ->column('updated_at', __('Deployed at'), sortable: true)
+            ->column('user.name', __('User'), as: fn ($name) => $name ?: __('Via Deploy URL'))
+            ->column('short_git_hash', __('Git Hash'))
             ->column('status', __('Status'))
-            ->rowModal(fn (Daemon $daemon) => route('admin.servers.daemons.edit', [$this->server, $daemon]))
-            ->defaultSort('command')
+            ->withGlobalSearch(__('Search Git Hash...'), ['git_hash'])
+            ->rowLink(fn (Deployment $deployment) => route('admin.servers.sites.deployments.show', [$this->server, $this->site, $deployment]))
+            ->defaultSort('-updated_at')
             ->paginate(15);
     }
 }

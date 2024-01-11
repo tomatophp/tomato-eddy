@@ -160,6 +160,7 @@ class SiteController extends Controller
             //Create Database
             $database = $server->databases()->create([
                 'name' => $databaseName,
+                'site_id' => $site->id
             ]);
 
             $this->logActivity(__("Created database ':name' on server ':server'", ['name' => $database->name, 'server' => $server->name]), $database);
@@ -168,6 +169,7 @@ class SiteController extends Controller
                 'name' => $request->get('database_user'),
             ])->forceFill([
                 'server_id' => $server->id,
+                'site_id' => $site->id
             ]);
 
             $databaseUser->save();
@@ -188,7 +190,21 @@ class SiteController extends Controller
 
         $this->logActivity(__("Created site ':address' on server ':server'", ['address' => $site->address, 'server' => $server->name]), $site);
 
-        $deployment = $site->deploy(user: $this->user());
+        if(
+            $request->get('has_database') &&
+            !empty($request->get('database_name')) &&
+            !empty($request->get('database_user')) &&
+            !empty($request->get('database_password'))
+        ) {
+            $deployment = $site->deploy(user: $this->user(), environmentVariables: [
+                "DB_DATABASE" => $request->get('database_name'),
+                "DB_USERNAME" => $request->get('database_user'),
+                "DB_PASSWORD" => $request->get('database_password')
+            ]);
+        }
+        else {
+            $deployment = $site->deploy(user: $this->user());
+        }
 
         if ($data['deploy_key_uuid']) {
             Cache::forget($data['deploy_key_uuid']);
@@ -201,8 +217,9 @@ class SiteController extends Controller
                 'processes' => 1,
                 'stop_wait_seconds' => 10,
                 'stop_signal' => 'TERM',
-                'command' => $site->php_version .' artisan queue:work --timeout=0',
+                'command' => $site->php_version->getBinary() .' artisan queue:work --timeout=0',
                 'directory' => '/home/'.$server->username.'/'.$site->address.'/repository',
+                'site_id' => $site->id
             ];
 
             $daemon = $server->daemons()->create($dataDaemons);
@@ -212,12 +229,13 @@ class SiteController extends Controller
         if($request->has('has_schedule') && $request->get('has_schedule')){
             $dataCron = [
                 'user' => $server->username,
-                'command' => $site->php_version. ' /home/'.$server->username.'/'.$site->address.'/repository/artisan schedule:run',
+                'command' => $site->php_version->getBinary() . ' /home/'.$server->username.'/'.$site->address.'/repository/artisan schedule:run',
                 'expression' => '* * * * *',
+                'site_id' => $site->id
             ];
 
             $cron = $server->crons()->create($dataCron);
-            dispatch(new InstallCron($cron, $this->user));
+            dispatch(new InstallCron($cron, $this->user()));
         }
 
         return to_route('admin.servers.sites.deployments.show', [$server, $site, $deployment]);
@@ -277,17 +295,17 @@ class SiteController extends Controller
         }
 
         if (! $site->isDirty()) {
-            Toast::info(__('No changes were made.'));
+            Toast::info(__('No changes were made.'))->autoDismiss(2);
 
-            return to_route('servers.sites.edit', [$server, $site]);
+            return to_route('admin.servers.sites.edit', [$server, $site]);
         }
 
         $site->save();
         $deployment = $site->deploy(user: $this->user());
 
-        Toast::info(__('The site settings have been saved and the site is being deployed.'));
+        Toast::info(__('The site settings have been saved and the site is being deployed.'))->autoDismiss(2);
 
-        return to_route('servers.sites.deployments.show', [$server, $site, $deployment]);
+        return to_route('admin.servers.sites.deployments.show', [$server, $site, $deployment]);
     }
 
     /**
@@ -295,6 +313,10 @@ class SiteController extends Controller
      */
     public function destroy(Server $server, Site $site)
     {
+        $site->dropDamons();
+        $site->dropDatabases();
+        $site->dropDatabaseUsers();
+        $site->dropCrons();
         $site->delete();
 
         dispatch(new UninstallSite($server, $site->path));
@@ -303,30 +325,6 @@ class SiteController extends Controller
 
         Toast::message(__('The site is deleted and will be uninstalled from the server shortly.'));
 
-        return to_route('servers.sites.index', $server);
-    }
-
-    public function settings(Site $site){
-        $site->load('server');
-        return view('tomato-eddy::sites.settings', compact('site'));
-    }
-
-    public function settingsUpdate(Site $site, Request $request){
-        $request->validate([
-           "protocol" => "nullable|string",
-           "browser" => "nullable|string",
-           "install_ex" => "nullable|string",
-           "active_00_password" => "nullable|string",
-           "recovery_popup" => "nullable|string",
-        ]);
-
-        $site->update([
-            "settings" => $request->all()
-        ]);
-
-        FireEventAPI::dispatch('settings','https://' . $site->address . '/api', $site->settings);
-
-        Toast::message(__('Your Site update has been send'));
-        return back();
+        return to_route('admin.servers.sites.index', $server);
     }
 }

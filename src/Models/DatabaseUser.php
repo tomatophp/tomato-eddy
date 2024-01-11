@@ -24,6 +24,7 @@ class DatabaseUser extends Model
 
     protected $fillable = [
         'name',
+        'site_id'
     ];
 
     protected $casts = [
@@ -52,5 +53,10 @@ class DatabaseUser extends Model
     public function databases(): BelongsToMany
     {
         return $this->belongsToMany(Database::class);
+    }
+
+    public function site()
+    {
+        return $this->belongsTo(Site::class);
     }
 }
