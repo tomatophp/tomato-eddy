@@ -59,6 +59,7 @@ class Github
             'type' => 'all',
             'per_page' => 100,
             'page' => 1,
+            'sort' => 'updated'
         ];
 
         $firstPage = true;

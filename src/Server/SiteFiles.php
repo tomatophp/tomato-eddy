@@ -2,7 +2,7 @@
 
 namespace TomatoPHP\TomatoEddy\Server;
 
-use TomatoPHP\TomatoEddy\FileOnServer;
+use TomatoPHP\TomatoEddy\Services\FileOnServer;
 use TomatoPHP\TomatoEddy\Models\Site;
 use TomatoPHP\TomatoEddy\Enums\Models\SiteType;
 use TomatoPHP\TomatoEddy\Enums\Services\PrismLanguage;

@@ -1,31 +1,25 @@
-<x-splade-event private channel="teams.{{ auth()->user()->currentTeam->id }}" listen="DaemonUpdated, DaemonDeleted" />
+@extends('tomato-eddy::servers.layout')
 
-<x-server-layout :$server>
-    <x-slot:title>
-        {{ __('Daemons') }}
-    </x-slot>
+@section('title', __('Daemons'))
 
-    <x-slot:description>
-        {{ __("Manage the daemons on server ':server'.", ['server' => $server->name]) }}
-    </x-slot>
+@section('description')
+    {{ __("Manage the daemons on server ':server'.", ['server' => $server->name]) }}
+@endsection
 
-    <x-slot:actions>
-        @if($daemons->isNotEmpty())
-            <x-splade-button type="link" modal href="{{ route('servers.daemons.create', $server) }}">
-                {{ __('Add Daemon') }}
-            </x-splade-button>
-        @endif
-    </x-slot>
+@section('buttons')
+    <div class="flex flex-end gap-4">
+        <x-tomato-admin-button type="link" modal href="{{ route('admin.servers.daemons.create', $server) }}">
+            {{ __('Add Daemon') }}
+        </x-tomato-admin-button>
+    </div>
+@endsection
+
+@section('content')
+    <x-splade-event private channel="teams.{{ auth()->user()->currentTeam->id }}" listen="DaemonUpdated, DaemonDeleted" />
 
     <x-splade-table :for="$daemons">
         <x-splade-cell status>
-            <x-installation-status :installable="$item" />
+            @include('tomato-eddy::servers.install-status', ['item' => $item])
         </x-splade-cell>
-
-        <x-slot:empty-state>
-            <x-empty-state modal :href="route('servers.daemons.create', $server)" icon="heroicon-o-document-plus">
-                {{ __('Add Daemon') }}
-            </x-empty-state>
-        </x-slot>
     </x-splade-table>
-</x-server-layout>
+@endsection

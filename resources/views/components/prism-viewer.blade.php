@@ -6,7 +6,9 @@
 
             @if($copyToClipboard)
                 <div class="absolute bottom-0 right-0">
-                    <x-clipboard class="w-4 h-4 mr-1">{{ $value }}</x-clipboard>
+                    <x-tomato-admin-copy :text="$value">
+                        <span class="w-4 h-4 mr-1">{{$value}}</span>
+                    </x-tomato-admin-copy>
                 </div>
             @endif
         </label>

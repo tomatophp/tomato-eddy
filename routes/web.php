@@ -12,6 +12,18 @@ Route::middleware(['web', 'signed:relative'])->group(function () {
 });
 
 
+Route::middleware(['web','auth', 'splade', 'verified'])->name('admin.')->group(function () {
+    Route::get('admin/site-templates', [TomatoPHP\TomatoEddy\Http\Controllers\SiteTemplateController::class, 'index'])->name('site-templates.index');
+    Route::get('admin/site-templates/api', [TomatoPHP\TomatoEddy\Http\Controllers\SiteTemplateController::class, 'api'])->name('site-templates.api');
+    Route::get('admin/site-templates/create', [TomatoPHP\TomatoEddy\Http\Controllers\SiteTemplateController::class, 'create'])->name('site-templates.create');
+    Route::post('admin/site-templates', [TomatoPHP\TomatoEddy\Http\Controllers\SiteTemplateController::class, 'store'])->name('site-templates.store');
+    Route::get('admin/site-templates/{model}', [TomatoPHP\TomatoEddy\Http\Controllers\SiteTemplateController::class, 'show'])->name('site-templates.show');
+    Route::get('admin/site-templates/{model}/edit', [TomatoPHP\TomatoEddy\Http\Controllers\SiteTemplateController::class, 'edit'])->name('site-templates.edit');
+    Route::post('admin/site-templates/{model}', [TomatoPHP\TomatoEddy\Http\Controllers\SiteTemplateController::class, 'update'])->name('site-templates.update');
+    Route::delete('admin/site-templates/{model}', [TomatoPHP\TomatoEddy\Http\Controllers\SiteTemplateController::class, 'destroy'])->name('site-templates.destroy');
+});
+
+
 Route::middleware(['web', 'auth', 'verified', 'splade'])->prefix('admin')->name('admin.')->group(function(){
 
     //Server Actions
@@ -36,7 +48,7 @@ Route::middleware(['web', 'auth', 'verified', 'splade'])->prefix('admin')->name(
     Route::resource('servers', \TomatoPHP\TomatoEddy\Http\Controllers\ServerController::class);
     Route::resource('servers.crons', \TomatoPHP\TomatoEddy\Http\Controllers\CronController::class);
     Route::resource('servers.daemons', \TomatoPHP\TomatoEddy\Http\Controllers\DaemonController::class);
-    Route::resource('servers.databases', \TomatoPHP\TomatoEddy\Http\Controllers\DatabaseController::class)->except(['show', 'update']);
+    Route::resource('servers.databases', \TomatoPHP\TomatoEddy\Http\Controllers\DatabaseController::class)->except(['show']);
     Route::resource('servers.database-users', \TomatoPHP\TomatoEddy\Http\Controllers\DatabaseUserController::class)->except(['index', 'show']);
     Route::resource('servers.files', \TomatoPHP\TomatoEddy\Http\Controllers\FileController::class)->only(['index', 'show', 'edit', 'update']);
     Route::resource('servers.firewall-rules', \TomatoPHP\TomatoEddy\Http\Controllers\FirewallRuleController::class);

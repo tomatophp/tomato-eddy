@@ -2,6 +2,7 @@
 
 namespace TomatoPHP\TomatoEddy\Server;
 
+use TomatoPHP\TomatoEddy\Enums\Server\Software;
 use TomatoPHP\TomatoEddy\Services\FileOnServer;
 use TomatoPHP\TomatoEddy\Models\Server;
 use TomatoPHP\TomatoEddy\Models\Site;

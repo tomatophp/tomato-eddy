@@ -44,6 +44,6 @@ class ServerConnectionLost extends Notification implements ShouldQueue
             ]))
             ->line(Markdown::parse($this->reference))
             ->line(__('Please check your server\'s connection details and try again.'))
-            ->action(__('View Server'), route('servers.show', $this->server));
+            ->action(__('View Server'), route('admin.servers.show', $this->server));
     }
 }

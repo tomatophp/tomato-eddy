@@ -43,11 +43,21 @@ trait InteractsWithEddy
         return $this->credentials()->one()->where('provider', Provider::Github);
     }
 
+    public function cloudflareCredential()
+    {
+        return $this->credentials()->one()->where('provider', Provider::Cloudflare);
+    }
+
     /**
      * Returns a boolean whether this user has a Github credentials.
      */
     public function hasGithubCredentials(): bool
     {
         return $this->githubCredentials()->exists();
+    }
+
+    public function hasCloudflareCredential():bool
+    {
+        return $this->cloudflareCredential()->exists();
     }
 }

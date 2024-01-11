@@ -2,6 +2,7 @@
 
 namespace TomatoPHP\TomatoEddy\Services;
 
+use TomatoPHP\TomatoEddy\Enums\Services\PrismLanguage;
 use TomatoPHP\TomatoEddy\Models\Server;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -40,17 +41,17 @@ class FileOnServer
 
     public function showRoute(Server $server): string
     {
-        return route('servers.files.show', [$server, $this->routeParameter()]);
+        return route('admin.servers.files.show', [$server, $this->routeParameter()]);
     }
 
     public function editRoute(Server $server): string
     {
-        return route('servers.files.edit', [$server, $this->routeParameter()]);
+        return route('admin.servers.files.edit', [$server, $this->routeParameter()]);
     }
 
     public function updateRoute(Server $server): string
     {
-        return route('servers.files.update', [$server, $this->routeParameter()]);
+        return route('admin.servers.files.update', [$server, $this->routeParameter()]);
     }
 
     public function routeParameter(): string

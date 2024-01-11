@@ -11,6 +11,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use ProtoneMedia\Splade\Facades\Toast;
 use ProtoneMedia\Splade\SpladeTable;
+use TomatoPHP\TomatoEddy\Tables\CronsTable;
 
 /**
  * @codeCoverageIgnore Handled by Dusk tests.
@@ -41,16 +42,9 @@ class CronController extends Controller
     {
         $frequencies = $this->frequencyOptions();
 
-        return view('crons.index', [
+        return view('tomato-eddy::crons.index', [
             'server' => $server,
-            'crons' => SpladeTable::for($server->crons())
-                ->column('command', __('Command'))
-                ->column('user', __('User'))
-                ->column('expression', __('Frequency'), as: fn ($expression) => $frequencies[$expression] ?? $expression)
-                ->column('status', __('Status'), alignment: 'right')
-                ->rowModal(fn (Cron $cron) => route('servers.crons.edit', [$server, $cron]))
-                ->defaultSort('command')
-                ->paginate(),
+            'crons' => (new CronsTable($server->crons(), $server, $frequencies)),
         ]);
     }
 
@@ -59,7 +53,7 @@ class CronController extends Controller
      */
     public function create(Server $server)
     {
-        return view('crons.create', [
+        return view('tomato-eddy::crons.create', [
             'server' => $server,
             'frequencies' => $this->frequencyOptions(),
         ]);
@@ -92,7 +86,7 @@ class CronController extends Controller
 
         Toast::message(__('The Cron has been created and will be installed on the server.'));
 
-        return to_route('servers.crons.index', $server);
+        return to_route('admin.servers.crons.index', $server);
     }
 
     /**
@@ -108,7 +102,7 @@ class CronController extends Controller
             $cron->custom_expression = $cron->expression;
         }
 
-        return view('crons.edit', [
+        return view('tomato-eddy::crons.edit', [
             'cron' => $cron,
             'server' => $server,
             'frequencies' => $this->frequencyOptions(),
@@ -144,7 +138,7 @@ class CronController extends Controller
 
         Toast::message(__('The Cron will be updated on the server.'));
 
-        return to_route('servers.crons.index', $server);
+        return to_route('admin.servers.crons.index', $server);
     }
 
     /**
@@ -160,6 +154,6 @@ class CronController extends Controller
 
         Toast::message(__('The Cron will be uninstalled from the server.'));
 
-        return to_route('servers.crons.index', $server);
+        return to_route('admin.servers.crons.index', $server);
     }
 }

@@ -1,31 +1,20 @@
-<x-splade-event private channel="teams.{{ auth()->user()->currentTeam->id }}" listen="FirewallRuleUpdated, FirewallRuleDeleted" />
+@extends('tomato-eddy::servers.layout')
 
-<x-server-layout :$server>
-    <x-slot:title>
-        {{ __('Firewall Rules') }}
-    </x-slot>
+@section('title', __('Firewall Rules'))
+@section('description', __('Manage your Firewall Rules.'))
 
-    <x-slot:description>
-        {{ __('Manage your Firewall Rules.') }}
-    </x-slot>
+@section('buttons')
+    <x-tomato-admin-button type="link" modal href="{{ route('admin.servers.firewall-rules.create', $server) }}">
+        {{ __('Add Firewall Rule') }}
+    </x-tomato-admin-button>
+@endsection
 
-    @if($firewallRules->isNotEmpty())
-        <x-slot:actions>
-            <x-splade-button type="link" modal href="{{ route('servers.firewall-rules.create', $server) }}">
-                {{ __('Add Firewall Rule') }}
-            </x-splade-button>
-        </x-slot>
-    @endif
+@section('content')
+    <x-splade-event private channel="teams.{{ auth()->user()->currentTeam->id }}" listen="FirewallRuleUpdated, FirewallRuleDeleted" />
 
     <x-splade-table :for="$firewallRules">
         <x-splade-cell status>
-            <x-installation-status :installable="$item" />
+            @include('tomato-eddy::servers.install-status', ['item' => $item])
         </x-splade-cell>
-
-        <x-slot:empty-state>
-            <x-empty-state modal :href="route('servers.firewall-rules.create', $server)">
-                {{ __('Add Firewall Rule') }}
-            </x-empty-state>
-        </x-slot>
     </x-splade-table>
-</x-server-layout>
+@endsection

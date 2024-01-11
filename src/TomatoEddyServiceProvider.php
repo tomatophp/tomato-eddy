@@ -130,6 +130,11 @@ class TomatoEddyServiceProvider extends ServiceProvider
                 ->label(__('SSH Keys'))
                 ->icon('bx bxs-key')
                 ->route('admin.ssh-keys.index'),
+            Menu::make()
+                ->group(__('Eddy'))
+                ->label(__('Sites Templates'))
+                ->icon('bx bx-globe')
+                ->route('admin.site-templates.index'),
            Menu::make()
             ->group(__('Eddy'))
             ->label(__('Servers'))

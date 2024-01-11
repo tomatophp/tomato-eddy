@@ -36,8 +36,8 @@
 
 @include('tomato-eddy::servers.menu-item', [
     'href' => route('admin.servers.software.index', $server->id),
-    'icon' => 'bx bx-code',
-    'label' => __('Software'),
+    'icon' => 'bx bxs-network-chart',
+    'label' => __('Services'),
 ])
 
 @include('tomato-eddy::servers.menu-item', [

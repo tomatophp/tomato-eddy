@@ -50,6 +50,6 @@ class DeploymentFailed extends Notification implements ShouldQueue
                     ->line(__("Here you'll find the 10 last lines of the task that failed:"))
                     ->line(Markdown::parse("```{$output}```"));
             })
-            ->action(__('View Site'), route('servers.sites.show', [$this->deployment->site->server, $this->deployment->site]));
+            ->action(__('View Site'), route('admin.servers.sites.show', [$this->deployment->site->server, $this->deployment->site]));
     }
 }

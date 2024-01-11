@@ -12,31 +12,8 @@
 
 @section('content')
     <x-splade-table :for="$sites">
-
+        <x-splade-cell latestDeployment.updated_at>
+            <x-tomato-admin-row table type="datetime" :value="$item->latestDeployment?->updated_at" />
+        </x-splade-cell>
     </x-splade-table>
 @endsection
-{{--<x-server-layout :$server>--}}
-{{--    <x-slot:title>--}}
-{{--        {{ __('Sites') }}--}}
-{{--    </x-slot>--}}
-
-{{--    <x-slot:description>--}}
-{{--        {{ __("Manage the sites on server ':server'.", ['server' => $server->name]) }}--}}
-{{--    </x-slot>--}}
-
-{{--    <x-slot:actions>--}}
-{{--        <x-splade-button type="link" modal href="{{ route('servers.sites.create', $server) }}">--}}
-{{--            {{ __('New Site') }}--}}
-{{--        </x-splade-button>--}}
-{{--    </x-slot>--}}
-
-{{--    @if($sites->isNotEmpty())--}}
-{{--        <x-slot:actions>--}}
-{{--            <x-splade-button type="link" modal href="{{ route('servers.sites.create', $server) }}">--}}
-{{--                {{ __('New Site') }}--}}
-{{--            </x-splade-button>--}}
-{{--        </x-slot>--}}
-{{--    @endif--}}
-
-
-{{--</x-server-layout>--}}

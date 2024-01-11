@@ -5,6 +5,8 @@ namespace TomatoPHP\TomatoEddy\Tables;
 use Illuminate\Http\Request;
 use ProtoneMedia\Splade\AbstractTable;
 use ProtoneMedia\Splade\SpladeTable;
+use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\Models\Site;
 
 class SiteTable extends AbstractTable
 {
@@ -14,9 +16,12 @@ class SiteTable extends AbstractTable
      * @return void
      */
     public function __construct(
-        public string $server
+        public mixed $query,
+        public Server $server,
     ) {
-        //
+        if(!$this->query){
+            $this->query = Site::query();
+        }
     }
 
     /**
@@ -36,7 +41,7 @@ class SiteTable extends AbstractTable
      */
     public function for()
     {
-        return \App\Models\Site::query()->where('forge_server_id', $this->server);
+        return $this->query;
     }
 
     /**
@@ -49,16 +54,16 @@ class SiteTable extends AbstractTable
         $table
             ->withGlobalSearch(label: trans('tomato-admin::global.search'), columns: [
                 'id',
-                'name',
-                'forge_site_id',
+                'address'
             ])
             ->export()
             ->defaultSort('id')
-            ->column(key: 'actions', label: trans('tomato-admin::global.crud.actions'))
-            ->column(label: 'Id', sortable: true)
-            ->column(key: 'forge_site_id', label: 'Site ID', sortable: true)
-            ->column(key: 'name', label: 'Domain', sortable: true)
-            ->column(key: 'status', label: 'Status', sortable: true)
+            ->column('address', __('Address'))
+            ->column('php_version_formatted', __('PHP Version'))
+            ->column('latestDeployment.updated_at', __('Deployed'))
+            ->rowLink(fn (Site $site) => route('admin.servers.sites.show', [$this->server, $site]))
+            ->selectFilter('php_version', $this->server->installedPhpVersions(), __('PHP Version'))
+            ->defaultSort('address')
             ->paginate(15);
     }
 }

@@ -12,6 +12,7 @@ use TomatoPHP\TomatoEddy\Enums\Firewall\RuleAction;
 use Illuminate\Http\Request;
 use ProtoneMedia\Splade\Facades\Toast;
 use ProtoneMedia\Splade\SpladeTable;
+use TomatoPHP\TomatoEddy\Tables\FirewallRulesTable;
 
 /**
  * @codeCoverageIgnore Handled by Dusk tests.
@@ -23,18 +24,9 @@ class FirewallRuleController extends Controller
      */
     public function index(Server $server)
     {
-        return view('firewall-rules.index', [
+        return view('tomato-eddy::firewall-rules.index', [
             'server' => $server,
-            'firewallRules' => SpladeTable::for($server->firewallRules())
-                ->column('name', __('Name'), sortable: true)
-                ->column('port', __('Port'), sortable: true)
-                ->column('action', __('Action'), sortable: true, as: fn (RuleAction $action) => $action->name)
-                ->column('from_ipv4', __('From IP'), sortable: true, as: fn ($ip) => $ip ?: __('Any'))
-                ->column('status', __('Status'), alignment: 'right')
-                ->withGlobalSearch(columns: ['name', 'port', 'from_ipv4'])
-                ->rowModal(fn (FirewallRule $firewallRule) => route('servers.firewall-rules.edit', [$server, $firewallRule]))
-                ->defaultSort('name')
-                ->paginate(),
+            'firewallRules' => (new FirewallRulesTable($server->firewallRules(), $server))
         ]);
     }
 
@@ -43,7 +35,7 @@ class FirewallRuleController extends Controller
      */
     public function create(Server $server)
     {
-        return view('firewall-rules.create', [
+        return view('tomato-eddy::firewall-rules.create', [
             'server' => $server,
             'actions' => Enum::options(RuleAction::class),
         ]);
@@ -68,9 +60,9 @@ class FirewallRuleController extends Controller
 
         $this->logActivity(__("Created firewall rule ':name' on server ':server'", ['name' => $firewallRule->name, 'server' => $server->name]), $firewallRule);
 
-        Toast::message(__('The Firewall Rule has been created and will be installed on the server.'));
+        Toast::message(__('The Firewall Rule has been created and will be installed on the server.'))->autoDismiss(2);
 
-        return to_route('servers.firewall-rules.index', $server);
+        return to_route('admin.servers.firewall-rules.index', $server);
     }
 
     /**
@@ -78,7 +70,7 @@ class FirewallRuleController extends Controller
      */
     public function edit(Server $server, FirewallRule $firewallRule)
     {
-        return view('firewall-rules.edit', [
+        return view('tomato-eddy::firewall-rules.edit', [
             'firewallRule' => $firewallRule,
             'server' => $server,
             'actions' => Enum::options(RuleAction::class),
@@ -96,11 +88,20 @@ class FirewallRuleController extends Controller
 
         $firewallRule->update($data);
 
+        if($firewallRule->installation_failed_at || $firewallRule->uninstallation_failed_at){
+            $firewallRule->forceFill([
+                'installation_failed_at' => null,
+                'uninstallation_failed_at' => null,
+                'installed_at' => now(),
+            ])->save();
+            dispatch(new InstallFirewallRule($firewallRule, $this->user()));
+        }
+
         $this->logActivity(__("Updated firewall rule ':name' on server ':server'", ['name' => $firewallRule->name, 'server' => $server->name]), $firewallRule);
 
-        Toast::message(__('The Firewall Rule name has been updated.'));
+        Toast::message(__('The Firewall Rule name has been updated.'))->autoDismiss(2);
 
-        return to_route('servers.firewall-rules.index', $server);
+        return to_route('admin.servers.firewall-rules.index', $server);
     }
 
     /**
@@ -114,8 +115,8 @@ class FirewallRuleController extends Controller
 
         $this->logActivity(__("Deleted firewall rule ':name' from server ':server'", ['name' => $firewallRule->name, 'server' => $server->name]), $firewallRule);
 
-        Toast::message(__('The Firewall Rule will be uninstalled from the server.'));
+        Toast::message(__('The Firewall Rule will be uninstalled from the server.'))->autoDismiss(2);
 
-        return to_route('servers.firewall-rules.index', $server);
+        return to_route('admin.servers.firewall-rules.index', $server);
     }
 }

@@ -1,22 +1,14 @@
-<x-server-layout :$server :title="__('Edit Cron')">
-    <x-action-section in-sidebar-layout>
-        <x-slot:title>
-            {{ __("Edit Firewall Rule on server ':server'.", ['server' => $server->name]) }}
-        </x-slot>
+<x-tomato-admin-container :label="__('Edit Firewall Rule on server')">
+    <x-splade-form method="PATCH" :action="route('admin.servers.firewall-rules.update', [$server, $firewallRule])" :default="$firewallRule" class="space-y-4">
+        <x-splade-input name="name" :label="__('Name')" />
 
-        <x-slot:content>
-            <x-splade-form method="PATCH" :action="route('servers.firewall-rules.update', [$server, $firewallRule])" :default="$firewallRule" class="space-y-4">
-                <x-splade-input name="name" :label="__('Name')" />
+        <div class="flex flex-row justify-between items-center">
+            <x-tomato-admin-submit spinner :label="__('Save Or Retry')" />
 
-                <div class="flex flex-row justify-between items-center">
-                    <x-splade-submit :label="__('Save')" />
+            <x-tomato-admin-button danger confirm-danger method="DELETE" :href="route('admin.servers.firewall-rules.destroy', [$server, $firewallRule])">
+                {{ __('Delete Firewall Rule') }}
+            </x-tomato-admin-button>
+        </div>
 
-                    <x-splade-link confirm-danger method="DELETE" :href="route('servers.firewall-rules.destroy', [$server, $firewallRule])">
-                        <x-splade-button danger :label="__('Delete Firewall Rule')" />
-                    </x-splade-link>
-                </div>
-
-            </x-splade-form>
-        </x-slot>
-    </x-action>
-</x-server-layout>
+    </x-splade-form>
+</x-tomato-admin-container>

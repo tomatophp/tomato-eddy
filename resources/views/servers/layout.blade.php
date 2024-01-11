@@ -9,9 +9,14 @@
     <x-slot:buttons>
         <x-tomato-admin-dropdown>
             <x-slot:button>
-                <x-tomato-admin-button type="button">
-                    {{ __('Server Actions') }}
-                </x-tomato-admin-button>
+                <div class="flex gap-2 items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150">
+                    <div>
+                        {{ __('Server Actions') }}
+                    </div>
+                    <div>
+                        <i class="bx bx-chevron-down"></i>
+                    </div>
+                </div>
             </x-slot:button>
 
             @php
@@ -104,39 +109,48 @@
         </x-tomato-admin-dropdown>
     </x-slot:buttons>
 
-    <div class="grid grid-cols-12 gap-4">
-        <div class="col-span-12 md:col-span-4 xl:col-span-2 flex flex-col gap-2">
-            <div class="hidden md:block">
-                @include('tomato-eddy::servers.sidebar')
+    <x-splade-data remember="server-sidebar" local-storage default="{menu: false}">
+        <div class="grid grid-cols-12 gap-4">
+            <div class="col-span-12 md:col-span-4 xl:col-span-2 flex flex-col gap-2" v-if="data.menu">
+                <div class="hidden md:block">
+                    @include('tomato-eddy::servers.sidebar')
+                </div>
+                <div class="block md:hidden">
+                    @include('tomato-eddy::servers.sidebar-mobile')
+                </div>
             </div>
-            <div class="block md:hidden">
-                @include('tomato-eddy::servers.sidebar-mobile')
-            </div>
-        </div>
-        <div class="col-span-12 md:col-span-8 xl:col-span-10 flex flex-col gap-4">
-            <div class="dark:bg-gray-800 dark:text-white p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <section class="mb-4 @hasSection('buttons') flex justify-between @endif">
-                    <div>
-                        <header>
-                            <h2 class="text-lg font-medium text-gray-900 dark:text-white">
-                                @yield('title')
-                            </h2>
-                        </header>
+            <div class="flex flex-col gap-4" :class="{'col-span-12 md:col-span-8 xl:col-span-10 ':data.menu, 'col-span-12':!data.menu}">
+                <div class="dark:bg-gray-800 dark:text-white p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                    <section class="mb-4 @hasSection('buttons') flex justify-between @endif">
+                        <div class="flex justify-start gap-4">
+                            <div>
+                                <x-tomato-admin-button type="button" @click.prevent="data.menu = !data.menu">
+                                    <i class="bx bx-menu-alt-left"></i>
+                                </x-tomato-admin-button>
+                            </div>
+                            <div>
+                                <header>
+                                    <h2 class="text-lg font-medium text-gray-900 dark:text-white">
+                                        @yield('title')
+                                    </h2>
+                                </header>
 
-                        <p class="mt-1 text-sm text-gray-600 dark:text-gray-300">
-                            @yield('description')
-                        </p>
-                    </div>
-                    @hasSection('buttons')
+                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-300">
+                                    @yield('description')
+                                </p>
+                            </div>
+                        </div>
+                        @hasSection('buttons')
+                            <div>
+                                @yield('buttons')
+                            </div>
+                        @endif
+                    </section>
                     <div>
-                        @yield('buttons')
+                        @yield('content')
                     </div>
-                    @endif
-                </section>
-                <div>
-                    @yield('content')
                 </div>
             </div>
         </div>
-    </div>
+    </x-splade-data>
 </x-tomato-admin-layout>

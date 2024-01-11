@@ -1,83 +1,89 @@
-<x-server-layout :$server :title="__('Add Site')">
-    <x-action-section in-sidebar-layout>
-        <x-slot:title>
-            {{ __("Add Site on server ':server'.", ['server' => $server->name]) }}
-        </x-slot>
+<x-tomato-admin-container :label="__('Add Site')">
+    <x-splade-script>
+        $splade.generatePassword = function () {
+        const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
-        <x-slot:content>
-            <x-splade-form :action="route('servers.sites.store', $server)" :default="[
-                'php_version' => array_keys($phpVersions)[1],
+        return Array.from(crypto.getRandomValues(new Uint32Array(32)))
+        .map((x) => charset[x % charset.length])
+        .join('')
+        };
+    </x-splade-script>
+    <x-splade-form :action="route('admin.servers.sites.store', $server)" :default="[
+                'php_version' => array_keys($phpVersions)[0],
                 'zero_downtime_deployment' => true,
                 'type' => 'laravel',
                 'web_folder' => '/public',
                 'repository_branch' => 'main',
-                'deploy_key_uuid' => null,
-                'address' => $server->name.'.3x1.one',
-                'repository_url' => 'git@github.com:3x1io/bing-api.git',
-                'repository_branch' => 'master',
+                'deploy_key_uuid' => $deployKeyUuid,
+                'has_database' => false,
+                'has_queue' => false,
+                'has_schedule' => false,
+                'add_server_ssh_key_to_github' => true,
+                'site_template' => false
             ]">
-                <div class="space-y-4">
-                    <x-splade-input name="address" :label="__('Hostname')" prepend="https://" autofocus />
+        <div class="space-y-4">
+            <x-splade-input name="address" :label="__('Hostname')" autofocus>
+                <x-slot:prepend>
+                    <span class="text-gray-900">https://</span>
+                </x-slot:prepend>
+            </x-splade-input>
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <x-splade-select name="php_version" :label="__('PHP Version')" :options="$phpVersions" />
-                        <x-splade-select name="type" :label="__('Site Type')" :options="$types" />
-                    </div>
 
-                    <div v-if="form.type != 'wordpress'" class="space-y-4">
-                        <x-splade-input name="web_folder" :label="__('Web Folder')" />
-                        <x-splade-checkbox name="zero_downtime_deployment" :label="__('Enable Zero Downtime Deployment')" />
-                    </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="col-span-2">
+                    <x-splade-select
+                        choices
+                        :label="__('Create From Template')"
+                        :placeholder="__('Select Template')"
+                        name="site_template"
+                        remote-root="data"
+                        :remote-url="route('admin.site-templates.api')"
+                        option-label="name"
+                        option-value="id"
+                    />
                 </div>
+                <x-splade-select v-if="!form.site_template" name="php_version" :label="__('PHP Version')" :options="$phpVersions" />
+                <x-splade-select v-if="!form.site_template" name="type" :label="__('Site Type')" :options="$types" />
+            </div>
 
-                <div v-if="form.type != 'wordpress'" class="space-y-4">
-                    <div class="my-8 h-px bg-slate-200" />
+            <div v-if="form.type != 'wordpress' && !form.site_template" class="flex flex-col gap-4">
+                <x-splade-input name="web_folder" :label="__('Web Folder')" />
+                <x-splade-checkbox name="zero_downtime_deployment" :label="__('Enable Zero Downtime Deployment')" />
+                @if($hasCloudflareCredential)
+                    <x-splade-checkbox name="add_server_ssh_key_to_github" :label="__('Add Server SSH Key To Github')" />
+                @endif
+                <x-splade-checkbox name="add_dns_zone_to_cloudflare" :label="__('Add Domain DNS to Cloudflare')" />
+                <x-splade-checkbox v-if="form.type === 'laravel'" name="has_queue" :label="__('Install Laravel Queue?')" />
+                <x-splade-checkbox v-if="form.type === 'laravel'" name="has_schedule" :label="__('Install Laravel Schedule?')" />
+                <x-splade-checkbox name="has_database" :label="__('Create Database?')" />
 
-                    @if($hasGithubCredentials)
-                        <x-splade-select name="repository_url" :label="__('Github Repository')" :remote-url="route('github.repositories')" />
-                    @endif
-
-                    <x-splade-input name="deploy_key_uuid" type="hidden" />
-                    <x-splade-input name="repository_url" :label="__('Repository URL')" />
-                    <x-splade-input name="repository_branch" :label="__('Repository Branch')" />
-
-                    <x-splade-toggle>
-                        <x-prism-viewer
-                            copy-to-clipboard
-                            v-if="!form.deploy_key_uuid"
-                            :label="__('Public Key Server')"
-                            :help="__('Make sure this key is added to Github or other repository provider.')"
-                            :value="trim($server->user_public_key)"
-                        />
-
-                        <x-prism-viewer
-                            copy-to-clipboard
-                            v-if="form.deploy_key_uuid"
-                            :label="__('Deploy Key')"
-                            :help="__('Instead of adding the public key of the server, you can add this deploy key to Github or other repository provider.')"
-                            :value="trim($deployKey->publicKey)"
-                        />
-
-                        <x-splade-button
-                            v-if="!form.deploy_key_uuid"
-                            @click.prevent="form.deploy_key_uuid = {{ Js::from($deployKeyUuid) }}"
-                            secondary
-                        >
-                            {{ __('Use a Deploy Key') }}
-                        </x-splade-button>
-
-                        <x-splade-button
-                            v-if="form.deploy_key_uuid"
-                            @click.prevent="form.deploy_key_uuid = null"
-                            secondary
-                        >
-                            {{ __('Use the Server\'s Public Key') }}
-                        </x-splade-button>
-                    </x-splade-toggle>
+                <div v-if="form.has_database" class="flex flex-col gap-4">
+                    <x-splade-input name="database_name" :label="__('Database Name')"  />
+                    <x-splade-input name="database_user" :label="__('Database User')"  />
+                    <x-splade-input name="database_password" :label="__('Database Password')">
+                        <x-slot:append>
+                            <button @click="form.database_password = $splade.generatePassword()" type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700">
+                                @svg('heroicon-o-sparkles', 'h-5 w-5')
+                            </button>
+                        </x-slot:append>
+                    </x-splade-input>
                 </div>
+            </div>
+        </div>
 
-                <x-splade-submit class="mt-8" :label="__('Deploy Now')" />
-            </x-splade-form>
-        </x-slot>
-    </x-action>
-</x-server-layout>
+        <div v-if="form.type != 'wordpress' && !form.site_template" class="space-y-4">
+            <div class="my-8 h-px bg-slate-200" />
+
+            @if($hasGithubCredentials)
+                <x-splade-select choices name="repository_url" :label="__('Github Repository')" :placeholder="__('Search By Repo')" :remote-url="route('admin.github.repositories')" />
+            @endif
+
+            <x-splade-input name="deploy_key_uuid" type="hidden" />
+            <x-splade-input name="repository_url" :label="__('Repository URL')" />
+            <x-splade-input name="repository_branch" :label="__('Repository Branch')" />
+        </div>
+
+        <x-tomato-admin-submit spinner class="mt-8" :label="__('Deploy Now')" />
+    </x-splade-form>
+
+</x-tomato-admin-container>

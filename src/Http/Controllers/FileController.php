@@ -4,8 +4,9 @@ namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
 use TomatoPHP\TomatoEddy\Services\FileOnServer;
 use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\Tables\FilesTable;
 use TomatoPHP\TomatoEddy\Tasks\GetFile;
-use App\Tasks\UploadFile;
+use TomatoPHP\TomatoEddy\Tasks\UploadFile;
 use Illuminate\Http\Request;
 use ProtoneMedia\Splade\Facades\Splade;
 use ProtoneMedia\Splade\Facades\Toast;
@@ -21,12 +22,9 @@ class FileController extends Controller
      */
     public function index(Server $server)
     {
-        return view('servers.files.index', [
+        return view('tomato-eddy::servers.files.index', [
             'server' => $server,
-            'files' => SpladeTable::for($server->files()->editableFiles())
-                ->column('name', __('Name'))
-                ->column('description', __('Description'))
-                ->rowModal(fn (FileOnServer $file) => $file->editRoute($server)),
+            'files' => (new FilesTable($server->files()->allEditableFiles(), $server)),
         ]);
     }
 
@@ -54,7 +52,7 @@ class FileController extends Controller
             ->getBuffer()
         );
 
-        return view('servers.files.show', [
+        return view('tomato-eddy::servers.files.show', [
             'server' => $server,
             'file' => $file,
             'contents' => $contents,
@@ -93,7 +91,7 @@ class FileController extends Controller
             ->dispatch()
             ->getBuffer();
 
-        return view('servers.files.edit', [
+        return view('tomato-eddy::servers.files.edit', [
             'server' => $server,
             'file' => $file,
             'contents' => $contents,
@@ -124,6 +122,6 @@ class FileController extends Controller
 
         Toast::message(__('The file will be updated. This may take a few seconds.'));
 
-        return back(fallback: route('servers.files.index', $server));
+        return back(fallback: route('admin.servers.files.index', $server));
     }
 }

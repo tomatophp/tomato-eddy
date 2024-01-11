@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Bus;
 use Illuminate\Validation\Rule;
 use ProtoneMedia\Splade\Facades\Toast;
 use ProtoneMedia\Splade\SpladeTable;
+use TomatoPHP\TomatoEddy\Tables\DatabaseTable;
+use TomatoPHP\TomatoEddy\Tables\DatabaseUsersTable;
 
 /**
  * @codeCoverageIgnore Handled by Dusk tests.
@@ -25,20 +27,10 @@ class DatabaseController extends Controller
      */
     public function index(Server $server)
     {
-        $this->authorize('viewAny', DatabaseUser::class);
-
-        return view('databases.index', [
+        return view('tomato-eddy::databases.index', [
             'server' => $server,
-
-            'databases' => SpladeTable::for($server->databases())
-                ->column('name', __('Database'))
-                ->column('status', __('Status'), alignment: 'right')
-                ->rowModal(fn (Database $database) => route('servers.databases.edit', [$server, $database])),
-
-            'users' => SpladeTable::for($server->databaseUsers())
-                ->column('name', __('User'))
-                ->column('status', __('Status'), alignment: 'right')
-                ->rowModal(fn (DatabaseUser $databaseUser) => route('servers.database-users.edit', [$server, $databaseUser])),
+            'databases' => (new DatabaseTable($server->databases(), $server)),
+            'users' => (new DatabaseUsersTable($server->databaseUsers(), $server))
         ]);
     }
 
@@ -47,7 +39,7 @@ class DatabaseController extends Controller
      */
     public function create(Server $server)
     {
-        return view('databases.create', [
+        return view('tomato-eddy::databases.create', [
             'server' => $server,
         ]);
     }
@@ -106,7 +98,7 @@ class DatabaseController extends Controller
      */
     public function edit(Server $server, Database $database)
     {
-        return view('databases.edit', [
+        return view('tomato-eddy::databases.edit', [
             'database' => $database,
             'server' => $server,
         ]);
@@ -126,5 +118,30 @@ class DatabaseController extends Controller
         Toast::message(__('The database will be uninstalled from the server.'));
 
         return to_route('servers.databases.index', $server);
+    }
+
+    public function update(Request $request, Server $server, Database $database)
+    {
+        /** @var DatabaseUser */
+        $databaseUser = $database->users()->first();
+
+        if(!$databaseUser){
+            $databaseUser = $database->users()->make([
+                'name' => $database->name,
+            ])->forceFill([
+                'server_id' => $server->id,
+            ]);
+
+            $databaseUser->save();
+            $databaseUser->databases()->attach($database);
+        }
+
+        Bus::chain([
+            new InstallDatabase($database, $this->user()->fresh()),
+            new InstallDatabaseUser($databaseUser, $server->database_password, $this->user()->fresh()),
+        ])->dispatch();
+
+        Toast::success(__('Retry Install Database Run on background'))->autoDismiss(2);
+        return back();
     }
 }

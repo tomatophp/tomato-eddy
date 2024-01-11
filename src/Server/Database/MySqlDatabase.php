@@ -2,7 +2,16 @@
 
 namespace TomatoPHP\TomatoEddy\Server\Database;
 
+use TomatoPHP\TomatoEddy\Exceptions\Database\CouldNotAuthenticateWithDatabaseException;
+use TomatoPHP\TomatoEddy\Exceptions\Database\CouldNotConnectToDatabaseException;
+use TomatoPHP\TomatoEddy\Exceptions\Database\CouldNotCreateUserException;
+use TomatoPHP\TomatoEddy\Exceptions\Database\CouldNotDropUserException;
+use TomatoPHP\TomatoEddy\Exceptions\Database\CouldNotGrantPrivilegesException;
+use TomatoPHP\TomatoEddy\Exceptions\Database\CouldNotRevokePrivilegesException;
+use TomatoPHP\TomatoEddy\Exceptions\Database\DatabaseAlreadyExistsException;
+use TomatoPHP\TomatoEddy\Exceptions\Database\DatabaseNotFoundException;
 use TomatoPHP\TomatoEddy\Models\Server;
+use TomatoPHP\TomatoEddy\Server\Database\Interfaces\DatabaseManager;
 use TomatoPHP\TomatoEddy\Tasks\MySql\CreateDatabase;
 use TomatoPHP\TomatoEddy\Tasks\MySql\CreateUser;
 use TomatoPHP\TomatoEddy\Tasks\MySql\DropDatabase;

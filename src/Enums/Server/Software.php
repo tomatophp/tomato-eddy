@@ -3,7 +3,7 @@
 namespace TomatoPHP\TomatoEddy\Enums\Server;
 
 use TomatoPHP\TomatoEddy\Tasks;
-use TomatoPHP\TomatoEddy\Enums\Tasks\Task;
+use TomatoPHP\TomatoEddy\Tasks\Task;
 use TomatoPHP\TomatoEddy\Tasks\UpdateAlternatives;
 use Illuminate\Support\Str;
 
@@ -16,6 +16,8 @@ enum Software: string
     case Php81 = 'php81';
     case Php82 = 'php82';
     case Redis6 = 'redis6';
+    case SuperVisor = 'supervisor';
+    case PhpMyAdmin = 'phpmyadmin';
 
     /**
      * Returns the default stack of software for a fresh server.
@@ -31,7 +33,7 @@ enum Software: string
             self::Php81,
             self::Php82,
             self::Composer2,
-            self::Node18
+            self::Node18,
         ];
     }
 
@@ -48,6 +50,8 @@ enum Software: string
             self::Php81 => 'PHP 8.1',
             self::Php82 => 'PHP 8.2',
             self::Redis6 => 'Redis 6',
+            self::SuperVisor => 'Daemon Server',
+            self::PhpMyAdmin => 'PHPMyAdmin',
         };
     }
 
@@ -62,6 +66,15 @@ enum Software: string
             self::Php81 => Tasks\RestartPhp81::class,
             self::Php82 => Tasks\RestartPhp82::class,
             self::Redis6 => Tasks\RestartRedis::class,
+            self::SuperVisor => Tasks\RestartSuperVisor::class,
+            default => null,
+        };
+    }
+
+    public function installTaskClass()
+    {
+        return match ($this) {
+            self::PhpMyAdmin => Tasks\ReloadCaddy::class,
             default => null,
         };
     }

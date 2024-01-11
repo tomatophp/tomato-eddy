@@ -41,6 +41,6 @@ class JobOnServerFailed extends Notification implements ShouldQueue
             ->subject(__('Job on server failed'))
             ->line(__("We tried to run a job on your server, but it failed. Here's what we tried to do:"))
             ->line(Markdown::parse($this->reference))
-            ->action(__('View Server'), route('servers.show', $this->server));
+            ->action(__('View Server'), route('admin.servers.show', $this->server));
     }
 }

@@ -3,14 +3,15 @@
 namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
 use TomatoPHP\TomatoEddy\Enums\Enum;
+use TomatoPHP\TomatoEddy\Enums\Services\Signal;
 use TomatoPHP\TomatoEddy\Jobs\InstallDaemon;
 use TomatoPHP\TomatoEddy\Jobs\UninstallDaemon;
 use TomatoPHP\TomatoEddy\Models\Daemon;
 use TomatoPHP\TomatoEddy\Models\Server;
-use App\Signal;
 use Illuminate\Http\Request;
 use ProtoneMedia\Splade\Facades\Toast;
 use ProtoneMedia\Splade\SpladeTable;
+use TomatoPHP\TomatoEddy\Tables\DaemonsTable;
 
 /**
  * @codeCoverageIgnore Handled by Dusk tests.
@@ -30,16 +31,9 @@ class DaemonController extends Controller
      */
     public function index(Server $server)
     {
-        return view('daemons.index', [
+        return view('tomato-eddy::daemons.index', [
             'server' => $server,
-            'daemons' => SpladeTable::for($server->daemons())
-                ->column('command', __('Command'))
-                ->column('user', __('User'))
-                ->column('processes', __('Processes'))
-                ->column('status', __('Status'), alignment: 'right')
-                ->rowModal(fn (Daemon $daemon) => route('servers.daemons.edit', [$server, $daemon]))
-                ->defaultSort('command')
-                ->paginate(),
+            'daemons' => (new DaemonsTable($server->daemons(), $server)),
         ]);
     }
 
@@ -48,7 +42,7 @@ class DaemonController extends Controller
      */
     public function create(Server $server)
     {
-        return view('daemons.create', [
+        return view('tomato-eddy::daemons.create', [
             'server' => $server,
             'signals' => $this->signalOptions(),
         ]);
@@ -77,7 +71,7 @@ class DaemonController extends Controller
 
         Toast::message(__('The Daemon has been created and will be installed on the server.'));
 
-        return to_route('servers.daemons.index', $server);
+        return to_route('admin.servers.daemons.index', $server);
     }
 
     /**
@@ -85,7 +79,7 @@ class DaemonController extends Controller
      */
     public function edit(Server $server, Daemon $daemon)
     {
-        return view('daemons.edit', [
+        return view('tomato-eddy::daemons.edit', [
             'daemon' => $daemon,
             'server' => $server,
             'signals' => $this->signalOptions(),
@@ -114,7 +108,7 @@ class DaemonController extends Controller
 
         Toast::message(__('The Daemon will be updated on the server.'));
 
-        return to_route('servers.daemons.index', $server);
+        return to_route('admin.servers.daemons.index', $server);
     }
 
     /**
@@ -130,6 +124,6 @@ class DaemonController extends Controller
 
         Toast::message(__('The Daemon will be uninstalled from the server.'));
 
-        return to_route('servers.daemons.index', $server);
+        return to_route('admin.servers.daemons.index', $server);
     }
 }

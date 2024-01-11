@@ -103,13 +103,15 @@ class GithubController extends Controller
         /** @var Github */
         $github = $providerFactory->forCredentials($githubCredentials);
 
-        return Cache::remember("github_repositories.{$githubCredentials->id}", 5 * 60, function () use ($github) {
-            /** @var Collection */
-            $repositories = rescue(fn () => $github->findRepositories(), Collection::make(), false);
+//        return Cache::remember("github_repositories.{$githubCredentials->id}", 5 * 60, function () use ($github) {
+//            /** @var Collection */
+//
+//        });
 
-            return $repositories->mapWithKeys(function (GitRepository $repository) {
-                return [$repository->url => $repository->name];
-            })->all();
-        });
+        $repositories = rescue(fn () => $github->findRepositories(), Collection::make(), false);
+
+        return $repositories->mapWithKeys(function (GitRepository $repository) {
+            return [$repository->url => $repository->name];
+        })->all();
     }
 }

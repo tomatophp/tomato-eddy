@@ -22,7 +22,7 @@ class DatabaseUserController extends Controller
      */
     public function create(Server $server)
     {
-        return view('database-users.create', [
+        return view('tomato-eddy::database-users.create', [
             'server' => $server,
             'databases' => $server->databases->mapWithKeys(fn (Database $database) => [$database->id => $database->name]),
         ]);
@@ -55,7 +55,7 @@ class DatabaseUserController extends Controller
 
         Toast::success(__('The database user will be created shortly.'));
 
-        return to_route('servers.databases.index', $server);
+        return to_route('admin.servers.databases.index', $server);
     }
 
     /**
@@ -63,7 +63,7 @@ class DatabaseUserController extends Controller
      */
     public function edit(Server $server, DatabaseUser $databaseUser)
     {
-        return view('database-users.edit', [
+        return view('tomato-eddy::database-users.edit', [
             'databaseUser' => $databaseUser,
             'server' => $server,
             'databases' => $server->databases->mapWithKeys(fn (Database $database) => [$database->id => $database->name]),
@@ -95,7 +95,7 @@ class DatabaseUserController extends Controller
 
         Toast::message(__('The database user will be updated shortly.'));
 
-        return to_route('servers.databases.index', $server);
+        return to_route('admin.servers.databases.index', $server);
     }
 
     /**
@@ -111,6 +111,6 @@ class DatabaseUserController extends Controller
 
         Toast::message(__('The database user will be uninstalled from the server.'));
 
-        return to_route('servers.databases.index', $server);
+        return to_route('admin.servers.databases.index', $server);
     }
 }
