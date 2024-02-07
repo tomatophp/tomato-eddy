@@ -3,14 +3,23 @@
 namespace TomatoPHP\TomatoEddy\Http\Controllers;
 
 use TomatoPHP\TomatoEddy\Enums\Enum;
+use TomatoPHP\TomatoEddy\Enums\Models\DeploymentStatus;
+use TomatoPHP\TomatoEddy\Exceptions\Models\PendingDeploymentException;
 use TomatoPHP\TomatoEddy\Http\Requests\UpdateSiteRequest;
 use TomatoPHP\TomatoEddy\Jobs\AddServerSshKeyToGithub;
+use TomatoPHP\TomatoEddy\Jobs\DeploySite;
 use TomatoPHP\TomatoEddy\Jobs\FireEventAPI;
 use TomatoPHP\TomatoEddy\Jobs\InstallCron;
 use TomatoPHP\TomatoEddy\Jobs\InstallDaemon;
 use TomatoPHP\TomatoEddy\Jobs\InstallDatabase;
 use TomatoPHP\TomatoEddy\Jobs\InstallDatabaseUser;
+use TomatoPHP\TomatoEddy\Jobs\LinkDomainToCloudflare;
+use TomatoPHP\TomatoEddy\Jobs\UninstallCron;
+use TomatoPHP\TomatoEddy\Jobs\UninstallDaemon;
+use TomatoPHP\TomatoEddy\Jobs\UninstallDatabase;
+use TomatoPHP\TomatoEddy\Jobs\UninstallDatabaseUser;
 use TomatoPHP\TomatoEddy\Jobs\UninstallSite;
+use TomatoPHP\TomatoEddy\Models\Deployment;
 use TomatoPHP\TomatoEddy\Models\SiteTemplate;
 use TomatoPHP\TomatoEddy\Services\KeyPair;
 use TomatoPHP\TomatoEddy\Services\KeyPairGenerator;
@@ -87,6 +96,7 @@ class SiteController extends Controller
             $siteTemplate = SiteTemplate::find($request->get('site_template'));
             $siteUsername = Str::of($request->get('address'))->explode('.')->first();
             $request->merge([
+                'address' => $siteUsername . '.'. $siteTemplate->domain,
                 'php_version' => $siteTemplate->php_version,
                 'type' => $siteTemplate->type,
                 'web_folder' => $siteTemplate->web_folder,
@@ -96,11 +106,15 @@ class SiteController extends Controller
                 'add_dns_zone_to_cloudflare' => $siteTemplate->add_dns_zone_to_cloudflare,
                 'add_server_ssh_key_to_github' => $siteTemplate->add_server_ssh_key_to_github,
                 'has_database' => $siteTemplate->has_database,
-                'database_name' => $siteTemplate->database_name.'-'.$siteUsername,
-                'database_user' => $siteTemplate->database_user.'-'.$siteUsername,
+                'database_name' => $siteTemplate->database_name.'_'.$siteUsername,
+                'database_user' => $siteTemplate->database_user.'_'.$siteUsername,
                 'database_password' => $siteTemplate->database_password,
                 'has_queue' => $siteTemplate->has_queue,
                 'has_schedule' => $siteTemplate->has_schedule,
+                'hook_before_updating_repository' => $siteTemplate->hook_before_updating_repository,
+                'hook_after_updating_repository' => $siteTemplate->hook_after_updating_repository,
+                'hook_before_making_current' => $siteTemplate->hook_before_making_current,
+                'hook_after_making_current' => $siteTemplate->hook_after_making_current,
             ]);
 
             $data = $request->all();
@@ -119,10 +133,15 @@ class SiteController extends Controller
         }
 
 
+        if($request->has('add_server_ssh_key_to_github') && $request->get('add_server_ssh_key_to_github')){
+            dispatch(new AddServerSshKeyToGithub($server, $this->user()->githubCredentials->fresh()));
+        }
+
+        $jobs = [];
+
+
         if($request->has('add_dns_zone_to_cloudflare') && $request->get('add_dns_zone_to_cloudflare')){
-            //Link with Cloudflare
-            $cloudflare = new Cloudflare();
-            $cloudflare->create($request->get('address'), $server->public_ipv4);
+            $jobs[] = new LinkDomainToCloudflare($server, $request->get('address'));
 
             $this->logActivity(__("Created Cloudflare ':address'", ['address' => $request->get('address')]));
         }
@@ -177,18 +196,40 @@ class SiteController extends Controller
 
             $this->logActivity(__("Created database user ':name' on server ':server'", ['name' => $databaseUser->name, 'server' => $server->name]), $databaseUser);
 
-            Bus::chain([
-                new InstallDatabase($database, $this->user()->fresh()),
-                new InstallDatabaseUser($databaseUser, $request->get('database_password'), $this->user()->fresh()),
-            ])->dispatch();
+            $jobs[] = new InstallDatabase($database, $this->user()->fresh());
+            $jobs[] = new InstallDatabaseUser($databaseUser, $request->get('database_password'), $this->user()->fresh());
+
         }
 
-        if($request->has('add_server_ssh_key_to_github') && $request->get('add_server_ssh_key_to_github')){
-            dispatch(new AddServerSshKeyToGithub($server, $this->user()->githubCredentials->fresh()));
-        }
 
 
         $this->logActivity(__("Created site ':address' on server ':server'", ['address' => $site->address, 'server' => $server->name]), $site);
+
+
+        if ($site->fresh()->latestDeployment?->status === DeploymentStatus::Pending) {
+            throw new PendingDeploymentException($site);
+        }
+
+        /** @var Deployment */
+        $deployment = $site->deployments()->create([
+            'status' => DeploymentStatus::Pending,
+            'user_id' => $this->user()?->exists ? $this->user()->id : null,
+        ]);
+
+        $site->server->team->activityLogs()->create([
+            'subject_id' => $site->getKey(),
+            'subject_type' => $site->getMorphClass(),
+            'description' => __(__("Deployed site ':address' on server ':server'", ['address' => $site->address, 'server' => $site->server->name])),
+            'user_id' => $this->user()?->exists ? $this->user()->id : null,
+        ]);
+
+        $site->forceFill([
+            'hook_before_updating_repository' => $siteTemplate->hook_before_updating_repository,
+            'hook_after_updating_repository' => $siteTemplate->hook_after_updating_repository,
+            'hook_before_making_current' => $siteTemplate->hook_before_making_current,
+            'hook_after_making_current' => $siteTemplate->hook_after_making_current,
+        ]);
+
 
         if(
             $request->get('has_database') &&
@@ -196,14 +237,14 @@ class SiteController extends Controller
             !empty($request->get('database_user')) &&
             !empty($request->get('database_password'))
         ) {
-            $deployment = $site->deploy(user: $this->user(), environmentVariables: [
+            $jobs[] = new DeploySite($deployment, [
                 "DB_DATABASE" => $request->get('database_name'),
                 "DB_USERNAME" => $request->get('database_user'),
                 "DB_PASSWORD" => $request->get('database_password')
             ]);
         }
         else {
-            $deployment = $site->deploy(user: $this->user());
+            $jobs[] = new DeploySite($deployment);
         }
 
         if ($data['deploy_key_uuid']) {
@@ -223,7 +264,7 @@ class SiteController extends Controller
             ];
 
             $daemon = $server->daemons()->create($dataDaemons);
-            dispatch(new InstallDaemon($daemon, $this->user()));
+            $jobs[] = new InstallDaemon($daemon, $this->user());
         }
 
         if($request->has('has_schedule') && $request->get('has_schedule')){
@@ -235,8 +276,10 @@ class SiteController extends Controller
             ];
 
             $cron = $server->crons()->create($dataCron);
-            dispatch(new InstallCron($cron, $this->user()));
+            $jobs[] = new InstallCron($cron, $this->user());
         }
+
+        Bus::chain($jobs)->dispatch();
 
         return to_route('admin.servers.sites.deployments.show', [$server, $site, $deployment]);
     }
@@ -313,13 +356,35 @@ class SiteController extends Controller
      */
     public function destroy(Server $server, Site $site)
     {
-        $site->dropDamons();
-        $site->dropDatabases();
-        $site->dropDatabaseUsers();
-        $site->dropCrons();
-        $site->delete();
+        $jobs = [];
+        $user = $this->user();
 
-        dispatch(new UninstallSite($server, $site->path));
+        $site->daemons()->get()->map(function ($daemon) use ($user, $jobs){
+            $daemon->markUninstallationRequest();
+            $jobs[] = new UninstallDaemon($daemon, $user);
+        });
+
+        $site->databases()->get()->map(function ($database) use ($user, $jobs){
+            $database->markUninstallationRequest();
+            $jobs[] = new UninstallDatabase($database, $user);
+        });
+
+        $site->databaseUsers()->get()->map(function ($databaseUser)use ($user, $jobs){
+            $databaseUser->markUninstallationRequest();
+            $jobs[] = new UninstallDatabaseUser($databaseUser, $user);
+        });
+
+        $site->crons()->get()->map(function ($cron) use ($user, $jobs){
+            $cron->markUninstallationRequest();
+            $jobs[] = new UninstallCron($cron, $user);
+        });
+
+        $jobs[] = new UninstallSite($server, $site->path);
+        $jobs[] = function() use ($site){
+            $site->delete();
+        };
+
+        Bus::chain($jobs)->dispatch();
 
         $this->logActivity(__("Deleted site ':address' from server ':server'", ['address' => $site->address, 'server' => $server->name]), $site);
 

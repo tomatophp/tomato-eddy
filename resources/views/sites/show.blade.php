@@ -31,6 +31,7 @@
             confirm-text="{{ __('This will invalidate the current deploy token.') }}"
             :label="__('Refresh Deploy Token')"
             method="POST"
+            type="link"
             :href="route('admin.servers.sites.refresh-deploy-token', [$server, $site])"
         />
     </div>
