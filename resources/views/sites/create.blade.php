@@ -22,12 +22,11 @@
                 'site_template' => false
             ]">
         <div class="space-y-4">
-            <x-splade-input name="address" :label="__('Hostname')" autofocus>
+            <x-splade-input v-if="!form.site_template" name="address" :label="__('Hostname')" autofocus>
                 <x-slot:prepend>
                     <span class="text-gray-900">https://</span>
                 </x-slot:prepend>
             </x-splade-input>
-
 
             <div class="grid grid-cols-2 gap-4">
                 <div class="col-span-2">
@@ -45,6 +44,7 @@
                 <x-splade-select v-if="!form.site_template" name="php_version" :label="__('PHP Version')" :options="$phpVersions" />
                 <x-splade-select v-if="!form.site_template" name="type" :label="__('Site Type')" :options="$types" />
             </div>
+
 
             <div v-if="form.type != 'wordpress' && !form.site_template" class="flex flex-col gap-4">
                 <x-splade-input name="web_folder" :label="__('Web Folder')" />

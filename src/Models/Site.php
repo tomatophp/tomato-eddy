@@ -334,11 +334,11 @@ class Site extends Model
         return $this->hasMany(Daemon::class);
     }
 
-    public function dropDamons()
+    public function dropDamons(User $user)
     {
-        $this->daemons()->get()->map(function ($daemon){
+        $this->daemons()->get()->map(function ($daemon) use ($user){
             $daemon->markUninstallationRequest();
-            dispatch(new UninstallDaemon($daemon, $this->user));
+            dispatch(new UninstallDaemon($daemon, $user));
         });
     }
 
@@ -347,11 +347,11 @@ class Site extends Model
         return $this->hasMany(Database::class);
     }
 
-    public function dropDatabases()
+    public function dropDatabases(User $user)
     {
-        $this->databases()->get()->map(function ($database){
+        $this->databases()->get()->map(function ($database) use ($user){
             $database->markUninstallationRequest();
-            dispatch(new UninstallDatabase($database, $this->user));
+            dispatch(new UninstallDatabase($database, $user));
         });
     }
 
@@ -360,11 +360,11 @@ class Site extends Model
         return $this->hasMany(DatabaseUser::class);
     }
 
-    public function dropDatabaseUsers()
+    public function dropDatabaseUsers(User $user)
     {
-        $this->databaseUsers()->get()->map(function ($databaseUser){
+        $this->databaseUsers()->get()->map(function ($databaseUser)use ($user){
             $databaseUser->markUninstallationRequest();
-            dispatch(new UninstallDatabaseUser($databaseUser, $this->user));
+            dispatch(new UninstallDatabaseUser($databaseUser, $user));
         });
     }
 
@@ -373,11 +373,11 @@ class Site extends Model
         return $this->hasMany(Cron::class);
     }
 
-    public function dropCrons()
+    public function dropCrons(User $user)
     {
-        $this->crons()->get()->map(function ($cron){
+        $this->crons()->get()->map(function ($cron) use ($user){
             $cron->markUninstallationRequest();
-            dispatch(new UninstallCron($cron, $this->user));
+            dispatch(new UninstallCron($cron, $user));
         });
     }
 }

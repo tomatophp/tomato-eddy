@@ -13,7 +13,16 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $repository_url
  * @property string $repository_branch
  * @property string $web_folder
+ * @property string $domain
  * @property string $php_version
+ * @property boolean $has_server
+ * @property string $server_name
+ * @property string $server_credentials_id
+ * @property string $server_custom_server
+ * @property string $server_ssh_keys
+ * @property string $server_type
+ * @property string $server_region
+ * @property string $server_image
  * @property string $hook_before_updating_repository
  * @property string $hook_after_updating_repository
  * @property string $hook_before_making_current
@@ -36,7 +45,17 @@ class SiteTemplate extends Model
     /**
      * @var array
      */
-    protected $fillable = ['name', 'type', 'zero_downtime_deployment', 'repository_url', 'repository_branch', 'web_folder', 'php_version', 'hook_before_updating_repository', 'hook_after_updating_repository', 'hook_before_making_current', 'hook_after_making_current', 'add_server_ssh_key_to_github', 'add_dns_zone_to_cloudflare', 'has_queue', 'has_schedule', 'has_database', 'database_name', 'database_user', 'database_password', 'created_at', 'updated_at'];
+    protected $fillable = [
+        'domain',
+        'has_server',
+        'server_name',
+        'server_credentials_id',
+        'server_custom_server',
+        'server_ssh_keys',
+        'server_type',
+        'server_region',
+        'server_image',
+        'name', 'type', 'zero_downtime_deployment', 'repository_url', 'repository_branch', 'web_folder', 'php_version', 'hook_before_updating_repository', 'hook_after_updating_repository', 'hook_before_making_current', 'hook_after_making_current', 'add_server_ssh_key_to_github', 'add_dns_zone_to_cloudflare', 'has_queue', 'has_schedule', 'has_database', 'database_name', 'database_user', 'database_password', 'created_at', 'updated_at'];
 
     protected $casts = [
         'zero_downtime_deployment' => 'boolean',
@@ -45,6 +64,7 @@ class SiteTemplate extends Model
         'has_queue' => 'boolean',
         'has_schedule' => 'boolean',
         'has_database' => 'boolean',
+        'has_server' => 'boolean',
     ];
 
 }

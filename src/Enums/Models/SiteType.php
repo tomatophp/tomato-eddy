@@ -32,6 +32,9 @@ $PHP_BINARY artisan dusk:install
 $PHP_BINARY artisan storage:link
 $PHP_BINARY artisan config:cache
 $PHP_BINARY artisan migrate --force
+
+yarn
+yarn build
 '.($zeroDowntimeDeployment ? '' : '$PHP_BINARY artisan up').'
 ');
 
