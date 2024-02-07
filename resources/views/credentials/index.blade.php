@@ -17,9 +17,9 @@
                             {{ __('Create Server') }}
                         </x-tomato-admin-button>
                     @else
-                        <x-tomato-admin-button danger method="DELETE" confirm :href="route('admin.credentials.destroy', $item->id)">
+                        <x-splade-link class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm shadow-sm focus:ring-white filament-page-button-action bg-danger-600 hover:bg-danger-500 focus:bg-danger-700 focus:ring-offset-danger-700 text-white border-transparent cursor-pointer transition-colors ease-in-out duration-20" method="DELETE" confirm-danger :href="route('admin.credentials.destroy', $item->id)">
                             {{__('Delete Credentials')}}
-                        </x-tomato-admin-button>
+                        </x-splade-link>
                     @endif
                 </x-splade-cell>
             </x-splade-table>
