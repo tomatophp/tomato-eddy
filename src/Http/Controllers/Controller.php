@@ -24,6 +24,13 @@ class Controller extends BaseController
      */
     protected function team(): Team
     {
+        if(Team::count() === 0) {
+            return $this->user()->ownedTeams()->create([
+                'name' => 'Default Team',
+                'personal_team' => true,
+            ]);
+        }
+
         return $this->user()->currentTeam;
     }
 

@@ -23,6 +23,7 @@ class CreateBulkServers implements ShouldQueue
     public function __construct(
         public int $count,
         public Credentials $credentials,
+        public string $name,
         public string $region,
         public string $type,
         public string $image,
@@ -40,7 +41,7 @@ class CreateBulkServers implements ShouldQueue
     {
         for ($i = 0; $i < $this->count; $i++) {
             $server = $this->user->currentTeam->servers()->make([
-                'name' => 'bing'.explode('-', Str::uuid())[0],
+                'name' => $this->name . explode('-', Str::uuid())[0],
                 'credentials_id' => $this->credentials?->id,
                 'region' => $this->region,
                 'type' => $this->type,
@@ -51,9 +52,9 @@ class CreateBulkServers implements ShouldQueue
             $server->public_key = $keyPair->publicKey;
             $server->private_key = $keyPair->privateKey;
 
-            $server->working_directory = config('eddy.server_defaults.working_directory');
-            $server->ssh_port = config('eddy.server_defaults.ssh_port');
-            $server->username = config('eddy.server_defaults.username');
+            $server->working_directory = config('tomato-eddy.server_defaults.working_directory');
+            $server->ssh_port = config('tomato-eddy.server_defaults.ssh_port');
+            $server->username = config('tomato-eddy.server_defaults.username');
 
             $server->password = Str::password(symbols: false);
             $server->database_password = Str::password(symbols: false);
