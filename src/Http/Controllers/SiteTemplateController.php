@@ -293,8 +293,7 @@ class SiteTemplateController extends Controller
                 type: $model->server_type,
                 image: $model->server_image,
                 user: $this->user(),
-                public_ipv4: $request->input('public_ipv4'),
-                ssh_keys: $request->input('ssh_keys'),
+                ssh_keys: [$model->server_ssh_keys],
                 keyPairGenerator: $keyPairGenerator
             ));
 

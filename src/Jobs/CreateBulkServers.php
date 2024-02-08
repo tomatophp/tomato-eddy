@@ -28,7 +28,6 @@ class CreateBulkServers implements ShouldQueue
         public string $type,
         public string $image,
         public User $user,
-        public ?string $public_ipv4,
         public ?array $ssh_keys,
         public ?KeyPairGenerator $keyPairGenerator
     ) {
@@ -59,7 +58,6 @@ class CreateBulkServers implements ShouldQueue
             $server->password = Str::password(symbols: false);
             $server->database_password = Str::password(symbols: false);
 
-            $server->public_ipv4 = $this->public_ipv4;
             $server->provider = $this->credentials->provider;
             $server->created_by_user_id = $this->user->id;
 
