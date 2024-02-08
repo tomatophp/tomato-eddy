@@ -492,7 +492,21 @@ class SiteTemplateController extends Controller
                    'user_id' => $this->user()?->exists ? $this->user()->id : null,
                ]);
 
-               $jobs[] = new DeploySite($deployment);
+               if(
+                   $data['has_database'] &&
+                   !empty($data['database_name']) &&
+                   !empty($data['database_user']) &&
+                   !empty($data['database_password'])
+               ) {
+                   $jobs[] = new DeploySite($deployment, [
+                       "DB_DATABASE" => $data['database_name'],
+                       "DB_USERNAME" => $data['database_user'],
+                       "DB_PASSWORD" => $data['database_password']
+                   ]);
+               }
+               else {
+                   $jobs[] = new DeploySite($deployment);
+               }
            }
 
             Bus::chain($jobs)->dispatch();
