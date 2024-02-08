@@ -20,6 +20,8 @@ class RunRecipe extends Task
      */
     public function render(): string
     {
-        return view($this->recipe->view);
+        return view('tomato-eddy::tasks.recipe', [
+            'recipe' => $this->recipe,
+        ]);
     }
 }
