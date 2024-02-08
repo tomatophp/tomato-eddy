@@ -36,6 +36,7 @@ Route::middleware(['web','auth', 'splade', 'verified'])->name('admin.')->group(f
     Route::get('admin/site-templates/{model}/edit', [TomatoPHP\TomatoEddy\Http\Controllers\SiteTemplateController::class, 'edit'])->name('site-templates.edit');
     Route::get('admin/site-templates/{model}/server', [TomatoPHP\TomatoEddy\Http\Controllers\SiteTemplateController::class, 'count'])->name('site-templates.server-count');
     Route::post('admin/site-templates/{model}/server', [TomatoPHP\TomatoEddy\Http\Controllers\SiteTemplateController::class, 'server'])->name('site-templates.server');
+    Route::post('admin/site-templates/{model}/sites', [TomatoPHP\TomatoEddy\Http\Controllers\SiteTemplateController::class, 'sites'])->name('site-templates.sites');
     Route::post('admin/site-templates/{model}', [TomatoPHP\TomatoEddy\Http\Controllers\SiteTemplateController::class, 'update'])->name('site-templates.update');
     Route::delete('admin/site-templates/{model}', [TomatoPHP\TomatoEddy\Http\Controllers\SiteTemplateController::class, 'destroy'])->name('site-templates.destroy');
 });

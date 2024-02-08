@@ -308,4 +308,184 @@ class SiteTemplateController extends Controller
 
         return to_route('admin.servers.show', $server);
     }
+
+    public function sites(SiteTemplate $model, KeyPairGenerator $keyPairGenerator)
+    {
+        $siteTemplate = $model;
+        $siteUsername = $server->name;
+        $data = [
+            'address' => $siteUsername . '.'. $siteTemplate->domain,
+            'php_version' => $siteTemplate->php_version,
+            'type' => $siteTemplate->type,
+            'web_folder' => $siteTemplate->web_folder,
+            'zero_downtime_deployment' => $siteTemplate->zero_downtime_deployment,
+            'repository_url' => $siteTemplate->repository_url,
+            'repository_branch' => $siteTemplate->repository_branch,
+            'add_dns_zone_to_cloudflare' => $siteTemplate->add_dns_zone_to_cloudflare,
+            'add_server_ssh_key_to_github' => $siteTemplate->add_server_ssh_key_to_github,
+            'has_database' => $siteTemplate->has_database,
+            'database_name' => $siteTemplate->database_name.'_'.$siteUsername,
+            'database_user' => $siteTemplate->database_user.'_'.$siteUsername,
+            'database_password' => $siteTemplate->database_password,
+            'has_queue' => $siteTemplate->has_queue,
+            'has_schedule' => $siteTemplate->has_schedule,
+            'hook_before_updating_repository' => $siteTemplate->hook_before_updating_repository,
+            'hook_after_updating_repository' => $siteTemplate->hook_after_updating_repository,
+            'hook_before_making_current' => $siteTemplate->hook_before_making_current,
+            'hook_after_making_current' => $siteTemplate->hook_after_making_current,
+        ];
+
+        $servers = Server::all();
+        foreach ($servers as $server) {
+            $deployKeyUuid = Str::uuid()->toString();
+            $keyPair = Cache::remember(
+                key: "deploy-key-{$server->id}-{$deployKeyUuid}",
+                ttl: config('session.lifetime') * 60,
+                callback: fn () => $keyPairGenerator->ed25519()
+            );
+
+            $data['deploy_key_uuid'] = $deployKeyUuid;
+
+            if($siteTemplate->add_server_ssh_key_to_github){
+                dispatch(new AddServerSshKeyToGithub($server, $this->user()->githubCredentials->fresh()));
+            }
+
+            $jobs = [];
+
+            if($siteTemplate->add_dns_zone_to_cloudflare){
+                $jobs[] = new LinkDomainToCloudflare($server, $data['address']);
+
+                $this->logActivity(__("Created Cloudflare ':address'", ['address' => $data['address']]));
+            }
+            /** @var Site */
+            $site = $server->sites()->make($data);
+            $site->tls_setting = TlsSetting::Auto;
+            $site->user = $server->username;
+            $site->path = "/home/{$site->user}/{$site->address}";
+            $site->forceFill($site->type->defaultAttributes($site->zero_downtime_deployment));
+
+            if ($data['deploy_key_uuid']) {
+                /** @var KeyPair|null */
+                $deployKey = Cache::get("deploy-key-{$server->id}-{$data['deploy_key_uuid']}");
+
+                if (! $deployKey) {
+                    Toast::danger(__('The deploy key has expired. Please try again.'));
+
+                    return back();
+                }
+
+                $site->deploy_key_public = $deployKey->publicKey;
+                $site->deploy_key_private = $deployKey->privateKey;
+            }
+
+            $site->save();
+
+
+            if(
+                $data['has_database'] &&
+                !empty($data['database_name']) &&
+                !empty($data['database_user']) &&
+                !empty($data['database_password'])
+            ){
+                $databaseName = $data['database_name'];
+                //Create Database
+                $database = $server->databases()->create([
+                    'name' => $databaseName,
+                    'site_id' => $site->id
+                ]);
+
+                $this->logActivity(__("Created database ':name' on server ':server'", ['name' => $database->name, 'server' => $server->name]), $database);
+
+                $databaseUser = $database->users()->make([
+                    'name' => $data['database_user'],
+                ])->forceFill([
+                    'server_id' => $server->id,
+                    'site_id' => $site->id
+                ]);
+
+                $databaseUser->save();
+                $databaseUser->databases()->attach($database);
+
+                $this->logActivity(__("Created database user ':name' on server ':server'", ['name' => $databaseUser->name, 'server' => $server->name]), $databaseUser);
+
+                $jobs[] = new InstallDatabase($database, $this->user()->fresh());
+                $jobs[] = new InstallDatabaseUser($databaseUser, $data['database_password'], $this->user()->fresh());
+
+            }
+
+
+            $this->logActivity(__("Created site ':address' on server ':server'", ['address' => $site->address, 'server' => $server->name]), $site);
+
+
+            if ($site->fresh()->latestDeployment?->status === DeploymentStatus::Pending) {
+                throw new PendingDeploymentException($site);
+            }
+
+            /** @var Deployment */
+            $deployment = $site->deployments()->create([
+                'status' => DeploymentStatus::Pending,
+                'user_id' => $this->user()?->exists ? $this->user()->id : null,
+            ]);
+
+            $site->server->team->activityLogs()->create([
+                'subject_id' => $site->getKey(),
+                'subject_type' => $site->getMorphClass(),
+                'description' => __(__("Deployed site ':address' on server ':server'", ['address' => $site->address, 'server' => $site->server->name])),
+                'user_id' => $this->user()?->exists ? $this->user()->id : null,
+            ]);
+
+            if(
+                $data['has_database'] &&
+                !empty($data['database_name']) &&
+                !empty($data['database_user']) &&
+                !empty($data['database_password'])
+            ) {
+                $jobs[] = new DeploySite($deployment, [
+                    "DB_DATABASE" => $data['database_name'],
+                    "DB_USERNAME" => $data['database_user'],
+                    "DB_PASSWORD" => $data['database_password']
+                ]);
+            }
+            else {
+                $jobs[] = new DeploySite($deployment);
+            }
+
+            if ($data['deploy_key_uuid']) {
+                Cache::forget($data['deploy_key_uuid']);
+            }
+
+
+            if($data['has_queue']){
+                $dataDaemons = [
+                    'user' => $server->username,
+                    'processes' => 1,
+                    'stop_wait_seconds' => 10,
+                    'stop_signal' => 'TERM',
+                    'command' => $site->php_version->getBinary() .' artisan queue:work --timeout=0',
+                    'directory' => '/home/'.$server->username.'/'.$site->address.'/repository',
+                    'site_id' => $site->id
+                ];
+
+                $daemon = $server->daemons()->create($dataDaemons);
+                $jobs[] = new InstallDaemon($daemon, $this->user());
+            }
+
+            if($data['has_schedule']){
+                $dataCron = [
+                    'user' => $server->username,
+                    'command' => $site->php_version->getBinary() . ' /home/'.$server->username.'/'.$site->address.'/repository/artisan schedule:run',
+                    'expression' => '* * * * *',
+                    'site_id' => $site->id
+                ];
+
+                $cron = $server->crons()->create($dataCron);
+                $jobs[] = new InstallCron($cron, $this->user());
+            }
+
+            Bus::chain($jobs)->dispatch();
+        }
+
+        Toast::success(__('Site has been created successfully'))->autoDismiss(2);
+        return back();
+    }
 }
