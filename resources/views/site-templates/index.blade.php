@@ -1,6 +1,6 @@
 <x-tomato-admin-layout>
     <x-slot:header>
-        {{ __('SiteTemplate') }}
+        {{ __('Site Template') }}
     </x-slot:header>
     <x-slot:buttons>
         <x-tomato-admin-button :href="route('admin.site-templates.create')" type="link">
