@@ -248,11 +248,11 @@ class SiteTemplateController extends Controller
             redirect: 'admin.site-templates.index',
         );
 
-         if($response instanceof JsonResponse){
-             return $response;
-         }
+        if($response instanceof JsonResponse){
+            return $response;
+        }
 
-         return $response->redirect;
+        return $response->redirect;
     }
 
     public function count(\TomatoPHP\TomatoEddy\Models\SiteTemplate $model)
@@ -311,32 +311,32 @@ class SiteTemplateController extends Controller
 
     public function sites(SiteTemplate $model, KeyPairGenerator $keyPairGenerator)
     {
-        $siteTemplate = $model;
-        $siteUsername = $server->name;
-        $data = [
-            'address' => $siteUsername . '.'. $siteTemplate->domain,
-            'php_version' => $siteTemplate->php_version,
-            'type' => $siteTemplate->type,
-            'web_folder' => $siteTemplate->web_folder,
-            'zero_downtime_deployment' => $siteTemplate->zero_downtime_deployment,
-            'repository_url' => $siteTemplate->repository_url,
-            'repository_branch' => $siteTemplate->repository_branch,
-            'add_dns_zone_to_cloudflare' => $siteTemplate->add_dns_zone_to_cloudflare,
-            'add_server_ssh_key_to_github' => $siteTemplate->add_server_ssh_key_to_github,
-            'has_database' => $siteTemplate->has_database,
-            'database_name' => $siteTemplate->database_name.'_'.$siteUsername,
-            'database_user' => $siteTemplate->database_user.'_'.$siteUsername,
-            'database_password' => $siteTemplate->database_password,
-            'has_queue' => $siteTemplate->has_queue,
-            'has_schedule' => $siteTemplate->has_schedule,
-            'hook_before_updating_repository' => $siteTemplate->hook_before_updating_repository,
-            'hook_after_updating_repository' => $siteTemplate->hook_after_updating_repository,
-            'hook_before_making_current' => $siteTemplate->hook_before_making_current,
-            'hook_after_making_current' => $siteTemplate->hook_after_making_current,
-        ];
-
         $servers = Server::all();
         foreach ($servers as $server) {
+            $siteTemplate = $model;
+            $siteUsername = $server->name;
+            $data = [
+                'address' => $siteUsername . '.'. $siteTemplate->domain,
+                'php_version' => $siteTemplate->php_version,
+                'type' => $siteTemplate->type,
+                'web_folder' => $siteTemplate->web_folder,
+                'zero_downtime_deployment' => $siteTemplate->zero_downtime_deployment,
+                'repository_url' => $siteTemplate->repository_url,
+                'repository_branch' => $siteTemplate->repository_branch,
+                'add_dns_zone_to_cloudflare' => $siteTemplate->add_dns_zone_to_cloudflare,
+                'add_server_ssh_key_to_github' => $siteTemplate->add_server_ssh_key_to_github,
+                'has_database' => $siteTemplate->has_database,
+                'database_name' => $siteTemplate->database_name.'_'.$siteUsername,
+                'database_user' => $siteTemplate->database_user.'_'.$siteUsername,
+                'database_password' => $siteTemplate->database_password,
+                'has_queue' => $siteTemplate->has_queue,
+                'has_schedule' => $siteTemplate->has_schedule,
+                'hook_before_updating_repository' => $siteTemplate->hook_before_updating_repository,
+                'hook_after_updating_repository' => $siteTemplate->hook_after_updating_repository,
+                'hook_before_making_current' => $siteTemplate->hook_before_making_current,
+                'hook_after_making_current' => $siteTemplate->hook_after_making_current,
+            ];
+
             $deployKeyUuid = Str::uuid()->toString();
             $keyPair = Cache::remember(
                 key: "deploy-key-{$server->id}-{$deployKeyUuid}",
