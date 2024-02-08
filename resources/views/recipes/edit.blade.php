@@ -13,7 +13,7 @@
 
         <x-splade-input :label="__('Name')" name="name" type="text"  :placeholder="__('Name')" />
         <x-splade-textarea :label="__('Description')" name="description" type="text"  :placeholder="__('Description')" />
-        <x-splade-textarea autozie :label="__('Script')" name="script"  :placeholder="__('Script')" />
+        <x-tomato-admin-code :label="__('Script')" name="script"  :placeholder="__('Script')" />
 
         <div class="flex justify-start gap-2 pt-3">
             <x-tomato-admin-submit  label="{{__('Save')}}" :spinner="true" />

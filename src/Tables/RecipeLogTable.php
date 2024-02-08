@@ -53,9 +53,11 @@ class RecipeLogTable extends AbstractTable
     public function configure(SpladeTable $table)
     {
         $table
+            ->column('id', __('ID'))
             ->column('server.name', __('Server'))
+            ->column('created_at', __('Date'))
             ->rowModal(fn (RecipesServerLog $model) => route('admin.recipes.log.show', [$model]))
-            ->defaultSort('id')
+            ->defaultSort('id', 'desc')
             ->paginate(10);
     }
 }

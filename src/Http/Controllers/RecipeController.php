@@ -5,6 +5,8 @@ namespace TomatoPHP\TomatoEddy\Http\Controllers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 use ProtoneMedia\Splade\Facades\Toast;
 use TomatoPHP\TomatoAdmin\Facade\Tomato;
@@ -66,16 +68,62 @@ class RecipeController extends Controller
             request: $request,
             model: \TomatoPHP\TomatoEddy\Models\Recipe::class,
             validation: [
-                            'name' => 'required|max:255|string',
-            'description' => 'nullable|max:255|string',
-            'user' => 'nullable|max:255|string',
-            'type' => 'nullable|max:255|string',
-            'script' => 'nullable',
-            'view' => 'nullable|max:255|string'
+                'name' => 'required|max:255|string',
+                'description' => 'nullable|max:255|string',
+                'user' => 'nullable|max:255|string',
+                'type' => 'nullable|max:255|string',
+                'script' => 'nullable',
+                'view' => 'nullable|max:255|string'
             ],
             message: __('Recipe updated successfully'),
             redirect: 'admin.recipes.index',
         );
+
+        $template = $response->record;
+        $checkIfTasksFolderExists = File::exists(resource_path('views/tasks'));
+        if(!$checkIfTasksFolderExists){
+            File::makeDirectory(resource_path('views/tasks'));
+        }
+        if($template->type === 'software'){
+            $checkIfTasksFolderExists = File::exists(resource_path('views/tasks/software'));
+            if(!$checkIfTasksFolderExists){
+                File::makeDirectory(resource_path('views/tasks/software'));
+            }
+            if(Str::of($template->script)->contains('apt')){
+                File::put(resource_path('views/tasks/software/'.$template->id.'.blade.php'),
+                    "@include('tomato-eddy::tasks.apt-functions') \n".
+                    'echo "Install '.$template->name.'"'."\n".
+                    'waitForAptUnlock'."\n".
+                    $template->script);
+            }
+            else {
+                File::put(resource_path('views/tasks/software/'.$template->id.'.blade.php'), $template->script);
+            }
+
+            $response->record->view = 'tasks.software.'.$template->id;
+            $response->record->save();
+        }
+        if($template->type === 'update'){
+            $checkIfTasksFolderExists = File::exists(resource_path('views/tasks/update'));
+            if(!$checkIfTasksFolderExists){
+                File::makeDirectory(resource_path('views/tasks/update'));
+            }
+            File::put(resource_path('views/tasks/update/'.$template->id.'.blade.php'), $template->script);
+
+            $response->record->view = 'tasks.update.'.$template->id;
+            $response->record->save();
+        }
+        if($template->type === 'cron'){
+            $checkIfTasksFolderExists = File::exists(resource_path('views/tasks/cron'));
+            if(!$checkIfTasksFolderExists){
+                File::makeDirectory(resource_path('views/tasks/cron'));
+            }
+            File::put(resource_path('views/tasks/cron/'.$template->id.'.blade.php'), $template->script);
+
+            $response->record->view = 'tasks.cron.'.$template->id;
+            $response->record->save();
+        }
+
 
         if($response instanceof JsonResponse){
             return $response;
@@ -129,6 +177,53 @@ class RecipeController extends Controller
             message: __('Recipe updated successfully'),
             redirect: 'admin.recipes.index',
         );
+
+        $template = $response->record;
+        $checkIfTasksFolderExists = File::exists(resource_path('views/tasks'));
+        if(!$checkIfTasksFolderExists){
+            File::makeDirectory(resource_path('views/tasks'));
+        }
+        if($template->type === 'software'){
+            $checkIfTasksFolderExists = File::exists(resource_path('views/tasks/software'));
+            if(!$checkIfTasksFolderExists){
+                File::makeDirectory(resource_path('views/tasks/software'));
+            }
+            if(Str::of($template->script)->contains('apt')){
+                File::put(resource_path('views/tasks/software/'.$template->id.'.blade.php'),
+                    "@include('tomato-eddy::tasks.apt-functions') \n".
+                    'echo "Install '.$template->name.'"'."\n".
+                    'waitForAptUnlock'."\n".
+                    $template->script);
+            }
+            else {
+                File::put(resource_path('views/tasks/software/'.$template->id.'.blade.php'), $template->script);
+            }
+
+            $response->record->view = 'tasks.software.'.$template->id;
+            $response->record->save();
+        }
+        if($template->type === 'update'){
+            $checkIfTasksFolderExists = File::exists(resource_path('views/tasks/update'));
+            if(!$checkIfTasksFolderExists){
+                File::makeDirectory(resource_path('views/tasks/update'));
+            }
+            File::put(resource_path('views/tasks/update/'.$template->id.'.blade.php'), $template->script);
+
+            $response->record->view = 'tasks.update.'.$template->id;
+            $response->record->save();
+        }
+        if($template->type === 'cron'){
+            $checkIfTasksFolderExists = File::exists(resource_path('views/tasks/cron'));
+            if(!$checkIfTasksFolderExists){
+                File::makeDirectory(resource_path('views/tasks/cron'));
+            }
+            File::put(resource_path('views/tasks/cron/'.$template->id.'.blade.php'), $template->script);
+
+            $response->record->view = 'tasks.corn.'.$template->id;
+            $response->record->save();
+        }
+
+
 
          if($response instanceof JsonResponse){
              return $response;
