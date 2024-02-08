@@ -38,6 +38,7 @@ class WaitForServerToConnect implements ShouldQueue
      */
     public function handle()
     {
+        sleep(3);
         if (! $this->server->public_ipv4) {
             $ip = $this->server->getProvider()->getPublicIpv4OfServer($this->server->provider_id);
 
