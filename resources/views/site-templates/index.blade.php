@@ -15,7 +15,7 @@
                     <div class="flex justify-start">
                         @if($item->has_server)
                         <div class="mx-4">
-                            <x-splade-link confirm success  method="POST" title="{{trans('tomato-admin::global.crud.view')}}" :href="route('admin.site-templates.server', $item->id)" class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm shadow-sm focus:ring-white filament-page-button-action bg-success-600 hover:bg-success-500 focus:bg-success-700 focus:ring-offset-success-700 text-white border-transparent cursor-pointer transition-colors ease-in-out duration-20">
+                            <x-splade-link modal title="{{trans('tomato-admin::global.crud.view')}}" :href="route('admin.site-templates.server-count', $item->id)" class="filament-button inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm shadow-sm focus:ring-white filament-page-button-action bg-success-600 hover:bg-success-500 focus:bg-success-700 focus:ring-offset-success-700 text-white border-transparent cursor-pointer transition-colors ease-in-out duration-20">
                                 {{ __('Create Server') }}
                             </x-splade-link>
                         </div>

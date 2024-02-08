@@ -255,6 +255,11 @@ class SiteTemplateController extends Controller
          return $response->redirect;
     }
 
+    public function count(\TomatoPHP\TomatoEddy\Models\SiteTemplate $model)
+    {
+        return view('tomato-eddy::site-templates.count', compact('model'));
+    }
+
     /**
      * @param \TomatoPHP\TomatoEddy\Models\SiteTemplate $model
      * @return RedirectResponse|JsonResponse
@@ -276,88 +281,32 @@ class SiteTemplateController extends Controller
 
     public function server(SiteTemplate $model, Request $request, KeyPairGenerator $keyPairGenerator)
     {
-        $serverName = $model->server_name.Str::random(6);
-        while (Server::where('name', $serverName)->first()){
-            $serverName = $model->server_name.Str::random(6);
-        }
-        $request->merge([
-            'name' => $serverName,
-            'region' => $model->server_region,
-            'type' => $model->server_type,
-            'image' => $model->server_image,
-            'image' => $model->server_image,
-            'ssh_keys' => [$model->server_ssh_keys],
-            'credentials_id' => [$model->server_credentials_id],
-            'add_key_to_github' => $model->add_server_ssh_key_to_github
-        ]);
-
         /** @var Credentials|null */
-        $credentials = $this->user()->credentials()->findOrFail($request->input('credentials_id'));
+        $credentials = $this->user()->credentials()->findOrFail($model->server_credentials_id);
 
-
-        if ($request->has('multi') && $request->has('count')) {
-            CreateBulkServers::dispatch(
-                $request->get('count'),
-                $credentials,
-                $request->input('region'),
-                $request->input('type'),
-                $request->input('image'),
-                $this->user(),
-                $request->input('public_ipv4'),
-                $request->input('ssh_keys'),
-                $keyPairGenerator
-            );
+        if ($request->has('count')) {
+            dispatch(new CreateBulkServers(
+                count: $request->get('count'),
+                credentials: $credentials,
+                name: $model->server_name,
+                region: $model->server_region,
+                type: $model->server_type,
+                image: $model->server_image,
+                user: $this->user(),
+                public_ipv4: $request->input('public_ipv4'),
+                ssh_keys: $request->input('ssh_keys'),
+                keyPairGenerator: $keyPairGenerator
+            ));
 
             $this->logActivity(__('Bulk Servers Has Been Created'));
 
             Toast::success(__('Bulk Servers Has Been Created'));
 
             return to_route('admin.servers.index');
-        } else {
-            /** @var Server */
-            $server = $this->team()->servers()->make([
-                'name' => $request->input('name'),
-                'credentials_id' => $credentials[0]?->id,
-                'region' => $request->input('region'),
-                'type' => $request->input('type'),
-                'image' => $request->input('image'),
-            ]);
-
-            $keyPair = $keyPairGenerator->ed25519();
-            $server->public_key = $keyPair->publicKey;
-            $server->private_key = $keyPair->privateKey;
-
-            $server->working_directory = config('tomato-eddy.server_defaults.working_directory');
-            $server->ssh_port = config('tomato-eddy.server_defaults.ssh_port');
-            $server->username = config('tomato-eddy.server_defaults.username');
-
-            $server->password = Str::password(symbols: false);
-            $server->database_password = Str::password(symbols: false);
-
-            $server->provider = $credentials[0]->provider;
-            $server->created_by_user_id = $this->user()->id;
-
-            $server->save();
-
-            $server = $server->fresh();
-
-            $jobs = [
-                new CreateServerOnInfrastructure($server),
-                new WaitForServerToConnect($server),
-                new ProvisionServer($server, EloquentCollection::make(SshKey::whereKey($request->input('ssh_keys'))->get())),
-            ];
-
-            if ($this->user()->githubCredentials) {
-                $jobs[] = new AddServerSshKeyToGithub($server, $this->user()->githubCredentials->fresh());
-            }
-
-            Bus::chain($jobs)->dispatch();
-
-            $this->logActivity(__("Created server ':server'", ['server' => $server->name]), $server);
-
-            Toast::success(__('Your server is being created and provisioned.'));
-
-            return to_route('admin.servers.show', $server);
         }
+
+        Toast::success(__('Your server is being created and provisioned.'));
+
+        return to_route('admin.servers.show', $server);
     }
 }
