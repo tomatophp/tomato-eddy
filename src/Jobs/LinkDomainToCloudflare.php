@@ -33,6 +33,6 @@ class LinkDomainToCloudflare implements ShouldQueue
     {
         //Link with Cloudflare
         $cloudflare = new Cloudflare();
-        $cloudflare->create($address, $this->server->public_ipv4);
+        $cloudflare->create($this->address, $this->server->public_ipv4);
     }
 }
