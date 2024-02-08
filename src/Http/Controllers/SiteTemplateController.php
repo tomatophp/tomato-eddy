@@ -339,8 +339,7 @@ class SiteTemplateController extends Controller
 
             $server->save();
 
-
-            $server = $this->fresh();
+            $server = $server->fresh();
 
             $jobs = [
                 new CreateServerOnInfrastructure($server),
@@ -348,40 +347,9 @@ class SiteTemplateController extends Controller
                 new ProvisionServer($server, EloquentCollection::make(SshKey::whereKey($request->input('ssh_keys'))->get())),
             ];
 
-            $addSshKeyToGithub = $request->boolean('add_key_to_github') ? $this->user()->githubCredentials : null;
-            if ($addSshKeyToGithub && $addSshKeyToGithub->exists) {
-                $jobs[] = new AddServerSshKeyToGithub($server, $addSshKeyToGithub->fresh());
+            if ($this->user()->githubCredentials) {
+                $jobs[] = new AddServerSshKeyToGithub($server, $this->user()->githubCredentials->fresh());
             }
-
-            $siteTemplate = $model;
-            $siteUsername = $model->name.Str::random(6);
-            $data = [
-                'address' => $siteUsername.'.'.$siteTemplate->domain,
-                'php_version' => $siteTemplate->php_version,
-                'type' => $siteTemplate->type,
-                'web_folder' => $siteTemplate->web_folder,
-                'zero_downtime_deployment' => $siteTemplate->zero_downtime_deployment,
-                'repository_url' => $siteTemplate->repository_url,
-                'repository_branch' => $siteTemplate->repository_branch,
-                'add_dns_zone_to_cloudflare' => $siteTemplate->add_dns_zone_to_cloudflare,
-                'add_server_ssh_key_to_github' => $siteTemplate->add_server_ssh_key_to_github,
-                'has_database' => $siteTemplate->has_database,
-                'database_name' => $siteTemplate->database_name.'_'.$siteUsername,
-                'database_user' => $siteTemplate->database_user.'_'.$siteUsername,
-                'database_password' => $siteTemplate->database_password,
-                'has_queue' => $siteTemplate->has_queue,
-                'has_schedule' => $siteTemplate->has_schedule,
-                'hook_before_updating_repository' => $siteTemplate->hook_before_updating_repository,
-                'hook_after_updating_repository' => $siteTemplate->hook_after_updating_repository,
-                'hook_before_making_current' => $siteTemplate->hook_before_making_current,
-                'hook_after_making_current' => $siteTemplate->hook_after_making_current,
-            ];
-
-             if($deploySite->add_dns_zone_to_cloudflare){
-                 $jobs[] = new LinkDomainToCloudflare($server, $data['address']);
-
-                 $this->logActivity(__("Created Cloudflare ':address'", ['address' => $data['address']]));
-             }
 
             Bus::chain($jobs)->dispatch();
 
