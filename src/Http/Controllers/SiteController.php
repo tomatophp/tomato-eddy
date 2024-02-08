@@ -223,14 +223,6 @@ class SiteController extends Controller
             'user_id' => $this->user()?->exists ? $this->user()->id : null,
         ]);
 
-        $site->forceFill([
-            'hook_before_updating_repository' => $siteTemplate->hook_before_updating_repository,
-            'hook_after_updating_repository' => $siteTemplate->hook_after_updating_repository,
-            'hook_before_making_current' => $siteTemplate->hook_before_making_current,
-            'hook_after_making_current' => $siteTemplate->hook_after_making_current,
-        ]);
-
-
         if(
             $request->get('has_database') &&
             !empty($request->get('database_name')) &&
