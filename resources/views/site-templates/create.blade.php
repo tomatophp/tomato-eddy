@@ -19,13 +19,13 @@
         'has_schedule' => false,
         'add_server_ssh_key_to_github' => true,
     ]" class="flex flex-col space-y-4" action="{{route('admin.site-templates.store')}}" method="post">
-          <x-splade-input :label="__('Name')" name="name" type="text"  :placeholder="__('Name')" />
-          <x-splade-input :label="__('Domain')" name="domain" type="text"  :placeholder="__('Domain')" />
-            <div class="grid grid-cols-2 gap-4">
-                <x-splade-select name="php_version" :label="__('PHP Version')" :options="$phpVersions" />
-                <x-splade-select name="type" :label="__('Site Type')" :options="$types" />
-            </div>
-            <x-splade-checkbox :label="__('Zero downtime deployment')" name="zero_downtime_deployment" label="Zero downtime deployment" />
+        <x-splade-input :label="__('Name')" name="name" type="text"  :placeholder="__('Name')" />
+        <x-splade-input :label="__('Domain')" name="domain" type="text"  :placeholder="__('Domain')" />
+        <div class="grid grid-cols-2 gap-4">
+            <x-splade-select name="php_version" :label="__('PHP Version')" :options="$phpVersions" />
+            <x-splade-select name="type" :label="__('Site Type')" :options="$types" />
+        </div>
+        <x-splade-checkbox :label="__('Zero downtime deployment')" name="zero_downtime_deployment" label="Zero downtime deployment" />
 
         <div v-if="form.type != 'wordpress'" class="flex flex-col gap-4">
             @if($hasGithubCredentials)
@@ -38,9 +38,9 @@
 
         <x-splade-checkbox :label="__('Add server ssh key to github')" name="add_server_ssh_key_to_github" label="Add server ssh key to github" />
         <x-splade-checkbox :label="__('Add dns zone to cloudflare')" name="add_dns_zone_to_cloudflare" label="Add dns zone to cloudflare" />
-          <x-splade-checkbox :label="__('Has queue')" name="has_queue" label="Has queue" />
-          <x-splade-checkbox :label="__('Has schedule')" name="has_schedule" label="Has schedule" />
-          <x-splade-checkbox :label="__('Has database')" name="has_database" label="Has database" />
+        <x-splade-checkbox :label="__('Has queue')" name="has_queue" label="Has queue" />
+        <x-splade-checkbox :label="__('Has schedule')" name="has_schedule" label="Has schedule" />
+        <x-splade-checkbox :label="__('Has database')" name="has_database" label="Has database" />
         <div v-if="form.has_database" class="flex flex-col gap-4">
             <x-splade-input :label="__('Database name')" name="database_name" type="text"  :placeholder="__('Database name')" />
             <x-splade-input :label="__('Database user')" name="database_user" type="text"  :placeholder="__('Database user')" />
@@ -73,11 +73,9 @@
                 <x-splade-select choices v-if="form.server_region" name="server_image" :label="__('Image')" remote-url="`/admin/servers/provider/${form.server_credentials_id}/images/${form.server_region}`" />
             </div>
 
-
-
             <x-splade-select
+                choices
                 name="server_ssh_keys"
-                multiple
                 :label="__('SSH Keys')"
                 :options="$sshKeys"
                 :help="__('Select the keys that should be added to the server so you can access it via SSH.')"
