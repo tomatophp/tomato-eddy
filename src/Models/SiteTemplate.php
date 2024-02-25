@@ -30,7 +30,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $add_server_ssh_key_to_github
  * @property boolean $add_dns_zone_to_cloudflare
  * @property boolean $has_queue
+ * @property string $queue_command
  * @property boolean $has_schedule
+ * @property string $schedule_command
  * @property boolean $has_database
  * @property string $database_name
  * @property string $database_user
@@ -46,6 +48,8 @@ class SiteTemplate extends Model
      * @var array
      */
     protected $fillable = [
+        'queue_command',
+        'schedule_command',
         'domain',
         'has_server',
         'server_name',

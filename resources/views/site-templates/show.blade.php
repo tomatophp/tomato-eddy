@@ -30,7 +30,11 @@
 
           <x-tomato-admin-row :label="__('Has queue')" :value="$model->has_queue" type="bool" />
 
+        <x-tomato-admin-row :label="__('queue command')" :value="$model->queue_command" type="bool" />
+
           <x-tomato-admin-row :label="__('Has schedule')" :value="$model->has_schedule" type="bool" />
+
+        <x-tomato-admin-row :label="__('schedule command')" :value="$model->schedule_command" type="bool" />
 
           <x-tomato-admin-row :label="__('Has database')" :value="$model->has_database" type="bool" />
 

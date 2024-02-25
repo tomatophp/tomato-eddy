@@ -330,7 +330,9 @@ class SiteTemplateController extends Controller
                 'database_user' => $siteTemplate->database_user.'_'.$siteUsername,
                 'database_password' => $siteTemplate->database_password,
                 'has_queue' => $siteTemplate->has_queue,
+                'queue_command' => $siteTemplate->queue_command,
                 'has_schedule' => $siteTemplate->has_schedule,
+                'schedule_command' => $siteTemplate->schedule_command,
                 'hook_before_updating_repository' => $siteTemplate->hook_before_updating_repository,
                 'hook_after_updating_repository' => $siteTemplate->hook_after_updating_repository,
                 'hook_before_making_current' => $siteTemplate->hook_before_making_current,
@@ -338,7 +340,6 @@ class SiteTemplateController extends Controller
             ];
 
             $checkIfSiteExists = Site::where('address', $data['address'])->first();
-
            if(!$checkIfSiteExists){
                $deployKeyUuid = Str::uuid()->toString();
                $keyPair = Cache::remember(
@@ -458,13 +459,15 @@ class SiteTemplateController extends Controller
                }
 
 
-               if($data['has_queue']){
+               if($data['has_queue'] && $data['queue_command']){
+                   $command = Str::replace('$ADDRESS', $site->address, $data['queue_command']);
+                   $command = Str::replace('$PHP', $site->php_version->getBinary(), $command);
                    $dataDaemons = [
                        'user' => $server->username,
                        'processes' => 1,
                        'stop_wait_seconds' => 10,
                        'stop_signal' => 'TERM',
-                       'command' => $site->php_version->getBinary() .' artisan queue:work --timeout=0',
+                       'command' => $command,
                        'directory' => '/home/'.$server->username.'/'.$site->address.'/repository',
                        'site_id' => $site->id
                    ];
@@ -473,10 +476,12 @@ class SiteTemplateController extends Controller
                    $jobs[] = new InstallDaemon($daemon, $this->user());
                }
 
-               if($data['has_schedule']){
+               if($data['has_schedule'] && $data['schedule_command']){
+                   $command = Str::replace('$ADDRESS', $site->address, $data['schedule_command']);
+                   $command = Str::replace('$PHP', $site->php_version->getBinary(), $command);
                    $dataCron = [
                        'user' => $server->username,
-                       'command' => $site->php_version->getBinary() . ' /home/'.$server->username.'/'.$site->address.'/repository/artisan schedule:run',
+                       'command' => $command,
                        'expression' => '* * * * *',
                        'site_id' => $site->id
                    ];
