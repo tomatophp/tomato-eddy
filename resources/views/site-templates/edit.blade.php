@@ -29,7 +29,9 @@
         <x-splade-checkbox :label="__('Add server ssh key to github')" name="add_server_ssh_key_to_github" label="Add server ssh key to github" />
         <x-splade-checkbox :label="__('Add dns zone to cloudflare')" name="add_dns_zone_to_cloudflare" label="Add dns zone to cloudflare" />
         <x-splade-checkbox :label="__('Has queue')" name="has_queue" label="Has queue" />
+        <x-tomato-admin-code v-if="form.has_queue" :label="__('Queue Command')" name="queue_command" />
         <x-splade-checkbox :label="__('Has schedule')" name="has_schedule" label="Has schedule" />
+        <x-tomato-admin-code v-if="form.has_schedule" :label="__('Schedule Command')" name="schedule_command"/>
         <x-splade-checkbox :label="__('Has database')" name="has_database" label="Has database" />
         <div v-if="form.has_database" class="flex flex-col gap-4">
             <x-splade-input :label="__('Database name')" name="database_name" type="text"  :placeholder="__('Database name')" />
