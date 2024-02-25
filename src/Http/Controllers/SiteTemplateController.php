@@ -494,18 +494,18 @@ class SiteTemplateController extends Controller
            }
            else {
                if($data['has_queue'] && $data['queue_command']){
-                   $checkIfQueueNotExists = Daemon::where('site_id', $site->id)->first();
+                   $checkIfQueueNotExists = Daemon::where('site_id', $checkIfSiteExists->id)->first();
                    if(!$checkIfQueueNotExists){
-                       $command = Str::replace('$ADDRESS', $site->address, $data['queue_command']);
-                       $command = Str::replace('$PHP', $site->php_version->getBinary(), $command);
+                       $command = Str::replace('$ADDRESS', $checkIfSiteExists->address, $data['queue_command']);
+                       $command = Str::replace('$PHP', $checkIfSiteExists->php_version->getBinary(), $command);
                        $dataDaemons = [
                            'user' => $server->username,
                            'processes' => 1,
                            'stop_wait_seconds' => 10,
                            'stop_signal' => 'TERM',
                            'command' => $command,
-                           'directory' => '/home/'.$server->username.'/'.$site->address.'/repository',
-                           'site_id' => $site->id
+                           'directory' => '/home/'.$server->username.'/'.$checkIfSiteExists->address.'/repository',
+                           'site_id' => $checkIfSiteExists->id
                        ];
 
                        $daemon = $server->daemons()->create($dataDaemons);
@@ -514,15 +514,15 @@ class SiteTemplateController extends Controller
                }
 
                if($data['has_schedule'] && $data['schedule_command']){
-                   $checkIFCronNotExist = Cron::where('site_id', $site->id)->first();
+                   $checkIFCronNotExist = Cron::where('site_id', $checkIfSiteExists->id)->first();
                    if(!$checkIFCronNotExist){
-                       $command = Str::replace('$ADDRESS', $site->address, $data['schedule_command']);
-                       $command = Str::replace('$PHP', $site->php_version->getBinary(), $command);
+                       $command = Str::replace('$ADDRESS', $checkIfSiteExists->address, $data['schedule_command']);
+                       $command = Str::replace('$PHP', $checkIfSiteExists->php_version->getBinary(), $command);
                        $dataCron = [
                            'user' => $server->username,
                            'command' => $command,
                            'expression' => '* * * * *',
-                           'site_id' => $site->id
+                           'site_id' => $checkIfSiteExists->id
                        ];
 
                        $cron = $server->crons()->create($dataCron);
