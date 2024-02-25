@@ -32,6 +32,8 @@ use TomatoPHP\TomatoEddy\Jobs\LinkDomainToCloudflare;
 use TomatoPHP\TomatoEddy\Jobs\ProvisionServer;
 use TomatoPHP\TomatoEddy\Jobs\WaitForServerToConnect;
 use TomatoPHP\TomatoEddy\Models\Credentials;
+use TomatoPHP\TomatoEddy\Models\Cron;
+use TomatoPHP\TomatoEddy\Models\Daemon;
 use TomatoPHP\TomatoEddy\Models\Deployment;
 use TomatoPHP\TomatoEddy\Models\Server;
 use TomatoPHP\TomatoEddy\Models\Site;
@@ -491,6 +493,43 @@ class SiteTemplateController extends Controller
                }
            }
            else {
+               if($data['has_queue'] && $data['queue_command']){
+                   $checkIfQueueNotExists = Daemon::where('site_id', $site->id)->first();
+                   if(!$checkIfQueueNotExists){
+                       $command = Str::replace('$ADDRESS', $site->address, $data['queue_command']);
+                       $command = Str::replace('$PHP', $site->php_version->getBinary(), $command);
+                       $dataDaemons = [
+                           'user' => $server->username,
+                           'processes' => 1,
+                           'stop_wait_seconds' => 10,
+                           'stop_signal' => 'TERM',
+                           'command' => $command,
+                           'directory' => '/home/'.$server->username.'/'.$site->address.'/repository',
+                           'site_id' => $site->id
+                       ];
+
+                       $daemon = $server->daemons()->create($dataDaemons);
+                       $jobs[] = new InstallDaemon($daemon, $this->user());
+                   }
+               }
+
+               if($data['has_schedule'] && $data['schedule_command']){
+                   $checkIFCronNotExist = Cron::where('site_id', $site->id)->first();
+                   if(!$checkIFCronNotExist){
+                       $command = Str::replace('$ADDRESS', $site->address, $data['schedule_command']);
+                       $command = Str::replace('$PHP', $site->php_version->getBinary(), $command);
+                       $dataCron = [
+                           'user' => $server->username,
+                           'command' => $command,
+                           'expression' => '* * * * *',
+                           'site_id' => $site->id
+                       ];
+
+                       $cron = $server->crons()->create($dataCron);
+                       $jobs[] = new InstallCron($cron, $this->user());
+                   }
+               }
+
                /** @var Deployment */
                $deployment = $checkIfSiteExists->deployments()->create([
                    'status' => DeploymentStatus::Pending,
